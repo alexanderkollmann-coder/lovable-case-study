@@ -1,0 +1,18 @@
+import { clsx, type ClassValue } from 'clsx'
+import { twMerge } from 'tailwind-merge'
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+
+export function clamp(value: number, min: number, max: number) {
+  return Math.max(min, Math.min(max, value))
+}
+
+export function lerp(a: number, b: number, t: number) {
+  return a + (b - a) * t
+}
+
+export function damp(current: number, target: number, lambda: number, dt: number) {
+  return lerp(current, target, 1 - Math.exp(-lambda * dt))
+}

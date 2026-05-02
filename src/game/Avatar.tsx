@@ -1,10 +1,10 @@
 import { useFrame } from '@react-three/fiber'
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
-import { RoundedBox } from '@react-three/drei'
+import { RoundedBox, Image as DreiImage } from '@react-three/drei'
 import { avatarGroupRef } from './refs'
 import { WORLD_BOUNDS } from './World'
-import { useGameStore } from '@/store/gameStore'
+import { useGameStore, getTimelineForX } from '@/store/gameStore'
 import { useKeyboard } from './controls/useKeyboard'
 import boothMeta from '@/content/booths.config'
 import type { BoothId } from '@/content/booths.config'
@@ -91,7 +91,15 @@ export function Avatar() {
     const bob = move.lengthSq() > 0 ? Math.abs(Math.sin(bobPhase.current)) * 0.07 : Math.sin(bobPhase.current) * 0.025
     g.position.y = bob
 
-    // 4) Proximity check to booths in active timeline
+    // 4) Auto-switch timeline on zone-boundary crossing
+    if (!store.isTransitioning && !store.activeBoothId) {
+      const expected = getTimelineForX(g.position.x)
+      if (expected !== store.timeline) {
+        store.beginTransitionTo(expected)
+      }
+    }
+
+    // 5) Proximity check to booths in active timeline
     let nearest: { id: BoothId; dist: number } | null = null
     const activeBooths = boothMeta.filter((b) => b.timeline === store.timeline)
     for (const b of activeBooths) {
@@ -105,11 +113,10 @@ export function Avatar() {
     const newProximityId: BoothId | null = nearest?.id ?? null
     if (newProximityId !== proximityRef.current) {
       proximityRef.current = newProximityId
-      // dispatch via window event to avoid Zustand re-renders for a tight loop
       window.dispatchEvent(new CustomEvent('booth:proximity', { detail: newProximityId }))
     }
 
-    // 5) Interaction
+    // 6) Interaction
     if (k.interactPressedThisFrame) {
       k.interactPressedThisFrame = false
       if (newProximityId) {
@@ -117,7 +124,6 @@ export function Avatar() {
       }
     }
 
-    // satisfy unused-locals when target tracking didn't engage
     void usingTarget
   })
 
@@ -125,8 +131,10 @@ export function Avatar() {
     <group ref={groupRef} position={[0, 0, 0]} rotation={[0, Math.PI * 0.25, 0]}>
       {/* Body */}
       <RoundedBox args={[0.7, 1.0, 0.5]} radius={0.18} smoothness={3} position={[0, 0.95, 0]} castShadow>
-        <meshStandardMaterial color="#ff4d7a" roughness={0.55} />
+        <meshStandardMaterial color="#0d111c" roughness={0.6} />
       </RoundedBox>
+      {/* Lovable heart on shirt — slightly forward of the body so it doesn't z-fight */}
+      <DreiImage url="/logos/lovable-heart.png" position={[0, 0.97, 0.27]} scale={[0.42, 0.42]} transparent />
       {/* Head */}
       <mesh position={[0, 1.7, 0]} castShadow>
         <sphereGeometry args={[0.32, 24, 18]} />

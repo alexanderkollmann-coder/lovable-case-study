@@ -31,6 +31,19 @@ export const TIMELINE_COLORS: Record<Timeline, { sky: string; ground: string; ac
 
 export type Vec3 = [number, number, number]
 
+/**
+ * Boundaries (in world-space x) between the three timeline zones.
+ * These match the zone-center spacing in World.tsx (centers at -17, 0, +17).
+ */
+export const ZONE_BOUNDARY_PRE_HACK = -8.5
+export const ZONE_BOUNDARY_HACK_POST = 8.5
+
+export function getTimelineForX(x: number): Timeline {
+  if (x < ZONE_BOUNDARY_PRE_HACK) return 'pre'
+  if (x > ZONE_BOUNDARY_HACK_POST) return 'post'
+  return 'hack'
+}
+
 interface GameState {
   timeline: Timeline
   pendingTimeline: Timeline | null

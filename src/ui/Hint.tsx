@@ -25,9 +25,9 @@ export function Hint() {
                 <kbd className="px-1.5 py-0.5 rounded bg-white/10 font-mono text-xs">E</kbd>
                 <span>open a booth</span>
               </li>
-              <li className="flex items-center gap-2">
-                <kbd className="px-1.5 py-0.5 rounded bg-white/10 font-mono text-xs">1 2 3</kbd>
-                <span>change timeline</span>
+              <li className="flex items-center gap-2 leading-tight">
+                <span className="text-xs">↔︎</span>
+                <span>walk between zones · or press <kbd className="px-1.5 py-0.5 rounded bg-white/10 font-mono text-xs">1 2 3</kbd></span>
               </li>
             </ul>
             <button

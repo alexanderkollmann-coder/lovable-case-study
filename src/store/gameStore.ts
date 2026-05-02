@@ -58,7 +58,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   pendingTimeline: null,
   isTransitioning: false,
   activeBoothId: null,
-  soundOn: false,
+  soundOn: true,
   hasSeenHint: false,
   avatarTarget: null,
 

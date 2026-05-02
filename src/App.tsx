@@ -9,6 +9,7 @@ import { Hint } from '@/ui/Hint'
 import { Footer } from '@/ui/Footer'
 import { BrandLockup } from '@/ui/BrandLockup'
 import { ProgressTracker } from '@/ui/ProgressTracker'
+import { BoothAudio } from '@/ui/BoothAudio'
 
 function App() {
   const [loading, setLoading] = useState(true)
@@ -46,6 +47,9 @@ function App() {
 
       {/* Booth panel */}
       <BoothPanel />
+
+      {/* Audio (proximity-triggered for the Measurement booth) */}
+      <BoothAudio />
 
       {/* Loading splash */}
       <LoadingSplash visible={loading} />

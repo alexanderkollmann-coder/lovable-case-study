@@ -114,7 +114,12 @@ function ZoneFloor({ timeline, center, size }: ZoneSpec) {
   )
 }
 
-/** Translucent black plane that hangs over an inactive zone, fading toward 0 when active. */
+/**
+ * Translucent black plane hanging over an inactive zone, fading to 0 when active.
+ * Sized strictly to the zone's footprint (with a small inset) so it can't bleed into
+ * a neighbouring zone's airspace and create the "shadow seeping into the current zone" artifact.
+ * Raised to y=14 so it sits above every prop in the scene (London skyline tops out ~9).
+ */
 function ZoneDimmer({ timeline, center, size }: ZoneSpec) {
   const matRef = useRef<THREE.MeshBasicMaterial>(null)
   useFrame((_, delta) => {
@@ -124,9 +129,16 @@ function ZoneDimmer({ timeline, center, size }: ZoneSpec) {
     matRef.current.opacity = THREE.MathUtils.lerp(matRef.current.opacity, target, 1 - Math.exp(-3 * delta))
   })
   return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[center[0], 8, center[1]]}>
-      <planeGeometry args={[size[0] + 4, size[1] + 4]} />
-      <meshBasicMaterial ref={matRef} color="#02030a" transparent opacity={0.55} side={THREE.DoubleSide} depthWrite={false} />
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[center[0], 14, center[1]]}>
+      <planeGeometry args={[size[0] - 0.6, size[1] - 0.6]} />
+      <meshBasicMaterial
+        ref={matRef}
+        color="#02030a"
+        transparent
+        opacity={0.55}
+        side={THREE.DoubleSide}
+        depthWrite={false}
+      />
     </mesh>
   )
 }

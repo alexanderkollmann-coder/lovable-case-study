@@ -2,7 +2,19 @@ import { RoundedBox, Text } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 import * as THREE from 'three'
-import { Desk, Whiteboard, Plant, Bookshelf, LovablePoster, useZoneActivity } from './SharedProps'
+import {
+  Desk,
+  Whiteboard,
+  Plant,
+  Bookshelf,
+  LovablePoster,
+  useZoneActivity,
+  StandingNPC,
+  SeatedNPC,
+  ConferenceTable,
+  NamePlacard,
+  MetricsWhiteboard,
+} from './SharedProps'
 
 const ZONE_CENTER_X = -17
 
@@ -59,16 +71,35 @@ export function PreZone() {
         LOVABLE · LONDON OFFICE
       </Text>
 
-      {/* ---------- DESKS — open-plan rows ---------- */}
+      {/* ---------- DESKS — open-plan rows (the centre column is reserved for the meeting scene) ---------- */}
       <Desk pos={[-5, 0, -7]} twin />
-      <Desk pos={[-2, 0, -7]} twin />
-      <Desk pos={[1, 0, -7]} twin />
       <Desk pos={[4, 0, -7]} twin />
 
       <Desk pos={[-5, 0, -3]} rotation={Math.PI} twin />
-      <Desk pos={[-2, 0, -3]} rotation={Math.PI} twin />
-      <Desk pos={[1, 0, -3]} rotation={Math.PI} twin />
       <Desk pos={[4, 0, -3]} rotation={Math.PI} twin />
+
+      {/* ---------- ALEX'S PITCH — whiteboard + presenter + audience ---------- */}
+      <MetricsWhiteboard pos={[-2, 0, -9.5]} title="HACKATHON · Q2 PIPELINE" />
+      <StandingNPC
+        pos={[-2, 0, -7.5]}
+        rotation={0}
+        pose="presenting"
+        shirtColor="#0d111c"
+        showHeart
+        name="ALEX"
+        nameColor="#ff4d7a"
+      />
+
+      {/* Conference table + seated audience facing Alex */}
+      <ConferenceTable pos={[-2, 0, -5.4]} size={[3.4, 0.06, 1.1]} />
+      <SeatedNPC pos={[-3.6, 0, -4.0]} rotation={Math.PI} shirtColor="#7aa1ff" />
+      <SeatedNPC pos={[-2, 0, -4.0]} rotation={Math.PI} shirtColor="#34d399" />
+      <SeatedNPC pos={[-0.4, 0, -4.0]} rotation={Math.PI} shirtColor="#fbbf24" />
+
+      {/* Name placards on the table edge facing the camera */}
+      <NamePlacard pos={[-3.6, 0.81, -4.85]} name="RYAN" accent="#7aa1ff" />
+      <NamePlacard pos={[-2, 0.81, -4.85]} name="KALI" accent="#34d399" />
+      <NamePlacard pos={[-0.4, 0.81, -4.85]} name="MONICA" accent="#fbbf24" />
 
       {/* "Reception" / front desk */}
       <RoundedBox args={[3.6, 0.96, 0.7]} radius={0.06} smoothness={2} position={[-5.5, 0.48, 4]} castShadow>

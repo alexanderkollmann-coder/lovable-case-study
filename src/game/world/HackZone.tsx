@@ -2,7 +2,17 @@ import { RoundedBox, Text, Image as DreiImage } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 import * as THREE from 'three'
-import { Desk, Trophy, Banner, Riser, useZoneActivity, LovableHeartFloating } from './SharedProps'
+import {
+  Desk,
+  Trophy,
+  Banner,
+  Riser,
+  useZoneActivity,
+  LovableHeartFloating,
+  HackathonTeam,
+  StandingNPC,
+  WinnerScreen,
+} from './SharedProps'
 
 const ZONE_CENTER_X = 0
 
@@ -74,13 +84,16 @@ export function HackZone() {
       <SpotlightRig pos={[0, 5.4, -5]} target={[0, 0, 0]} color="#ffd87a" />
 
       {/* ---------- HACKATHON DESKS — pit area ---------- */}
-      {/* Two rows of 4 desks facing the stage */}
+      {/* Back row stays full; front row is trimmed because the Hackathon Team takes centre */}
       {[-3.6, -1.2, 1.2, 3.6].map((x) => (
         <Desk key={`hd1-${x}`} pos={[x, 0, -3]} twin />
       ))}
-      {[-3.6, -1.2, 1.2, 3.6].map((x) => (
+      {[-3.6, 3.6].map((x) => (
         <Desk key={`hd2-${x}`} pos={[x, 0, 0.5]} twin />
       ))}
+
+      {/* Centre-stage: the Hackathon Team (3 builders + laptops) — what the cinematic dolly lands on */}
+      <HackathonTeam pos={[0, 0, 1]} />
 
       {/* ---------- AUDIENCE RISERS ---------- */}
       <Riser pos={[-4, 0, 4]} size={[3.2, 0.18, 1.6]} />
@@ -102,8 +115,17 @@ export function HackZone() {
       <SideScreen pos={[-7.5, 0, -3]} rotation={Math.PI / 2} message="LIVE · TEAMS BUILDING" />
       <SideScreen pos={[7.5, 0, -3]} rotation={-Math.PI / 2} message="JUDGES · 23 MINS REMAINING" />
 
-      {/* ---------- TROPHY PODIUM ---------- */}
-      <Trophy pos={[0, 0, 8]} />
+      {/* ---------- WINNER STAGE ---------- */}
+      <Trophy pos={[-3, 0, 8]} />
+      <WinnerScreen pos={[0, 0, 8.2]} />
+      <StandingNPC
+        pos={[0, 0, 9.4]}
+        rotation={0}
+        pose="winner"
+        shirtColor="#ff4d7a"
+        showHeart
+        skinColor="#fde0e7"
+      />
 
       {/* ---------- HANGING BANNERS ---------- */}
       <Banner pos={[-7, 0, -8.5]} color="#ff5577" />

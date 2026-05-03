@@ -65,6 +65,48 @@ export const SHOTS: Shot[] = [
       { t: 1.0, pos: [-13, 9, 14], lookAt: [-17, 2, -6], zoom: 38 },
     ],
   },
+  {
+    id: 'pitch-pushin',
+    name: 'Pitch · Alex presenting to Ryan, Kali & Monica',
+    description:
+      'Push-in shot of the London office meeting room. Opens wide over the audience\'s shoulders, ends close on Alex pitching at the metrics whiteboard.',
+    duration: 8,
+    timeline: 'pre',
+    filename: '04-pitch-pushin',
+    keys: [
+      { t: 0.0, pos: [-13.5, 4.6, 3], lookAt: [-19, 1.5, -8], zoom: 60 },
+      { t: 0.5, pos: [-15, 3.6, -1], lookAt: [-19, 1.6, -8], zoom: 70 },
+      { t: 1.0, pos: [-17.6, 2.6, -3.4], lookAt: [-19, 1.6, -8.5], zoom: 88 },
+    ],
+  },
+  {
+    id: 'hack-team-orbit',
+    name: 'Hackathon · team orbit',
+    description:
+      'Side-to-side track around the Hackathon Team — three builders hunched over laptops at centre stage. Shows the cross-functional energy without lingering on a single face.',
+    duration: 9,
+    timeline: 'hack',
+    filename: '05-hack-team-orbit',
+    keys: [
+      { t: 0.0, pos: [5, 2.4, 5.6], lookAt: [0, 1.0, 1], zoom: 70 },
+      { t: 0.5, pos: [0, 2.6, 5.8], lookAt: [0, 1.0, 1], zoom: 78 },
+      { t: 1.0, pos: [-5, 2.4, 5.6], lookAt: [0, 1.0, 1], zoom: 70 },
+    ],
+  },
+  {
+    id: 'winner-reveal',
+    name: 'Winner · low-angle reveal',
+    description:
+      'Hero shot of the winner — low-angle push from the trophy podium up to the celebrant with arms raised, "WINNER!" screen pulsing behind them.',
+    duration: 7,
+    timeline: 'hack',
+    filename: '06-winner-reveal',
+    keys: [
+      { t: 0.0, pos: [-2.5, 0.6, 14], lookAt: [0, 1.5, 9], zoom: 52 },
+      { t: 0.55, pos: [0, 1.6, 12.2], lookAt: [0, 1.8, 9], zoom: 70 },
+      { t: 1.0, pos: [0, 2.8, 11], lookAt: [0, 1.7, 9], zoom: 90 },
+    ],
+  },
 ]
 
 const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2)

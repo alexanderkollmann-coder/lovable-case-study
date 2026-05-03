@@ -88,6 +88,9 @@ function App() {
 
       {/* Tiny render-pause toggle (bottom-right) — keeps laptop cool while idle */}
       {!cinematicMode && <RenderPauseToggle />}
+
+      {/* Intro video — sits on top of the scene until user clicks "Do you believe?" */}
+      {!cinematicMode && <IntroVideo />}
     </div>
   )
 }

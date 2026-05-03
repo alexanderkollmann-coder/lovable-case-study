@@ -11,6 +11,7 @@ import { BrandLockup } from '@/ui/BrandLockup'
 import { ProgressTracker } from '@/ui/ProgressTracker'
 import { BoothAudio } from '@/ui/BoothAudio'
 import { ThemeToggle } from '@/ui/ThemeToggle'
+import { RenderPauseToggle } from '@/ui/RenderPauseToggle'
 import { Cinematic } from '@/cinematic/Cinematic'
 import { useGameStore } from '@/store/gameStore'
 
@@ -83,6 +84,9 @@ function App() {
 
       {/* Loading splash */}
       <LoadingSplash visible={loading} />
+
+      {/* Tiny render-pause toggle (bottom-right) — keeps laptop cool while idle */}
+      {!cinematicMode && <RenderPauseToggle />}
     </div>
   )
 }

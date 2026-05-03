@@ -11,6 +11,7 @@ import { CloudSweep } from './CloudSweep'
 import { Fireflies } from './Fireflies'
 import { useFrame } from '@react-three/fiber'
 import { ShotPlayer } from '@/cinematic/ShotPlayer'
+import { DisableCulling } from './DisableCulling'
 
 export function Scene() {
   return (
@@ -41,6 +42,7 @@ function SceneContents() {
       <Fireflies />
       <CloudSweep />
       <ShotPlayer />
+      <DisableCulling />
     </Suspense>
   )
 }

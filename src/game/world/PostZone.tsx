@@ -102,8 +102,6 @@ export function PostZone() {
       {/* Filing cabinets along left wall */}
       <FilingCabinet pos={[-7.6, 0, -3]} rotation={Math.PI / 2} />
       <FilingCabinet pos={[-7.6, 0, -1.5]} rotation={Math.PI / 2} />
-      {/* Coffee corner front-right */}
-      <CoffeeCorner pos={[6, 0, 7.5]} />
       {/* Bookshelf on right wall */}
       <Bookshelf pos={[7.6, 0, 4]} rotation={-Math.PI / 2} />
       {/* Plants in front corners */}
@@ -123,22 +121,18 @@ export function PostZone() {
 function PostHackBackdrop() {
   return (
     <group position={[0, 0, -13]}>
-      {/* Sky strip — slightly cooler than the hack backdrop, leans toward green */}
+      {/* Sky strip — narrowed so the post-zone backdrop stays within its own zone */}
       <mesh position={[0, 6, -1.5]}>
-        <planeGeometry args={[28, 12]} />
+        <planeGeometry args={[16, 12]} />
         <meshStandardMaterial color="#cdeed8" emissive="#dff5e6" emissiveIntensity={0.3} roughness={0.95} />
       </mesh>
 
-      {/* Corporate tower far left */}
-      <CorpTower pos={[-9, 0, 0]} h={8.5} w={2.0} color="#5a6a82" accent="#7aa1ff" />
-      {/* Glass tower */}
-      <CorpTower pos={[-5.5, 0, 0]} h={10.5} w={2.2} color="#a5c8e0" accent="#cfe5f5" />
-      {/* Apple-style circular HQ — low ring at the back */}
-      <CircularHQ pos={[0, 0, -2]} />
-      {/* Data centre block — low long building right of centre */}
-      <DataCenter pos={[5, 0, 0]} />
-      {/* Antenna + dish on right */}
-      <SatelliteDish pos={[8.5, 0, 0]} />
+      {/* Buildings — kept within zone-local x within ±7 */}
+      <CorpTower pos={[-6.5, 0, 0]} h={8.5} w={1.8} color="#5a6a82" accent="#7aa1ff" />
+      <CorpTower pos={[-3.5, 0, 0]} h={10.5} w={1.9} color="#a5c8e0" accent="#cfe5f5" />
+      <CircularHQ pos={[-0.2, 0, -2]} />
+      <ResearchLab pos={[3.5, 0, 0]} />
+      <SatelliteDish pos={[6.5, 0, 0]} />
     </group>
   )
 }
@@ -199,31 +193,39 @@ function CircularHQ({ pos }: { pos: [number, number, number] }) {
   )
 }
 
-function DataCenter({ pos }: { pos: [number, number, number] }) {
+/** Research lab — slim main tower with sky-bridge to a smaller block. Replaces DataCenter. */
+function ResearchLab({ pos }: { pos: [number, number, number] }) {
   return (
     <group position={pos}>
-      {/* Wide low body */}
-      <RoundedBox args={[5, 3, 2]} radius={0.06} smoothness={2} position={[0, 1.5, 0]} castShadow>
-        <meshStandardMaterial color="#3a4d80" roughness={0.7} />
+      {/* Main slim tower */}
+      <RoundedBox args={[1.6, 7, 1.6]} radius={0.05} smoothness={2} position={[0, 3.5, 0]} castShadow>
+        <meshStandardMaterial color="#6a8290" roughness={0.6} metalness={0.15} />
       </RoundedBox>
-      {/* Vent strips on the front */}
-      {[-1.5, -0.5, 0.5, 1.5].map((x, i) => (
-        <mesh key={i} position={[x, 1.5, 1.01]}>
-          <planeGeometry args={[0.6, 1.4]} />
-          <meshStandardMaterial color="#0a0d1a" emissive="#34d399" emissiveIntensity={0.4} />
+      {/* Window strips along the front */}
+      {Array.from({ length: 8 }).map((_, i) => (
+        <mesh key={i} position={[0, 0.8 + i * 0.85, 0.81]}>
+          <planeGeometry args={[1.3, 0.32]} />
+          <meshStandardMaterial color="#cfe5f5" emissive="#a5c8e0" emissiveIntensity={0.4} />
         </mesh>
       ))}
-      {/* Solar panels on roof */}
-      {Array.from({ length: 4 }).map((_, i) => (
-        <mesh key={i} position={[-1.5 + i * 1, 3.05, 0]} rotation={[-0.3, 0, 0]}>
-          <boxGeometry args={[0.9, 0.06, 0.9]} />
-          <meshStandardMaterial color="#1a2840" emissive="#5e88ff" emissiveIntensity={0.3} metalness={0.5} />
-        </mesh>
-      ))}
-      {/* Sign */}
-      <Text position={[0, 3.6, 1.01]} fontSize={0.26} color="#34d399" anchorX="center" letterSpacing={0.18}>
-        DATA CENTRE
-      </Text>
+      {/* Sky bridge — translucent connector to the secondary block */}
+      <mesh position={[1.6, 4.0, 0]}>
+        <boxGeometry args={[1.2, 0.5, 0.7]} />
+        <meshStandardMaterial color="#cfe5f5" emissive="#a5c8e0" emissiveIntensity={0.3} transparent opacity={0.65} />
+      </mesh>
+      {/* Smaller secondary block */}
+      <RoundedBox args={[1.2, 4, 1.4]} radius={0.05} smoothness={2} position={[2.7, 2, 0]} castShadow>
+        <meshStandardMaterial color="#5a6a7a" roughness={0.6} />
+      </RoundedBox>
+      {/* Roof spike on main tower */}
+      <mesh position={[0, 7.3, 0]}>
+        <cylinderGeometry args={[0.04, 0.06, 0.5, 8]} />
+        <meshStandardMaterial color="#1f2332" />
+      </mesh>
+      <mesh position={[0, 7.6, 0]}>
+        <sphereGeometry args={[0.06, 12, 8]} />
+        <meshStandardMaterial color="#34d399" emissive="#34d399" emissiveIntensity={1.4} />
+      </mesh>
     </group>
   )
 }
@@ -336,41 +338,7 @@ function FilingCabinet({ pos, rotation = 0 }: { pos: [number, number, number]; r
   )
 }
 
-function CoffeeCorner({ pos }: { pos: [number, number, number] }) {
-  return (
-    <group position={pos}>
-      {/* Counter */}
-      <RoundedBox args={[1.6, 0.96, 0.7]} radius={0.06} smoothness={2} position={[0, 0.48, 0]} castShadow>
-        <meshStandardMaterial color="#3a4d80" roughness={0.55} />
-      </RoundedBox>
-      <RoundedBox args={[1.6, 0.04, 0.92]} radius={0.04} smoothness={2} position={[0, 0.98, 0]}>
-        <meshStandardMaterial color="#1f2332" />
-      </RoundedBox>
-      {/* Coffee machine */}
-      <RoundedBox args={[0.55, 0.6, 0.42]} radius={0.04} smoothness={2} position={[0.4, 1.3, -0.06]} castShadow>
-        <meshStandardMaterial color="#15171f" roughness={0.4} metalness={0.4} />
-      </RoundedBox>
-      {/* Indicator light */}
-      <mesh position={[0.4, 1.55, 0.16]}>
-        <boxGeometry args={[0.18, 0.03, 0.03]} />
-        <meshStandardMaterial color="#34d399" emissive="#34d399" emissiveIntensity={0.9} />
-      </mesh>
-      {/* Coffee cups */}
-      <mesh position={[-0.45, 1.06, 0]}>
-        <cylinderGeometry args={[0.07, 0.08, 0.13, 12]} />
-        <meshStandardMaterial color="#ffffff" roughness={0.5} />
-      </mesh>
-      <mesh position={[-0.25, 1.06, 0.12]}>
-        <cylinderGeometry args={[0.07, 0.08, 0.13, 12]} />
-        <meshStandardMaterial color="#ffffff" roughness={0.5} />
-      </mesh>
-      {/* Sign */}
-      <Text position={[0, 1.85, 0]} fontSize={0.14} color="#34d399" anchorX="center" letterSpacing={0.18}>
-        OPS COFFEE
-      </Text>
-    </group>
-  )
-}
+// CoffeeCorner removed per spec
 
 function ConsoleStation({ pos, rotation, hue }: { pos: [number, number, number]; rotation: number; hue: string }) {
   const matRef = useRef<THREE.MeshStandardMaterial>(null)

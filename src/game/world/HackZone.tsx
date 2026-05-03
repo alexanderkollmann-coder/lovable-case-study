@@ -141,9 +141,6 @@ export function HackZone() {
       {/* ---------- BACKDROP SKYLINE — tech-city silhouette behind the stage ---------- */}
       <HackathonBackdrop />
 
-      {/* ---------- JUDGING TABLE — front-centre area was empty ---------- */}
-      <JudgingTable pos={[3, 0, 9.6]} />
-
       {/* ---------- FLOOR CABLE STRIP — runs from desks toward the stage ---------- */}
       <CableStrip from={[0, 0, 1]} to={[0, 0, -3]} />
 
@@ -165,22 +162,18 @@ export function HackZone() {
 function HackathonBackdrop() {
   return (
     <group position={[0, 0, -13]}>
-      {/* Sky strip — bright daytime, slightly warmer than London's */}
+      {/* Sky strip — narrowed to the zone width so it doesn't bleed into adjacent zones */}
       <mesh position={[0, 6, -1.5]}>
-        <planeGeometry args={[28, 12]} />
+        <planeGeometry args={[16, 12]} />
         <meshStandardMaterial color="#ffd2dc" emissive="#ffe4ec" emissiveIntensity={0.3} roughness={0.95} />
       </mesh>
 
-      {/* Tall tech tower — far left */}
-      <TechTower pos={[-9, 0, 0]} h={9} w={2.0} color="#3a4d80" accent="#7aa1ff" />
-      {/* Convention center — long low building */}
-      <ConventionCenter pos={[-4, 0, 0]} />
-      {/* Glass office tower — centre back, peeks above billboard */}
-      <GlassTower pos={[0, 0, -2]} h={11} w={2.4} />
-      {/* NVIDIA-style block — right of centre */}
-      <NvidiaBlock pos={[5, 0, 0]} />
-      {/* Antenna tower — far right */}
-      <AntennaTower pos={[9, 0, 0]} />
+      {/* Buildings — all positions kept inside zone-local x within ±7 */}
+      <TechTower pos={[-6.5, 0, 0]} h={8.5} w={1.8} color="#3a4d80" accent="#7aa1ff" />
+      <ConventionCenter pos={[-3, 0, 0]} />
+      <GlassTower pos={[1, 0, -2]} h={11} w={2.2} />
+      <Arena pos={[4.5, 0, 0]} />
+      <AntennaTower pos={[6.8, 0, 0]} />
     </group>
   )
 }
@@ -259,29 +252,34 @@ function GlassTower({ pos, h = 10, w = 2.4 }: { pos: [number, number, number]; h
   )
 }
 
-function NvidiaBlock({ pos }: { pos: [number, number, number] }) {
+/** Domed arena — replaces the previous TECH HQ block. No corporate signage, just architecture. */
+function Arena({ pos }: { pos: [number, number, number] }) {
   return (
     <group position={pos}>
-      <RoundedBox args={[3.5, 6.5, 2]} radius={0.1} smoothness={3} position={[0, 3.25, 0]} castShadow>
-        <meshStandardMaterial color="#0d4d2c" roughness={0.6} />
-      </RoundedBox>
-      {/* Window grid */}
-      {Array.from({ length: 8 }).map((_, row) =>
-        [-1, -0.3, 0.4, 1.1].map((x, col) => (
-          <mesh key={`${row}-${col}`} position={[x, 1.0 + row * 0.7, 1.01]}>
-            <planeGeometry args={[0.55, 0.4]} />
-            <meshStandardMaterial color="#9ae5c5" emissive="#34d399" emissiveIntensity={0.5} />
-          </mesh>
-        ))
-      )}
-      {/* Roof signage block */}
-      <mesh position={[0, 6.9, 0.5]}>
-        <boxGeometry args={[2.5, 0.6, 0.06]} />
-        <meshStandardMaterial color="#0a0d1a" emissive="#34d399" emissiveIntensity={0.6} />
+      {/* Wide low cylindrical body */}
+      <mesh position={[0, 1.5, 0]}>
+        <cylinderGeometry args={[2.2, 2.2, 3, 28]} />
+        <meshStandardMaterial color="#5a4d80" roughness={0.6} />
       </mesh>
-      <Text position={[0, 6.9, 0.55]} fontSize={0.4} color="#ffffff" anchorX="center" letterSpacing={0.18}>
-        TECH HQ
-      </Text>
+      {/* Domed roof */}
+      <mesh position={[0, 3, 0]}>
+        <sphereGeometry args={[2.2, 28, 14, 0, Math.PI * 2, 0, Math.PI / 2]} />
+        <meshStandardMaterial color="#7a5d8a" roughness={0.4} metalness={0.3} />
+      </mesh>
+      {/* Glass entrance band around the body */}
+      <mesh position={[0, 0.6, 0]}>
+        <cylinderGeometry args={[2.21, 2.21, 0.6, 28, 1, true]} />
+        <meshStandardMaterial color="#a5c8e0" emissive="#cfe5f5" emissiveIntensity={0.35} transparent opacity={0.6} side={THREE.DoubleSide} />
+      </mesh>
+      {/* Spire on top */}
+      <mesh position={[0, 5.3, 0]}>
+        <cylinderGeometry args={[0.05, 0.07, 0.8, 8]} />
+        <meshStandardMaterial color="#1f2332" />
+      </mesh>
+      <mesh position={[0, 5.8, 0]}>
+        <sphereGeometry args={[0.08, 12, 8]} />
+        <meshStandardMaterial color="#ff4d7a" emissive="#ff4d7a" emissiveIntensity={1.4} />
+      </mesh>
     </group>
   )
 }
@@ -324,41 +322,7 @@ function AntennaTower({ pos }: { pos: [number, number, number] }) {
   )
 }
 
-function JudgingTable({ pos }: { pos: [number, number, number] }) {
-  return (
-    <group position={pos}>
-      {/* Long table */}
-      <RoundedBox args={[2.8, 0.08, 1.0]} radius={0.04} smoothness={2} position={[0, 0.78, 0]} castShadow>
-        <meshStandardMaterial color="#3a4d80" roughness={0.5} />
-      </RoundedBox>
-      {/* Tablecloth band */}
-      <mesh position={[0, 0.4, 0.51]}>
-        <planeGeometry args={[2.8, 0.78]} />
-        <meshStandardMaterial color="#ff4d7a" roughness={0.6} side={THREE.DoubleSide} />
-      </mesh>
-      <Text position={[0, 0.4, 0.516]} fontSize={0.2} color="#ffffff" anchorX="center" letterSpacing={0.18}>
-        JUDGES
-      </Text>
-      {/* Three chairs behind */}
-      {[-0.9, 0, 0.9].map((x, i) => (
-        <group key={i} position={[x, 0, -0.6]}>
-          <RoundedBox args={[0.5, 0.07, 0.5]} radius={0.04} smoothness={2} position={[0, 0.45, 0]}>
-            <meshStandardMaterial color="#1f2332" />
-          </RoundedBox>
-          <RoundedBox args={[0.5, 0.55, 0.05]} radius={0.04} smoothness={2} position={[0, 0.78, -0.25]}>
-            <meshStandardMaterial color="#1f2332" />
-          </RoundedBox>
-        </group>
-      ))}
-      {/* Three small placards */}
-      {[-0.9, 0, 0.9].map((x) => (
-        <RoundedBox key={x} args={[0.5, 0.18, 0.04]} radius={0.02} smoothness={2} rotation={[Math.PI / 12, 0, 0]} position={[x, 0.91, 0.35]}>
-          <meshStandardMaterial color="#ffffff" roughness={0.4} />
-        </RoundedBox>
-      ))}
-    </group>
-  )
-}
+// JudgingTable removed per spec
 
 function CableStrip({ from, to }: { from: [number, number, number]; to: [number, number, number] }) {
   const dx = to[0] - from[0]

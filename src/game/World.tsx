@@ -64,11 +64,6 @@ export function World({ onGroundClick }: { onGroundClick: (point: THREE.Vector3)
       <PostZone />
 
       <ZoneLights />
-
-      {/* Per-zone darkening overlay: when zone is inactive, render a near-black plane that fades in */}
-      {ZONES.map((z) => (
-        <ZoneDimmer key={`dim-${z.timeline}`} {...z} />
-      ))}
     </group>
   )
 }
@@ -111,35 +106,6 @@ function ZoneFloor({ timeline, center, size }: ZoneSpec) {
         <meshBasicMaterial color={TIMELINE_COLORS[timeline].accent} transparent opacity={0.18} />
       </mesh>
     </group>
-  )
-}
-
-/**
- * Translucent black plane hanging over an inactive zone, fading to 0 when active.
- * Sized strictly to the zone's footprint (with a small inset) so it can't bleed into
- * a neighbouring zone's airspace and create the "shadow seeping into the current zone" artifact.
- * Raised to y=14 so it sits above every prop in the scene (London skyline tops out ~9).
- */
-function ZoneDimmer({ timeline, center, size }: ZoneSpec) {
-  const matRef = useRef<THREE.MeshBasicMaterial>(null)
-  useFrame((_, delta) => {
-    if (!matRef.current) return
-    const active = useGameStore.getState().timeline === timeline
-    const target = active ? 0 : 0.55
-    matRef.current.opacity = THREE.MathUtils.lerp(matRef.current.opacity, target, 1 - Math.exp(-3 * delta))
-  })
-  return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[center[0], 14, center[1]]}>
-      <planeGeometry args={[size[0] - 0.6, size[1] - 0.6]} />
-      <meshBasicMaterial
-        ref={matRef}
-        color="#02030a"
-        transparent
-        opacity={0.55}
-        side={THREE.DoubleSide}
-        depthWrite={false}
-      />
-    </mesh>
   )
 }
 

@@ -34,7 +34,7 @@ function ZoneKeyLight({ zone }: { zone: Timeline }) {
 
   useFrame((_, delta) => {
     const active = useGameStore.getState().timeline === zone
-    const target = active ? 3.2 : 0.05
+    const target = active ? 4.6 : 0.05
     intensityRef.current = THREE.MathUtils.lerp(intensityRef.current, target, 1 - Math.exp(-3.5 * delta))
     if (lightRef.current) {
       lightRef.current.intensity = intensityRef.current

@@ -26,20 +26,20 @@ export function Lighting() {
       fillRef.current.color.lerp(new THREE.Color(palette.fog), 1 - Math.exp(-3 * delta))
     }
 
-    // gentle "breathing" dir intensity
+    // gentle "breathing" dir intensity (lower base now — the per-zone spot lights carry the active zone)
     if (dirRef.current) {
       const t = state.clock.elapsedTime
-      dirRef.current.intensity = damp(dirRef.current.intensity, 1.4 + Math.sin(t * 0.4) * 0.05, 4, delta)
+      dirRef.current.intensity = damp(dirRef.current.intensity, 0.75 + Math.sin(t * 0.4) * 0.05, 4, delta)
     }
   })
 
   return (
     <>
-      <ambientLight ref={ambientRef} intensity={0.55} />
+      <ambientLight ref={ambientRef} intensity={0.32} />
       <directionalLight
         ref={dirRef}
-        position={[15, 24, 12]}
-        intensity={1.4}
+        position={[6, 22, 14]}
+        intensity={0.75}
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
@@ -50,7 +50,7 @@ export function Lighting() {
         shadow-camera-near={0.1}
         shadow-camera-far={80}
       />
-      <directionalLight ref={fillRef} position={[-10, 10, -10]} intensity={0.4} />
+      <directionalLight ref={fillRef} position={[-6, 10, 14]} intensity={0.25} />
     </>
   )
 }

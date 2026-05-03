@@ -17,9 +17,9 @@ export function RenderPauseToggle() {
             type="button"
             onClick={toggle}
             aria-label={paused ? 'Resume rendering' : 'Pause rendering'}
-            className="pointer-events-auto fixed bottom-3 right-3 w-7 h-7 rounded-full glass flex items-center justify-center text-white/60 hover:text-white transition-colors z-50"
+            className="pointer-events-auto fixed bottom-3 left-3 w-9 h-9 rounded-full glass flex items-center justify-center text-white/80 hover:text-white transition-colors z-[60] shadow-lg"
           >
-            {paused ? <Play className="w-3 h-3" /> : <Pause className="w-3 h-3" />}
+            {paused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
           </button>
         </TooltipTrigger>
         <TooltipContent side="left">

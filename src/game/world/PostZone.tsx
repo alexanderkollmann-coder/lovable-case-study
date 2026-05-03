@@ -28,6 +28,9 @@ export function PostZone() {
 
   return (
     <group position={[ZONE_CENTER_X, 0, 0]}>
+      {/* ---------- BACKDROP SKYLINE — tech park visible behind / above the wall screen ---------- */}
+      <PostHackBackdrop />
+
       {/* ---------- BIG CENTRAL WALL SCREEN ---------- */}
       <RoundedBox args={[10, 4.0, 0.4]} radius={0.06} smoothness={2} position={[0, 2.5, -10.4]} castShadow>
         <meshStandardMaterial color="#0a0d1a" />
@@ -106,6 +109,151 @@ export function PostZone() {
       {/* Plants in front corners */}
       <Plant pos={[-7, 0, 9.5]} />
       <Plant pos={[7, 0, 9.5]} />
+    </group>
+  )
+}
+
+/* --------------------------- POST ZONE BACKDROP --------------------------- */
+
+/**
+ * Tech-park silhouette behind the wall screen. Mix of corporate towers, an Apple-style
+ * circular HQ silhouette, satellite dishes, and a low data-centre block. Visible above
+ * and around the wall screen to break up the empty back area.
+ */
+function PostHackBackdrop() {
+  return (
+    <group position={[0, 0, -13]}>
+      {/* Sky strip — slightly cooler than the hack backdrop, leans toward green */}
+      <mesh position={[0, 6, -1.5]}>
+        <planeGeometry args={[28, 12]} />
+        <meshStandardMaterial color="#cdeed8" emissive="#dff5e6" emissiveIntensity={0.3} roughness={0.95} />
+      </mesh>
+
+      {/* Corporate tower far left */}
+      <CorpTower pos={[-9, 0, 0]} h={8.5} w={2.0} color="#5a6a82" accent="#7aa1ff" />
+      {/* Glass tower */}
+      <CorpTower pos={[-5.5, 0, 0]} h={10.5} w={2.2} color="#a5c8e0" accent="#cfe5f5" />
+      {/* Apple-style circular HQ — low ring at the back */}
+      <CircularHQ pos={[0, 0, -2]} />
+      {/* Data centre block — low long building right of centre */}
+      <DataCenter pos={[5, 0, 0]} />
+      {/* Antenna + dish on right */}
+      <SatelliteDish pos={[8.5, 0, 0]} />
+    </group>
+  )
+}
+
+function CorpTower({
+  pos,
+  h = 9,
+  w = 2.0,
+  color = '#5a6a82',
+  accent = '#7aa1ff',
+}: {
+  pos: [number, number, number]
+  h?: number
+  w?: number
+  color?: string
+  accent?: string
+}) {
+  return (
+    <group position={pos}>
+      <RoundedBox args={[w, h, w]} radius={0.05} smoothness={2} position={[0, h / 2, 0]} castShadow>
+        <meshStandardMaterial color={color} roughness={0.6} metalness={0.2} />
+      </RoundedBox>
+      {/* Window grid (front face) */}
+      {Array.from({ length: Math.floor(h / 0.7) }).map((_, row) => (
+        <mesh key={row} position={[0, 0.5 + row * 0.7, w / 2 + 0.012]}>
+          <planeGeometry args={[w * 0.85, 0.22]} />
+          <meshStandardMaterial color={accent} emissive={accent} emissiveIntensity={0.32} />
+        </mesh>
+      ))}
+      {/* Roof block */}
+      <mesh position={[0, h, 0]}>
+        <boxGeometry args={[w * 0.6, 0.5, w * 0.6]} />
+        <meshStandardMaterial color="#1f2332" />
+      </mesh>
+    </group>
+  )
+}
+
+function CircularHQ({ pos }: { pos: [number, number, number] }) {
+  return (
+    <group position={pos}>
+      {/* Outer ring */}
+      <mesh position={[0, 1.5, 0]}>
+        <torusGeometry args={[3.2, 0.7, 12, 48]} />
+        <meshStandardMaterial color="#cfe5f5" emissive="#a5c8e0" emissiveIntensity={0.2} roughness={0.4} metalness={0.3} />
+      </mesh>
+      {/* Inner courtyard */}
+      <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[2.2, 32]} />
+        <meshStandardMaterial color="#34d399" emissive="#34d399" emissiveIntensity={0.2} roughness={0.7} />
+      </mesh>
+      {/* Glass facade ring */}
+      <mesh position={[0, 1.5, 0]}>
+        <torusGeometry args={[3.2, 0.5, 12, 48]} />
+        <meshStandardMaterial color="#e0f0fa" emissive="#cfe5f5" emissiveIntensity={0.4} transparent opacity={0.65} />
+      </mesh>
+    </group>
+  )
+}
+
+function DataCenter({ pos }: { pos: [number, number, number] }) {
+  return (
+    <group position={pos}>
+      {/* Wide low body */}
+      <RoundedBox args={[5, 3, 2]} radius={0.06} smoothness={2} position={[0, 1.5, 0]} castShadow>
+        <meshStandardMaterial color="#3a4d80" roughness={0.7} />
+      </RoundedBox>
+      {/* Vent strips on the front */}
+      {[-1.5, -0.5, 0.5, 1.5].map((x, i) => (
+        <mesh key={i} position={[x, 1.5, 1.01]}>
+          <planeGeometry args={[0.6, 1.4]} />
+          <meshStandardMaterial color="#0a0d1a" emissive="#34d399" emissiveIntensity={0.4} />
+        </mesh>
+      ))}
+      {/* Solar panels on roof */}
+      {Array.from({ length: 4 }).map((_, i) => (
+        <mesh key={i} position={[-1.5 + i * 1, 3.05, 0]} rotation={[-0.3, 0, 0]}>
+          <boxGeometry args={[0.9, 0.06, 0.9]} />
+          <meshStandardMaterial color="#1a2840" emissive="#5e88ff" emissiveIntensity={0.3} metalness={0.5} />
+        </mesh>
+      ))}
+      {/* Sign */}
+      <Text position={[0, 3.6, 1.01]} fontSize={0.26} color="#34d399" anchorX="center" letterSpacing={0.18}>
+        DATA CENTRE
+      </Text>
+    </group>
+  )
+}
+
+function SatelliteDish({ pos }: { pos: [number, number, number] }) {
+  return (
+    <group position={pos}>
+      {/* Squat support tower */}
+      <RoundedBox args={[1.2, 4, 1.2]} radius={0.05} smoothness={2} position={[0, 2, 0]} castShadow>
+        <meshStandardMaterial color="#5a5a62" roughness={0.7} />
+      </RoundedBox>
+      {/* Dish */}
+      <mesh position={[0, 4.6, 0.4]} rotation={[0.5, 0, 0]}>
+        <sphereGeometry args={[1.0, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2]} />
+        <meshStandardMaterial color="#e8e2d2" roughness={0.4} side={THREE.DoubleSide} />
+      </mesh>
+      {/* Dish spike */}
+      <mesh position={[0, 4.6, 1.0]} rotation={[0.5, 0, 0]}>
+        <cylinderGeometry args={[0.04, 0.04, 0.6, 8]} />
+        <meshStandardMaterial color="#1f2332" />
+      </mesh>
+      {/* Antenna spike to the side */}
+      <mesh position={[0.6, 5.5, 0]}>
+        <cylinderGeometry args={[0.03, 0.05, 1.8, 8]} />
+        <meshStandardMaterial color="#1f2332" />
+      </mesh>
+      <mesh position={[0.6, 6.4, 0]}>
+        <sphereGeometry args={[0.07, 12, 8]} />
+        <meshStandardMaterial color="#34d399" emissive="#34d399" emissiveIntensity={1.4} />
+      </mesh>
     </group>
   )
 }

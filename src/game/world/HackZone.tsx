@@ -138,8 +138,8 @@ export function HackZone() {
         transparent
       />
 
-      {/* ---------- CEILING TRUSS — fills the empty top half of the arena ---------- */}
-      <CeilingTruss />
+      {/* ---------- BACKDROP SKYLINE — tech-city silhouette behind the stage ---------- */}
+      <HackathonBackdrop />
 
       {/* ---------- JUDGING TABLE — front-centre area was empty ---------- */}
       <JudgingTable pos={[3, 0, 9.6]} />
@@ -157,42 +157,169 @@ export function HackZone() {
 
 /* --------------------------- HACK ZONE FILLERS --------------------------- */
 
-function CeilingTruss() {
-  // Two long beams running x-direction with cross beams every few units.
-  // Coloured pennant flags hang from a string between the beams.
+/**
+ * Tech-city backdrop behind the stage — visible above and around the Lovable billboard.
+ * Includes a convention center silhouette, a tall tech tower, a glass office, an antenna,
+ * and a low data-centre block. Bright daytime sky tone matches the energetic palette.
+ */
+function HackathonBackdrop() {
   return (
-    <group>
-      {/* Two main x-direction beams */}
-      <mesh position={[0, 5.0, -2]}>
-        <boxGeometry args={[14, 0.08, 0.08]} />
-        <meshStandardMaterial color="#2e2e36" metalness={0.4} roughness={0.5} />
+    <group position={[0, 0, -13]}>
+      {/* Sky strip — bright daytime, slightly warmer than London's */}
+      <mesh position={[0, 6, -1.5]}>
+        <planeGeometry args={[28, 12]} />
+        <meshStandardMaterial color="#ffd2dc" emissive="#ffe4ec" emissiveIntensity={0.3} roughness={0.95} />
       </mesh>
-      <mesh position={[0, 5.0, 4]}>
-        <boxGeometry args={[14, 0.08, 0.08]} />
-        <meshStandardMaterial color="#2e2e36" metalness={0.4} roughness={0.5} />
-      </mesh>
-      {/* Cross beams */}
-      {[-6, -3, 0, 3, 6].map((x) => (
-        <mesh key={x} position={[x, 5.0, 1]}>
-          <boxGeometry args={[0.08, 0.08, 6]} />
-          <meshStandardMaterial color="#2e2e36" metalness={0.4} roughness={0.5} />
+
+      {/* Tall tech tower — far left */}
+      <TechTower pos={[-9, 0, 0]} h={9} w={2.0} color="#3a4d80" accent="#7aa1ff" />
+      {/* Convention center — long low building */}
+      <ConventionCenter pos={[-4, 0, 0]} />
+      {/* Glass office tower — centre back, peeks above billboard */}
+      <GlassTower pos={[0, 0, -2]} h={11} w={2.4} />
+      {/* NVIDIA-style block — right of centre */}
+      <NvidiaBlock pos={[5, 0, 0]} />
+      {/* Antenna tower — far right */}
+      <AntennaTower pos={[9, 0, 0]} />
+    </group>
+  )
+}
+
+function TechTower({ pos, h = 9, w = 2.0, color = '#3a4d80', accent = '#7aa1ff' }: {
+  pos: [number, number, number]
+  h?: number
+  w?: number
+  color?: string
+  accent?: string
+}) {
+  return (
+    <group position={pos}>
+      <RoundedBox args={[w, h, w]} radius={0.04} smoothness={2} position={[0, h / 2, 0]} castShadow>
+        <meshStandardMaterial color={color} roughness={0.7} />
+      </RoundedBox>
+      {/* Window strips */}
+      {Array.from({ length: Math.floor(h / 0.8) }).map((_, i) => (
+        <mesh key={i} position={[0, 0.6 + i * 0.8, w / 2 + 0.01]}>
+          <planeGeometry args={[w * 0.85, 0.18]} />
+          <meshStandardMaterial color={accent} emissive={accent} emissiveIntensity={0.4} />
         </mesh>
       ))}
-      {/* Pennant flag string with coloured triangles */}
-      <mesh position={[0, 4.5, 1]}>
-        <boxGeometry args={[14, 0.01, 0.01]} />
-        <meshStandardMaterial color="#1a1a20" />
+      {/* Roof cap */}
+      <mesh position={[0, h, 0]}>
+        <boxGeometry args={[w * 0.5, 0.4, w * 0.5]} />
+        <meshStandardMaterial color="#1f2332" />
       </mesh>
-      {Array.from({ length: 18 }).map((_, i) => {
-        const x = -7 + i * (14 / 18)
-        const colors = ['#ff4d7a', '#7aa1ff', '#34d399', '#fbbf24', '#c084fc']
-        return (
-          <mesh key={i} position={[x, 4.32, 1]} rotation={[0, 0, Math.PI]}>
-            <coneGeometry args={[0.13, 0.32, 3]} />
-            <meshStandardMaterial color={colors[i % colors.length]} side={THREE.DoubleSide} />
+    </group>
+  )
+}
+
+function ConventionCenter({ pos }: { pos: [number, number, number] }) {
+  return (
+    <group position={pos}>
+      {/* Wide low body */}
+      <RoundedBox args={[5, 4, 2]} radius={0.1} smoothness={3} position={[0, 2, 0]} castShadow>
+        <meshStandardMaterial color="#a8b8c8" roughness={0.6} metalness={0.2} />
+      </RoundedBox>
+      {/* Roof curve — illusion via flatter rounded box on top */}
+      <RoundedBox args={[5.4, 0.6, 2.4]} radius={0.3} smoothness={3} position={[0, 4.3, 0]}>
+        <meshStandardMaterial color="#7a8898" roughness={0.5} metalness={0.3} />
+      </RoundedBox>
+      {/* Big front window */}
+      <mesh position={[0, 1.8, 1.01]}>
+        <planeGeometry args={[4, 2.2]} />
+        <meshStandardMaterial color="#a5c8e0" emissive="#a5c8e0" emissiveIntensity={0.4} transparent opacity={0.85} />
+      </mesh>
+      {/* Banner/sign on top */}
+      <Text position={[0, 4.8, 1.21]} fontSize={0.28} color="#ff4d7a" anchorX="center" letterSpacing={0.18}>
+        CONVENTION CENTRE
+      </Text>
+    </group>
+  )
+}
+
+function GlassTower({ pos, h = 10, w = 2.4 }: { pos: [number, number, number]; h?: number; w?: number }) {
+  return (
+    <group position={pos}>
+      <RoundedBox args={[w, h, w]} radius={0.05} smoothness={2} position={[0, h / 2, 0]} castShadow>
+        <meshStandardMaterial color="#cfe5f5" emissive="#a5c8e0" emissiveIntensity={0.18} roughness={0.2} metalness={0.3} />
+      </RoundedBox>
+      {/* Vertical mullion accents */}
+      {[-w / 3, 0, w / 3].map((x, i) => (
+        <mesh key={i} position={[x, h / 2, w / 2 + 0.012]}>
+          <boxGeometry args={[0.04, h * 0.95, 0.005]} />
+          <meshStandardMaterial color="#3a3a40" />
+        </mesh>
+      ))}
+      {/* Roof helipad */}
+      <mesh position={[0, h + 0.05, 0]}>
+        <cylinderGeometry args={[w * 0.4, w * 0.4, 0.1, 16]} />
+        <meshStandardMaterial color="#34d399" emissive="#34d399" emissiveIntensity={0.4} />
+      </mesh>
+    </group>
+  )
+}
+
+function NvidiaBlock({ pos }: { pos: [number, number, number] }) {
+  return (
+    <group position={pos}>
+      <RoundedBox args={[3.5, 6.5, 2]} radius={0.1} smoothness={3} position={[0, 3.25, 0]} castShadow>
+        <meshStandardMaterial color="#0d4d2c" roughness={0.6} />
+      </RoundedBox>
+      {/* Window grid */}
+      {Array.from({ length: 8 }).map((_, row) =>
+        [-1, -0.3, 0.4, 1.1].map((x, col) => (
+          <mesh key={`${row}-${col}`} position={[x, 1.0 + row * 0.7, 1.01]}>
+            <planeGeometry args={[0.55, 0.4]} />
+            <meshStandardMaterial color="#9ae5c5" emissive="#34d399" emissiveIntensity={0.5} />
           </mesh>
-        )
-      })}
+        ))
+      )}
+      {/* Roof signage block */}
+      <mesh position={[0, 6.9, 0.5]}>
+        <boxGeometry args={[2.5, 0.6, 0.06]} />
+        <meshStandardMaterial color="#0a0d1a" emissive="#34d399" emissiveIntensity={0.6} />
+      </mesh>
+      <Text position={[0, 6.9, 0.55]} fontSize={0.4} color="#ffffff" anchorX="center" letterSpacing={0.18}>
+        TECH HQ
+      </Text>
+    </group>
+  )
+}
+
+function AntennaTower({ pos }: { pos: [number, number, number] }) {
+  return (
+    <group position={pos}>
+      {/* Squat base */}
+      <RoundedBox args={[1.4, 3, 1.4]} radius={0.06} smoothness={2} position={[0, 1.5, 0]} castShadow>
+        <meshStandardMaterial color="#5a5a62" roughness={0.7} />
+      </RoundedBox>
+      {/* Lattice tower — represented as 4 thin pillars + cross-braces */}
+      {[
+        [-0.4, 0, -0.4],
+        [0.4, 0, -0.4],
+        [-0.4, 0, 0.4],
+        [0.4, 0, 0.4],
+      ].map((p, i) => (
+        <mesh key={i} position={[p[0], 4.5, p[2]]}>
+          <boxGeometry args={[0.05, 3, 0.05]} />
+          <meshStandardMaterial color="#3a3a40" metalness={0.4} />
+        </mesh>
+      ))}
+      {/* Antenna spike */}
+      <mesh position={[0, 6.8, 0]}>
+        <cylinderGeometry args={[0.04, 0.06, 1.6, 8]} />
+        <meshStandardMaterial color="#1f2332" />
+      </mesh>
+      {/* Red blinking light */}
+      <mesh position={[0, 7.6, 0]}>
+        <sphereGeometry args={[0.08, 12, 8]} />
+        <meshStandardMaterial color="#ff4d7a" emissive="#ff4d7a" emissiveIntensity={1.5} />
+      </mesh>
+      {/* Satellite dish */}
+      <mesh position={[0.4, 4.5, 0.7]} rotation={[0.5, 0.3, 0]}>
+        <sphereGeometry args={[0.4, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2]} />
+        <meshStandardMaterial color="#e8e2d2" roughness={0.5} side={THREE.DoubleSide} />
+      </mesh>
     </group>
   )
 }

@@ -135,7 +135,8 @@ export function PreZone() {
 function OfficeBackWall() {
   const TRIM_COLOR = '#e6dfcd' // soft warm cream — matches floor accent
   const BASE_Z = -10.6
-  const WALL_HALF_X = 7
+  // Wall now extends the full width of the pre-zone floor tile (16 wide)
+  const WALL_HALF_X = 8
   const wallTopY = 3.4
   const trimTop = wallTopY - 0.45 // top trim sits in the upper 0.45m
   const trimBottom = 0.5 // bottom trim is the lower 0.5m
@@ -163,15 +164,15 @@ function OfficeBackWall() {
         <meshStandardMaterial color={TRIM_COLOR} roughness={0.85} />
       </RoundedBox>
 
-      {/* Continuous glass panel — single span, no mullions, see-through */}
+      {/* Continuous glass panel — slightly stronger tint so it reads as office glass */}
       <mesh position={[0, (trimBottom + trimTop) / 2, BASE_Z + 0.02]}>
         <planeGeometry args={[WALL_HALF_X * 2 - 0.05, trimTop - trimBottom]} />
         <meshStandardMaterial
-          color="#cfe5f5"
+          color="#a5c8e0"
           transparent
-          opacity={0.16}
-          roughness={0.05}
-          metalness={0.05}
+          opacity={0.32}
+          roughness={0.08}
+          metalness={0.08}
           side={THREE.DoubleSide}
         />
       </mesh>

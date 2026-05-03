@@ -261,17 +261,21 @@ export function LovablePoster({
   rotation = 0,
   scale = 1.5,
   hideFrame = false,
+  variant = 'onDark',
 }: {
   pos: [number, number, number]
   rotation?: number
   scale?: number
   /** When true, drop the dark/red emissive frame and render only the wordmark image. */
   hideFrame?: boolean
+  /** Which transparent wordmark to use: dark text (for light surfaces) or light text (for dark surfaces). */
+  variant?: 'onLight' | 'onDark'
 }) {
   const accentMat = useMemo(
     () => ({ color: '#0a0d1a', emissive: '#ff4d7a', emissiveIntensity: 0.18, roughness: 0.55 }),
     []
   )
+  const wordmarkUrl = variant === 'onLight' ? '/logos/lovable-dark.png' : '/logos/lovable-light.png'
   return (
     <group position={pos} rotation={[0, rotation, 0]}>
       {!hideFrame && (
@@ -280,7 +284,7 @@ export function LovablePoster({
         </RoundedBox>
       )}
       <DreiImage
-        url="/logos/lovable-wordmark-dark.png"
+        url={wordmarkUrl}
         position={[0, 0, hideFrame ? 0 : 0.04]}
         scale={[scale * 1.18, scale * 0.42]}
         transparent

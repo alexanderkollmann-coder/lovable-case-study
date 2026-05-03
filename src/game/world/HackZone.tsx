@@ -8,7 +8,6 @@ import {
   Banner,
   Riser,
   useZoneActivity,
-  LovableHeartFloating,
   HackathonTeam,
   StandingNPC,
   WinnerScreen,
@@ -130,9 +129,14 @@ export function HackZone() {
       <Banner pos={[7, 0, -8.5]} color="#ff5577" />
       <Banner pos={[7, 0, 8.5]} color="#34d399" />
 
-      {/* ---------- SNACK BAR + perched Lovable heart ---------- */}
+      {/* ---------- SNACK BAR + heart fixed to its camera-facing front face ---------- */}
       <SnackBar pos={[-6.5, 0, 1]} />
-      <LovableHeartFloating pos={[-6.5, 1.95, 1]} scale={0.32} />
+      <DreiImage
+        url="/logos/lovable-heart.png"
+        position={[-6.5, 0.5, 1.36]}
+        scale={[0.55, 0.55]}
+        transparent
+      />
     </group>
   )
 }

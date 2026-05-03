@@ -136,6 +136,10 @@ interface GameState {
   /** Active visual palette. Cycle through PALETTE_ORDER. */
   palette: Palette
 
+  /** When true, the R3F render loop is paused to save CPU/GPU while idle. */
+  renderPaused: boolean
+  toggleRenderPaused: () => void
+
   setTimeline: (t: Timeline) => void
   beginTransitionTo: (t: Timeline) => void
   finishTransition: () => void

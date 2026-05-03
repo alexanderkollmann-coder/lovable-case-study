@@ -39,8 +39,6 @@ export function Booth({ meta }: BoothProps) {
     g.scale.lerp(new THREE.Vector3(desiredScale, desiredScale, desiredScale), 1 - Math.exp(-3 * delta))
   })
 
-  const store = useGameStore.getState()
-  const isActiveTimeline = store.timeline === meta.timeline
 
   return (
     <group

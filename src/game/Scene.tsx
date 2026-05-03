@@ -50,18 +50,32 @@ function SceneContents() {
 function SkyAndFog({ fogColor }: { fogColor: THREE.Color }) {
   const tmp = useMemo(() => new THREE.Color(), [])
   useFrame((state, delta) => {
-    const palette = PALETTES[useGameStore.getState().palette]
+    const store = useGameStore.getState()
+    const palette = PALETTES[store.palette]
+    const inCinematic = store.cinematicShotId !== null
+
     tmp.set(palette.fog)
     fogColor.lerp(tmp, 1 - Math.exp(-3 * delta))
-    // Background uses the palette's "background" colour (often slightly different from fog)
+
+    // Background tracks the palette's background colour
     if (!(state.scene.background instanceof THREE.Color)) {
       state.scene.background = new THREE.Color()
     }
     ;(state.scene.background as THREE.Color).lerp(new THREE.Color(palette.background), 1 - Math.exp(-3 * delta))
-    if (!state.scene.fog) {
-      state.scene.fog = new THREE.Fog(fogColor, 32, 80)
+
+    // Fog: disabled during cinematic shots so distant scenery never fades out as the camera moves.
+    // Wider range (50 → 220) for regular gameplay so casual movement also doesn't fade scenery prematurely.
+    if (inCinematic) {
+      state.scene.fog = null
     } else {
-      ;(state.scene.fog as THREE.Fog).color.copy(fogColor)
+      if (!state.scene.fog || !(state.scene.fog instanceof THREE.Fog)) {
+        state.scene.fog = new THREE.Fog(fogColor, 50, 220)
+      } else {
+        const fog = state.scene.fog as THREE.Fog
+        fog.color.copy(fogColor)
+        fog.near = 50
+        fog.far = 220
+      }
     }
   })
   return null

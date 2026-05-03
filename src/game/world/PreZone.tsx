@@ -49,8 +49,8 @@ export function PreZone() {
       {/* ---------- INTERIOR OFFICE FLOOR ---------- */}
       {/* Light office wall — segmented around the windows so they're true see-through openings */}
       <OfficeBackWall />
-      {/* Lovable wordmark — transparent dark-text version on the now-light wall */}
-      <LovablePoster pos={[-6, 2.95, -10.3]} scale={1.4} hideFrame variant="onLight" />
+      {/* Lovable wordmark — sits on the opaque brand plate in the upper trim */}
+      <LovablePoster pos={[-4.5, 3.18, -10.38]} scale={2.0} hideFrame variant="onLight" />
 
       {/* ---------- DESKS — open-plan rows (the centre column is reserved for the meeting scene) ---------- */}
       <Desk pos={[-5, 0, -7]} twin />
@@ -115,8 +115,8 @@ export function PreZone() {
       {/* Red phone box (a London staple) */}
       <PhoneBox pos={[5.5, 0, 6.5]} />
 
-      {/* Double-decker bus, parked further back */}
-      <Bus pos={[3, 0, -10]} />
+      {/* Double-decker bus parked outside the office, to the left — visible through the glass */}
+      <Bus pos={[-6, 0, -12]} />
 
       {/* Street lamps */}
       <StreetLamp pos={[-7.5, 0, 9]} />
@@ -128,131 +128,74 @@ export function PreZone() {
 /* ----------------------------- OFFICE BACK WALL ----------------------------- */
 
 /**
- * Light office wall, segmented to leave four genuine see-through window openings.
- * Top + bottom strips run full width; vertical pillars sit between the windows. Each
- * opening gets a slim dark frame with a centre mullion (an office-window look).
+ * Modern glass curtain wall — slim metal trim top + bottom, continuous transparent glass
+ * spanning the entire width with no individual mullions. A small opaque brand plate inset
+ * into the top trim hosts the Lovable wordmark (added separately in PreZone).
  */
 function OfficeBackWall() {
-  const WALL_COLOR = '#e6dfcd' // soft warm cream
-  const FRAME_COLOR = '#2a2a32'
+  const TRIM_COLOR = '#e6dfcd' // soft warm cream — matches floor accent
   const BASE_Z = -10.6
-  const WINDOWS = [-4, -1, 2, 5] // x centres of each window
-  const WINDOW_W = 1.6
-  const WINDOW_H = 1.2
-  const WINDOW_Y = 2.0 // centre y
   const WALL_HALF_X = 7
-
-  // y range covered by windows
-  const winTop = WINDOW_Y + WINDOW_H / 2 // 2.6
-  const winBottom = WINDOW_Y - WINDOW_H / 2 // 1.4
-  const wallTopY = 3.4 // top of wall
-  const wallBottomY = 0 // floor
-
-  // Pillar segments (between/around windows) at the window y range
-  const halfW = WINDOW_W / 2
-  const xs = WINDOWS.slice().sort((a, b) => a - b)
-  const pillars: Array<[number, number]> = []
-  let cursor = -WALL_HALF_X
-  for (const wx of xs) {
-    const wLeft = wx - halfW
-    if (wLeft > cursor) {
-      const w = wLeft - cursor
-      pillars.push([cursor + w / 2, w])
-    }
-    cursor = wx + halfW
-  }
-  if (cursor < WALL_HALF_X) {
-    const w = WALL_HALF_X - cursor
-    pillars.push([cursor + w / 2, w])
-  }
+  const wallTopY = 3.4
+  const trimTop = wallTopY - 0.45 // top trim sits in the upper 0.45m
+  const trimBottom = 0.5 // bottom trim is the lower 0.5m
 
   return (
     <group>
-      {/* Top strip */}
+      {/* Bottom trim — solid base */}
       <RoundedBox
-        args={[WALL_HALF_X * 2, wallTopY - winTop, 0.3]}
+        args={[WALL_HALF_X * 2, trimBottom, 0.3]}
         radius={0.04}
         smoothness={2}
-        position={[0, (wallTopY + winTop) / 2, BASE_Z]}
+        position={[0, trimBottom / 2, BASE_Z]}
         castShadow
       >
-        <meshStandardMaterial color={WALL_COLOR} roughness={0.85} />
+        <meshStandardMaterial color={TRIM_COLOR} roughness={0.85} />
       </RoundedBox>
-      {/* Bottom strip */}
+      {/* Top trim — solid header where the brand plate sits */}
       <RoundedBox
-        args={[WALL_HALF_X * 2, winBottom - wallBottomY, 0.3]}
+        args={[WALL_HALF_X * 2, wallTopY - trimTop, 0.3]}
         radius={0.04}
         smoothness={2}
-        position={[0, (winBottom + wallBottomY) / 2, BASE_Z]}
+        position={[0, (wallTopY + trimTop) / 2, BASE_Z]}
         castShadow
       >
-        <meshStandardMaterial color={WALL_COLOR} roughness={0.85} />
+        <meshStandardMaterial color={TRIM_COLOR} roughness={0.85} />
       </RoundedBox>
-      {/* Pillars between windows (only at window y range) */}
-      {pillars.map(([cx, w]) => (
-        <RoundedBox
-          key={`p-${cx}`}
-          args={[w, WINDOW_H, 0.3]}
-          radius={0.04}
-          smoothness={2}
-          position={[cx, WINDOW_Y, BASE_Z]}
-          castShadow
-        >
-          <meshStandardMaterial color={WALL_COLOR} roughness={0.85} />
-        </RoundedBox>
-      ))}
-      {/* Window frames — sit slightly forward of the wall */}
-      {WINDOWS.map((x) => (
-        <WindowFrame key={`f-${x}`} x={x} y={WINDOW_Y} z={BASE_Z + 0.16} w={WINDOW_W} h={WINDOW_H} color={FRAME_COLOR} />
-      ))}
-    </group>
-  )
-}
 
-function WindowFrame({
-  x,
-  y,
-  z,
-  w,
-  h,
-  color,
-}: {
-  x: number
-  y: number
-  z: number
-  w: number
-  h: number
-  color: string
-}) {
-  const T = 0.05 // frame thickness
-  const D = 0.04 // frame depth
-  return (
-    <group position={[x, y, z]}>
-      {/* Top */}
-      <mesh position={[0, h / 2, 0]}>
-        <boxGeometry args={[w + T * 2, T, D]} />
-        <meshStandardMaterial color={color} roughness={0.5} />
+      {/* Continuous glass panel — single span, no mullions, see-through */}
+      <mesh position={[0, (trimBottom + trimTop) / 2, BASE_Z + 0.02]}>
+        <planeGeometry args={[WALL_HALF_X * 2 - 0.05, trimTop - trimBottom]} />
+        <meshStandardMaterial
+          color="#cfe5f5"
+          transparent
+          opacity={0.16}
+          roughness={0.05}
+          metalness={0.05}
+          side={THREE.DoubleSide}
+        />
       </mesh>
-      {/* Bottom */}
-      <mesh position={[0, -h / 2, 0]}>
-        <boxGeometry args={[w + T * 2, T, D]} />
-        <meshStandardMaterial color={color} roughness={0.5} />
+
+      {/* Subtle horizontal frame line that visually separates trim from glass — top */}
+      <mesh position={[0, trimTop, BASE_Z + 0.16]}>
+        <boxGeometry args={[WALL_HALF_X * 2, 0.03, 0.04]} />
+        <meshStandardMaterial color="#3a3a40" roughness={0.4} metalness={0.2} />
       </mesh>
-      {/* Left */}
-      <mesh position={[-w / 2, 0, 0]}>
-        <boxGeometry args={[T, h, D]} />
-        <meshStandardMaterial color={color} roughness={0.5} />
+      {/* and bottom */}
+      <mesh position={[0, trimBottom, BASE_Z + 0.16]}>
+        <boxGeometry args={[WALL_HALF_X * 2, 0.03, 0.04]} />
+        <meshStandardMaterial color="#3a3a40" roughness={0.4} metalness={0.2} />
       </mesh>
-      {/* Right */}
-      <mesh position={[w / 2, 0, 0]}>
-        <boxGeometry args={[T, h, D]} />
-        <meshStandardMaterial color={color} roughness={0.5} />
-      </mesh>
-      {/* Centre vertical mullion */}
-      <mesh position={[0, 0, 0]}>
-        <boxGeometry args={[T * 0.7, h, D * 0.6]} />
-        <meshStandardMaterial color={color} roughness={0.5} />
-      </mesh>
+
+      {/* Brand plate — opaque cream rectangle in the top trim where the wordmark sits */}
+      <RoundedBox
+        args={[2.4, 0.5, 0.05]}
+        radius={0.04}
+        smoothness={2}
+        position={[-4.5, (wallTopY + trimTop) / 2, BASE_Z + 0.18]}
+      >
+        <meshStandardMaterial color="#f4ecd9" roughness={0.55} />
+      </RoundedBox>
     </group>
   )
 }
@@ -262,10 +205,10 @@ function WindowFrame({
 function LondonSkyline({ activityRef }: { activityRef: React.MutableRefObject<number> }) {
   return (
     <group position={[0, 0, -13]}>
-      {/* Sky backdrop strip with subtle gradient feel */}
+      {/* Sky backdrop — bright daytime blue */}
       <mesh position={[0, 6, -1.5]}>
         <planeGeometry args={[28, 12]} />
-        <meshStandardMaterial color="#3b507d" emissive="#7aa1ff" emissiveIntensity={0.08} roughness={0.95} />
+        <meshStandardMaterial color="#cce4ff" emissive="#dceffd" emissiveIntensity={0.25} roughness={0.95} />
       </mesh>
 
       <BigBen pos={[-9, 0, 0]} activityRef={activityRef} />

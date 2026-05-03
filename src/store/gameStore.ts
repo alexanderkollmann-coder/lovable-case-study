@@ -95,15 +95,15 @@ export const PALETTES: Record<Palette, {
   },
   energetic: {
     name: 'Energetic',
-    description: 'Bright, saturated, high-energy',
-    background: '#fbe5ec',
-    fog: '#f6d3df',
-    groundColor: '#e8b8cc',
-    ambientIntensity: 1.05,
-    ambientColor: '#fff8f0',
-    directionalIntensity: 1.4,
+    description: 'Bright daylight, modern, energising',
+    background: '#dceffd',
+    fog: '#cce4ff',
+    groundColor: '#e8e2d2',
+    ambientIntensity: 1.1,
+    ambientColor: '#fff8ec',
+    directionalIntensity: 1.5,
     directionalColor: '#ffffff',
-    swatch: '#ff5e91',
+    swatch: '#ff7a5f',
     mood: 'light',
   },
 }
@@ -160,7 +160,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   hasSeenHint: false,
   avatarTarget: null,
   cinematicShotId: null,
-  palette: 'cinematic',
+  palette: 'energetic',
 
   setTimeline: (timeline) => set({ timeline, pendingTimeline: null, isTransitioning: false }),
 

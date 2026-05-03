@@ -137,6 +137,132 @@ export function HackZone() {
         scale={[0.55, 0.55]}
         transparent
       />
+
+      {/* ---------- CEILING TRUSS — fills the empty top half of the arena ---------- */}
+      <CeilingTruss />
+
+      {/* ---------- JUDGING TABLE — front-centre area was empty ---------- */}
+      <JudgingTable pos={[3, 0, 9.6]} />
+
+      {/* ---------- FLOOR CABLE STRIP — runs from desks toward the stage ---------- */}
+      <CableStrip from={[0, 0, 1]} to={[0, 0, -3]} />
+
+      {/* ---------- STORAGE CRATES — convention atmosphere ---------- */}
+      <Crate pos={[6.4, 0, 9.5]} color="#ff4d7a" />
+      <Crate pos={[6.4, 0.55, 9.5]} color="#7aa1ff" rotated />
+      <Crate pos={[7.1, 0, 7.8]} color="#34d399" />
+    </group>
+  )
+}
+
+/* --------------------------- HACK ZONE FILLERS --------------------------- */
+
+function CeilingTruss() {
+  // Two long beams running x-direction with cross beams every few units.
+  // Coloured pennant flags hang from a string between the beams.
+  return (
+    <group>
+      {/* Two main x-direction beams */}
+      <mesh position={[0, 5.0, -2]}>
+        <boxGeometry args={[14, 0.08, 0.08]} />
+        <meshStandardMaterial color="#2e2e36" metalness={0.4} roughness={0.5} />
+      </mesh>
+      <mesh position={[0, 5.0, 4]}>
+        <boxGeometry args={[14, 0.08, 0.08]} />
+        <meshStandardMaterial color="#2e2e36" metalness={0.4} roughness={0.5} />
+      </mesh>
+      {/* Cross beams */}
+      {[-6, -3, 0, 3, 6].map((x) => (
+        <mesh key={x} position={[x, 5.0, 1]}>
+          <boxGeometry args={[0.08, 0.08, 6]} />
+          <meshStandardMaterial color="#2e2e36" metalness={0.4} roughness={0.5} />
+        </mesh>
+      ))}
+      {/* Pennant flag string with coloured triangles */}
+      <mesh position={[0, 4.5, 1]}>
+        <boxGeometry args={[14, 0.01, 0.01]} />
+        <meshStandardMaterial color="#1a1a20" />
+      </mesh>
+      {Array.from({ length: 18 }).map((_, i) => {
+        const x = -7 + i * (14 / 18)
+        const colors = ['#ff4d7a', '#7aa1ff', '#34d399', '#fbbf24', '#c084fc']
+        return (
+          <mesh key={i} position={[x, 4.32, 1]} rotation={[0, 0, Math.PI]}>
+            <coneGeometry args={[0.13, 0.32, 3]} />
+            <meshStandardMaterial color={colors[i % colors.length]} side={THREE.DoubleSide} />
+          </mesh>
+        )
+      })}
+    </group>
+  )
+}
+
+function JudgingTable({ pos }: { pos: [number, number, number] }) {
+  return (
+    <group position={pos}>
+      {/* Long table */}
+      <RoundedBox args={[2.8, 0.08, 1.0]} radius={0.04} smoothness={2} position={[0, 0.78, 0]} castShadow>
+        <meshStandardMaterial color="#3a4d80" roughness={0.5} />
+      </RoundedBox>
+      {/* Tablecloth band */}
+      <mesh position={[0, 0.4, 0.51]}>
+        <planeGeometry args={[2.8, 0.78]} />
+        <meshStandardMaterial color="#ff4d7a" roughness={0.6} side={THREE.DoubleSide} />
+      </mesh>
+      <Text position={[0, 0.4, 0.516]} fontSize={0.2} color="#ffffff" anchorX="center" letterSpacing={0.18}>
+        JUDGES
+      </Text>
+      {/* Three chairs behind */}
+      {[-0.9, 0, 0.9].map((x, i) => (
+        <group key={i} position={[x, 0, -0.6]}>
+          <RoundedBox args={[0.5, 0.07, 0.5]} radius={0.04} smoothness={2} position={[0, 0.45, 0]}>
+            <meshStandardMaterial color="#1f2332" />
+          </RoundedBox>
+          <RoundedBox args={[0.5, 0.55, 0.05]} radius={0.04} smoothness={2} position={[0, 0.78, -0.25]}>
+            <meshStandardMaterial color="#1f2332" />
+          </RoundedBox>
+        </group>
+      ))}
+      {/* Three small placards */}
+      {[-0.9, 0, 0.9].map((x) => (
+        <RoundedBox key={x} args={[0.5, 0.18, 0.04]} radius={0.02} smoothness={2} rotation={[Math.PI / 12, 0, 0]} position={[x, 0.91, 0.35]}>
+          <meshStandardMaterial color="#ffffff" roughness={0.4} />
+        </RoundedBox>
+      ))}
+    </group>
+  )
+}
+
+function CableStrip({ from, to }: { from: [number, number, number]; to: [number, number, number] }) {
+  const dx = to[0] - from[0]
+  const dz = to[2] - from[2]
+  const len = Math.sqrt(dx * dx + dz * dz)
+  const angle = Math.atan2(dx, dz)
+  return (
+    <group position={[(from[0] + to[0]) / 2, 0.025, (from[2] + to[2]) / 2]} rotation={[0, angle, 0]}>
+      <mesh>
+        <boxGeometry args={[0.18, 0.05, len]} />
+        <meshStandardMaterial color="#1a1a20" roughness={0.7} />
+      </mesh>
+    </group>
+  )
+}
+
+function Crate({ pos, color, rotated = false }: { pos: [number, number, number]; color: string; rotated?: boolean }) {
+  return (
+    <group position={pos} rotation={[0, rotated ? Math.PI / 5 : 0, 0]}>
+      <RoundedBox args={[0.7, 0.55, 0.7]} radius={0.04} smoothness={2} position={[0, 0.275, 0]} castShadow>
+        <meshStandardMaterial color={color} roughness={0.6} />
+      </RoundedBox>
+      {/* metal bands */}
+      <mesh position={[0, 0.13, 0]}>
+        <boxGeometry args={[0.74, 0.04, 0.74]} />
+        <meshStandardMaterial color="#1f2332" metalness={0.4} />
+      </mesh>
+      <mesh position={[0, 0.42, 0]}>
+        <boxGeometry args={[0.74, 0.04, 0.74]} />
+        <meshStandardMaterial color="#1f2332" metalness={0.4} />
+      </mesh>
     </group>
   )
 }

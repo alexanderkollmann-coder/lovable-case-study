@@ -256,6 +256,11 @@ export function Riser({ pos, size = [2.4, 0.18, 1.6] }: { pos: [number, number, 
 /*  Lovable-branded decoration                                                  */
 /* -------------------------------------------------------------------------- */
 
+// Aspect ratio of the new transparent wordmark images (911 × 155).
+// drei's <Image> cover-fits to its scale rectangle — if the rectangle's aspect doesn't
+// match the image, the image is cropped. So we always render at the natural aspect.
+const WORDMARK_ASPECT = 911 / 155 // ~5.88
+
 export function LovablePoster({
   pos,
   rotation = 0,
@@ -265,6 +270,7 @@ export function LovablePoster({
 }: {
   pos: [number, number, number]
   rotation?: number
+  /** Width of the wordmark, in world units. */
   scale?: number
   /** When true, drop the dark/red emissive frame and render only the wordmark image. */
   hideFrame?: boolean
@@ -276,17 +282,19 @@ export function LovablePoster({
     []
   )
   const wordmarkUrl = variant === 'onLight' ? '/logos/lovable-dark.png' : '/logos/lovable-light.png'
+  const w = scale
+  const h = scale / WORDMARK_ASPECT
   return (
     <group position={pos} rotation={[0, rotation, 0]}>
       {!hideFrame && (
-        <RoundedBox args={[scale * 1.2, scale * 0.5, 0.06]} radius={0.04} smoothness={2}>
+        <RoundedBox args={[w * 1.08, h * 1.6, 0.06]} radius={0.04} smoothness={2}>
           <meshStandardMaterial {...accentMat} />
         </RoundedBox>
       )}
       <DreiImage
         url={wordmarkUrl}
         position={[0, 0, hideFrame ? 0 : 0.04]}
-        scale={[scale * 1.18, scale * 0.42]}
+        scale={[w, h]}
         transparent
       />
     </group>

@@ -2,7 +2,7 @@ import { RoundedBox, Text } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 import * as THREE from 'three'
-import { SeatedNPC, useZoneActivity } from './SharedProps'
+import { SeatedNPC, useZoneActivity, Plant, Bookshelf } from './SharedProps'
 
 const ZONE_CENTER_X = 17
 
@@ -91,6 +91,134 @@ export function PostZone() {
         letterSpacing={0.18}
       >
         DEPLOYMENT · WAR ROOM
+      </Text>
+
+      {/* ---------- BACKGROUND FILLERS — make the war room feel populated ---------- */}
+      {/* Sprint board on left wall */}
+      <OpsWhiteboard pos={[-7.6, 0, 3.5]} rotation={Math.PI / 2} />
+      {/* Filing cabinets along left wall */}
+      <FilingCabinet pos={[-7.6, 0, -3]} rotation={Math.PI / 2} />
+      <FilingCabinet pos={[-7.6, 0, -1.5]} rotation={Math.PI / 2} />
+      {/* Coffee corner front-right */}
+      <CoffeeCorner pos={[6, 0, 7.5]} />
+      {/* Bookshelf on right wall */}
+      <Bookshelf pos={[7.6, 0, 4]} rotation={-Math.PI / 2} />
+      {/* Plants in front corners */}
+      <Plant pos={[-7, 0, 9.5]} />
+      <Plant pos={[7, 0, 9.5]} />
+    </group>
+  )
+}
+
+/* --------------------------- POST ZONE FILLERS --------------------------- */
+
+function OpsWhiteboard({ pos, rotation = 0 }: { pos: [number, number, number]; rotation?: number }) {
+  const stickies: Array<{ x: number; y: number; color: string }> = [
+    { x: -0.7, y: 0.4, color: '#fbbf24' },
+    { x: -0.4, y: 0.5, color: '#7aa1ff' },
+    { x: -0.05, y: 0.3, color: '#ff7596' },
+    { x: 0.5, y: 0.6, color: '#34d399' },
+    { x: 0.7, y: 0.15, color: '#fbbf24' },
+    { x: -0.3, y: -0.3, color: '#7aa1ff' },
+    { x: 0.3, y: -0.4, color: '#ff7596' },
+    { x: 0.6, y: -0.2, color: '#34d399' },
+  ]
+  return (
+    <group position={pos} rotation={[0, rotation, 0]}>
+      {/* Frame backplate */}
+      <RoundedBox args={[2.5, 1.7, 0.06]} radius={0.04} smoothness={2} position={[0, 1.4, -0.04]} castShadow>
+        <meshStandardMaterial color="#1f2332" />
+      </RoundedBox>
+      {/* Whiteboard surface */}
+      <RoundedBox args={[2.4, 1.6, 0.06]} radius={0.04} smoothness={2} position={[0, 1.4, 0]} castShadow>
+        <meshStandardMaterial color="#f7f4ec" roughness={0.7} />
+      </RoundedBox>
+      {/* Sticky notes */}
+      {stickies.map((s, i) => (
+        <mesh key={i} position={[s.x, 1.4 + s.y, 0.04]}>
+          <planeGeometry args={[0.2, 0.2]} />
+          <meshStandardMaterial color={s.color} roughness={0.7} side={THREE.DoubleSide} />
+        </mesh>
+      ))}
+      {/* Title */}
+      <Text position={[0, 2.08, 0.05]} fontSize={0.12} color="#34d399" anchorX="center" letterSpacing={0.18}>
+        SPRINT BOARD
+      </Text>
+      {/* Column dividers (faint) */}
+      {[-0.8, 0, 0.8].map((x) => (
+        <mesh key={x} position={[x, 1.4, 0.04]}>
+          <boxGeometry args={[0.005, 1.5, 0.001]} />
+          <meshStandardMaterial color="#9aa0aa" />
+        </mesh>
+      ))}
+      {/* Stand */}
+      <mesh position={[-0.95, 0.3, 0]}>
+        <boxGeometry args={[0.08, 0.6, 0.08]} />
+        <meshStandardMaterial color="#1f2332" />
+      </mesh>
+      <mesh position={[0.95, 0.3, 0]}>
+        <boxGeometry args={[0.08, 0.6, 0.08]} />
+        <meshStandardMaterial color="#1f2332" />
+      </mesh>
+    </group>
+  )
+}
+
+function FilingCabinet({ pos, rotation = 0 }: { pos: [number, number, number]; rotation?: number }) {
+  return (
+    <group position={pos} rotation={[0, rotation, 0]}>
+      <RoundedBox args={[0.7, 1.4, 0.5]} radius={0.04} smoothness={2} position={[0, 0.7, 0]} castShadow>
+        <meshStandardMaterial color="#3a3a40" roughness={0.7} metalness={0.2} />
+      </RoundedBox>
+      {/* Drawer handles */}
+      {[0.3, 0.75, 1.2].map((y, i) => (
+        <mesh key={i} position={[0, y, 0.27]}>
+          <boxGeometry args={[0.18, 0.04, 0.05]} />
+          <meshStandardMaterial color="#9aa0aa" metalness={0.5} />
+        </mesh>
+      ))}
+      {/* Faint drawer divider lines */}
+      {[0.5, 0.95].map((y, i) => (
+        <mesh key={`d-${i}`} position={[0, y, 0.26]}>
+          <boxGeometry args={[0.7, 0.008, 0.001]} />
+          <meshStandardMaterial color="#5a5a62" />
+        </mesh>
+      ))}
+    </group>
+  )
+}
+
+function CoffeeCorner({ pos }: { pos: [number, number, number] }) {
+  return (
+    <group position={pos}>
+      {/* Counter */}
+      <RoundedBox args={[1.6, 0.96, 0.7]} radius={0.06} smoothness={2} position={[0, 0.48, 0]} castShadow>
+        <meshStandardMaterial color="#3a4d80" roughness={0.55} />
+      </RoundedBox>
+      <RoundedBox args={[1.6, 0.04, 0.92]} radius={0.04} smoothness={2} position={[0, 0.98, 0]}>
+        <meshStandardMaterial color="#1f2332" />
+      </RoundedBox>
+      {/* Coffee machine */}
+      <RoundedBox args={[0.55, 0.6, 0.42]} radius={0.04} smoothness={2} position={[0.4, 1.3, -0.06]} castShadow>
+        <meshStandardMaterial color="#15171f" roughness={0.4} metalness={0.4} />
+      </RoundedBox>
+      {/* Indicator light */}
+      <mesh position={[0.4, 1.55, 0.16]}>
+        <boxGeometry args={[0.18, 0.03, 0.03]} />
+        <meshStandardMaterial color="#34d399" emissive="#34d399" emissiveIntensity={0.9} />
+      </mesh>
+      {/* Coffee cups */}
+      <mesh position={[-0.45, 1.06, 0]}>
+        <cylinderGeometry args={[0.07, 0.08, 0.13, 12]} />
+        <meshStandardMaterial color="#ffffff" roughness={0.5} />
+      </mesh>
+      <mesh position={[-0.25, 1.06, 0.12]}>
+        <cylinderGeometry args={[0.07, 0.08, 0.13, 12]} />
+        <meshStandardMaterial color="#ffffff" roughness={0.5} />
+      </mesh>
+      {/* Sign */}
+      <Text position={[0, 1.85, 0]} fontSize={0.14} color="#34d399" anchorX="center" letterSpacing={0.18}>
+        OPS COFFEE
       </Text>
     </group>
   )

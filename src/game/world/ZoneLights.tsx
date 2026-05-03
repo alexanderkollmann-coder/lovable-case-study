@@ -33,14 +33,22 @@ function ZoneKeyLight({ zone }: { zone: Timeline }) {
   const palette = TIMELINE_COLORS[zone]
 
   useFrame((_, delta) => {
-    const active = useGameStore.getState().timeline === zone
+    const store = useGameStore.getState()
+    const active = store.timeline === zone
+    const inCinematic = store.cinematicShotId !== null
     const target = active ? 4.6 : 0.05
-    intensityRef.current = THREE.MathUtils.lerp(intensityRef.current, target, 1 - Math.exp(-3.5 * delta))
+    // Snap to target instantly during cinematic shots so lights don't ramp on screen.
+    intensityRef.current = inCinematic
+      ? target
+      : THREE.MathUtils.lerp(intensityRef.current, target, 1 - Math.exp(-3.5 * delta))
     if (lightRef.current) {
       lightRef.current.intensity = intensityRef.current
-      // also slightly bias the colour temperature (cooler when off)
       const c = new THREE.Color(palette.accent)
-      lightRef.current.color.lerp(c, 1 - Math.exp(-2 * delta))
+      if (inCinematic) {
+        lightRef.current.color.copy(c)
+      } else {
+        lightRef.current.color.lerp(c, 1 - Math.exp(-2 * delta))
+      }
     }
     if (targetRef.current) {
       targetRef.current.position.set(center[0], 0, center[1])

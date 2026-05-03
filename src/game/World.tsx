@@ -89,15 +89,22 @@ function ZoneFloor({ timeline, center, size }: ZoneSpec) {
   const dimmedColor = useMemo(() => new THREE.Color('#0a0d18'), [])
 
   useFrame((_, delta) => {
-    const active = useGameStore.getState().timeline === timeline
+    const store = useGameStore.getState()
+    const active = store.timeline === timeline
+    const inCinematic = store.cinematicShotId !== null
     if (!matRef.current) return
     targetColor.copy(active ? baseColor : dimmedColor)
-    matRef.current.color.lerp(targetColor, 1 - Math.exp(-3 * delta))
-    matRef.current.emissiveIntensity = THREE.MathUtils.lerp(
-      matRef.current.emissiveIntensity ?? 0,
-      active ? 0.05 : 0,
-      1 - Math.exp(-3 * delta)
-    )
+    if (inCinematic) {
+      matRef.current.color.copy(targetColor)
+      matRef.current.emissiveIntensity = active ? 0.05 : 0
+    } else {
+      matRef.current.color.lerp(targetColor, 1 - Math.exp(-3 * delta))
+      matRef.current.emissiveIntensity = THREE.MathUtils.lerp(
+        matRef.current.emissiveIntensity ?? 0,
+        active ? 0.05 : 0,
+        1 - Math.exp(-3 * delta)
+      )
+    }
   })
 
   return (

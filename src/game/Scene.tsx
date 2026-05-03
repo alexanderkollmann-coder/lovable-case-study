@@ -48,14 +48,22 @@ function SceneContents() {
 }
 
 function SkyAndFog({ fogColor: _ }: { fogColor: THREE.Color }) {
+  const tmp = useMemo(() => new THREE.Color(), [])
   useFrame((state, delta) => {
-    const palette = PALETTES[useGameStore.getState().palette]
+    const store = useGameStore.getState()
+    const palette = PALETTES[store.palette]
+    const inCinematic = store.cinematicShotId !== null
 
     // Background tracks the palette's background colour
     if (!(state.scene.background instanceof THREE.Color)) {
       state.scene.background = new THREE.Color()
     }
-    ;(state.scene.background as THREE.Color).lerp(new THREE.Color(palette.background), 1 - Math.exp(-3 * delta))
+    tmp.set(palette.background)
+    if (inCinematic) {
+      ;(state.scene.background as THREE.Color).copy(tmp)
+    } else {
+      ;(state.scene.background as THREE.Color).lerp(tmp, 1 - Math.exp(-3 * delta))
+    }
 
     // Fog removed entirely — was causing distant scenery to fade in/out as camera moved
     state.scene.fog = null

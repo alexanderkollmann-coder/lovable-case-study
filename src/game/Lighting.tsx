@@ -19,21 +19,25 @@ export function Lighting() {
   const fillTarget = useRef(new THREE.Color(PALETTES.cinematic.fog))
 
   useFrame((state, delta) => {
-    const palette = PALETTES[useGameStore.getState().palette]
+    const store = useGameStore.getState()
+    const palette = PALETTES[store.palette]
+    const inCinematic = store.cinematicShotId !== null
     ambientTarget.current.set(palette.ambientColor)
     dirTarget.current.set(palette.directionalColor)
     fillTarget.current.set(palette.fog)
 
-    const lerpRate = 1 - Math.exp(-3 * delta)
+    const lerpRate = inCinematic ? 1 : 1 - Math.exp(-3 * delta)
     if (ambientRef.current) {
       ambientRef.current.color.lerp(ambientTarget.current, lerpRate)
-      ambientRef.current.intensity = damp(ambientRef.current.intensity, palette.ambientIntensity, 4, delta)
+      ambientRef.current.intensity = inCinematic
+        ? palette.ambientIntensity
+        : damp(ambientRef.current.intensity, palette.ambientIntensity, 4, delta)
     }
     if (dirRef.current) {
       dirRef.current.color.lerp(dirTarget.current, lerpRate)
       const t = state.clock.elapsedTime
       const target = palette.directionalIntensity + Math.sin(t * 0.4) * 0.05
-      dirRef.current.intensity = damp(dirRef.current.intensity, target, 4, delta)
+      dirRef.current.intensity = inCinematic ? target : damp(dirRef.current.intensity, target, 4, delta)
     }
     if (fillRef.current) {
       fillRef.current.color.lerp(fillTarget.current, lerpRate)

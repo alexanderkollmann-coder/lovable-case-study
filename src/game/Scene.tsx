@@ -14,10 +14,12 @@ import { ShotPlayer } from '@/cinematic/ShotPlayer'
 import { DisableCulling } from './DisableCulling'
 
 export function Scene() {
+  const renderPaused = useGameStore((s) => s.renderPaused)
   return (
     <Canvas
       shadows
       dpr={[1, 2]}
+      frameloop={renderPaused ? 'never' : 'always'}
       // `preserveDrawingBuffer` is required for `canvas.captureStream()` recording in cinematic mode
       gl={{ antialias: true, alpha: false, preserveDrawingBuffer: true }}
       style={{ width: '100%', height: '100%', display: 'block' }}

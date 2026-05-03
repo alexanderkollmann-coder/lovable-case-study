@@ -29,6 +29,7 @@ export function IntroVideo() {
   const [needsTap, setNeedsTap] = useState(false)
   const [ended, setEnded] = useState(false)
   const [exiting, setExiting] = useState(false)
+  const [fadingOut, setFadingOut] = useState(false)
 
   // Try to autoplay with sound; if blocked, fall back to "tap to begin"
   useEffect(() => {
@@ -99,7 +100,14 @@ export function IntroVideo() {
             playsInline
             preload="auto"
             onEnded={() => setEnded(true)}
-            className="w-full h-full object-cover"
+            onTimeUpdate={(e) => {
+              const v = e.currentTarget
+              if (v.duration && v.duration - v.currentTime < 1) {
+                setFadingOut(true)
+              }
+            }}
+            className="w-full h-full object-cover transition-opacity duration-1000"
+            style={{ opacity: fadingOut ? 0 : 1 }}
           />
 
           {/* "Tap to begin" splash if browser blocked autoplay-with-sound */}

@@ -174,15 +174,8 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   introComplete:
     typeof window !== 'undefined' &&
-    (sessionStorage.getItem('introComplete') === '1' ||
-      new URLSearchParams(window.location.search).has('skipIntro')),
-  setIntroComplete: (v) => {
-    if (typeof window !== 'undefined') {
-      if (v) sessionStorage.setItem('introComplete', '1')
-      else sessionStorage.removeItem('introComplete')
-    }
-    set({ introComplete: v })
-  },
+    new URLSearchParams(window.location.search).has('skipIntro'),
+  setIntroComplete: (v) => set({ introComplete: v }),
 
   setTimeline: (timeline) => set({ timeline, pendingTimeline: null, isTransitioning: false }),
 

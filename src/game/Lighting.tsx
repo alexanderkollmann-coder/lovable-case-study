@@ -51,12 +51,12 @@ export function Lighting() {
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
-        shadow-camera-left={-40}
-        shadow-camera-right={40}
-        shadow-camera-top={40}
-        shadow-camera-bottom={-40}
+        shadow-camera-left={-50}
+        shadow-camera-right={50}
+        shadow-camera-top={50}
+        shadow-camera-bottom={-50}
         shadow-camera-near={0.1}
-        shadow-camera-far={80}
+        shadow-camera-far={300}
       />
       <directionalLight ref={fillRef} position={[-6, 10, 14]} intensity={0.25} />
     </>

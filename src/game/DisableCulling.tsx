@@ -21,7 +21,6 @@ export function DisableCulling() {
   const timeline = useGameStore((s) => s.timeline)
 
   useEffect(() => {
-    const inCinematic = cinematicShotId !== null
     const apply = () => {
       scene.traverse((obj) => {
         obj.frustumCulled = false
@@ -30,14 +29,11 @@ export function DisableCulling() {
         const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material]
         for (const m of materials) {
           if (!m || typeof m !== 'object') continue
-          // Every standard/physical/basic/etc. material has a `fog` property.
           if ('fog' in m) {
-            const desired = !inCinematic
-            // `fog` is a boolean. Force the shader to recompile only when the value flips.
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const mat = m as any
-            if (mat.fog !== desired) {
-              mat.fog = desired
+            if (mat.fog !== false) {
+              mat.fog = false
               mat.needsUpdate = true
             }
           }
@@ -49,10 +45,9 @@ export function DisableCulling() {
     return () => clearTimeout(t)
   }, [scene, cinematicShotId, timeline])
 
-  // Safety net while cinematic is active — re-apply flags every frame for any
-  // mesh that mounted after the effect ran (e.g. drei components hydrating inside Suspense).
+  // Belt + braces: every frame, no matter what mode, force the flags off for any
+  // newly-mounted mesh. Cheap O(n) traversal at our scene size.
   useFrame(() => {
-    if (useGameStore.getState().cinematicShotId === null) return
     scene.traverse((obj) => {
       if (obj.frustumCulled) obj.frustumCulled = false
       const mesh = obj as THREE.Mesh

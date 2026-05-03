@@ -130,10 +130,9 @@ export function HackZone() {
         />
       </group>
 
-      {/* ---------- HANGING BANNERS ---------- */}
+      {/* ---------- HANGING BANNERS — bottom-left blue stand removed per spec ---------- */}
       <Banner pos={[-7, 0, -8.5]} color="#ff5577" />
       <Banner pos={[7, 0, -8.5]} color="#ff5577" />
-      <Banner pos={[-7, 0, 8.5]} color="#7aa1ff" />
       <Banner pos={[7, 0, 8.5]} color="#34d399" />
 
       {/* ---------- SNACK BAR ---------- */}

@@ -93,8 +93,10 @@ const booths: BoothMeta[] = [
   {
     id: 'measurement',
     timeline: 'post',
-    position: [20, 0, -6],
-    rotation: 0.6,
+    // Far right of post zone, just to the right of the Uptime display
+    position: [23, 0, 4],
+    // Diagonal — sign points back toward the centre of the zone
+    rotation: -2.158,
     label: 'Measurement',
     subtitle: 'How we know it is working.',
     accent: '#0f9b6c',

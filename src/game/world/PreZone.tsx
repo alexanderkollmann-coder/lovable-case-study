@@ -1,4 +1,4 @@
-import { RoundedBox, Text } from '@react-three/drei'
+import { RoundedBox } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 import * as THREE from 'three'
@@ -57,19 +57,8 @@ export function PreZone() {
           <meshStandardMaterial color="#9bc8ff" emissive="#9bc8ff" emissiveIntensity={0.55} roughness={0.2} />
         </RoundedBox>
       ))}
-      {/* Lovable wall poster (centred on partition) */}
-      <LovablePoster pos={[-6, 2.4, -10.3]} scale={1.6} />
-      {/* "Lovable London" text */}
-      <Text
-        position={[-6, 1.5, -10.28]}
-        fontSize={0.18}
-        color="#7aa1ff"
-        anchorX="center"
-        anchorY="middle"
-        letterSpacing={0.18}
-      >
-        LOVABLE · LONDON OFFICE
-      </Text>
+      {/* Lovable wordmark in the top-left of the partition wall — frame removed for clean placement */}
+      <LovablePoster pos={[-6, 2.85, -10.3]} scale={1.4} hideFrame />
 
       {/* ---------- DESKS — open-plan rows (the centre column is reserved for the meeting scene) ---------- */}
       <Desk pos={[-5, 0, -7]} twin />
@@ -134,7 +123,8 @@ export function PreZone() {
       <Plant pos={[-7.5, 0, -8]} />
       <Plant pos={[5.5, 0, 9]} />
       <Plant pos={[7, 0, -2]} />
-      <Plant pos={[-3, 0, 8]} />
+      {/* Moved out of the meeting area to sit beside the front-left street lamp */}
+      <Plant pos={[-6.5, 0, 9]} />
 
       {/* Red phone box (a London staple) */}
       <PhoneBox pos={[5.5, 0, 6.5]} />

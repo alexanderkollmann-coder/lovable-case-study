@@ -72,8 +72,8 @@ export function Booth({ meta }: BoothProps) {
           roughness={0.4}
         />
       </RoundedBox>
-      {/* Vertical stem */}
-      <RoundedBox args={[0.18, 1.6, 0.18]} radius={0.04} smoothness={2} position={[0, 1.2, 0]} castShadow>
+      {/* Vertical stem — ends just before the sign card so it doesn't bisect the label */}
+      <RoundedBox args={[0.18, 1.18, 0.18]} radius={0.04} smoothness={2} position={[0, 0.99, 0]} castShadow>
         <meshStandardMaterial color="#1a1f2e" roughness={0.6} />
       </RoundedBox>
       {/* Sign card */}

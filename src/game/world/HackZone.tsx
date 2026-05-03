@@ -115,10 +115,10 @@ export function HackZone() {
       <SideScreen pos={[-7.5, 0, -3]} rotation={Math.PI / 2} message="LIVE · TEAMS BUILDING" />
       <SideScreen pos={[7.5, 0, -3]} rotation={-Math.PI / 2} message="JUDGES · 23 MINS REMAINING" />
 
-      {/* ---------- WINNER STAGE — small + far right per spec ---------- */}
+      {/* ---------- WINNER STAGE — far-right back corner, facing diagonally toward Execution booth ---------- */}
       <Trophy pos={[-2, 0, 8]} />
-      {/* Wrapping in a scaled group shrinks the winner + screen to roughly audience-standee size */}
-      <group position={[6, 0, 6]} scale={0.55}>
+      {/* Group rotated -0.675 rad (~-38°) so the winner faces the Execution booth at (-5, 0, 8) */}
+      <group position={[7, 0, -7]} rotation={[0, -0.675, 0]} scale={0.55}>
         <WinnerScreen pos={[0, 0, 0]} />
         <StandingNPC
           pos={[0, 0, 1.6]}

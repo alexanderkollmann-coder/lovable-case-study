@@ -783,15 +783,15 @@ export function WinnerScreen({ pos, rotation = 0 }: { pos: [number, number, numb
       <RoundedBox args={[3.4, 2.6, 0.18]} radius={0.06} smoothness={3} position={[0, 1.5, -0.03]} castShadow>
         <meshStandardMaterial color="#0a0d1a" />
       </RoundedBox>
-      {/* Glowing screen */}
+      {/* Glowing screen — Lovable red instead of gold */}
       <RoundedBox args={[3.2, 2.4, 0.05]} radius={0.04} smoothness={2} position={[0, 1.5, 0.05]}>
-        <meshStandardMaterial ref={matRef} color="#1f1818" emissive="#fbbf24" emissiveIntensity={0.55} />
+        <meshStandardMaterial ref={matRef} color="#1a0a14" emissive="#ff4d7a" emissiveIntensity={0.55} />
       </RoundedBox>
       {/* Big "WINNER!" */}
       <Text
         position={[0, 1.85, 0.085]}
         fontSize={0.66}
-        color="#fbbf24"
+        color="#ffffff"
         anchorX="center"
         anchorY="middle"
         letterSpacing={0.16}
@@ -803,7 +803,7 @@ export function WinnerScreen({ pos, rotation = 0 }: { pos: [number, number, numb
       <Text
         position={[0, 1.25, 0.085]}
         fontSize={0.18}
-        color="#fff8e0"
+        color="#ffe0e8"
         anchorX="center"
         anchorY="middle"
         letterSpacing={0.18}

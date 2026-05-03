@@ -33,8 +33,9 @@ const booths: BoothMeta[] = [
   {
     id: 'value',
     timeline: 'pre',
-    position: [-23, 0, -2],
-    rotation: 0, // square to camera per spec
+    // Just to the left of the parked double-decker bus, facing the camera
+    position: [-17, 0, -9.5],
+    rotation: 0,
     label: 'Value Prop',
     subtitle: 'Why hackathons. Seeing is believing.',
     accent: '#5e88ff',

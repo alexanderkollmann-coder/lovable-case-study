@@ -69,41 +69,41 @@ export const SHOTS: Shot[] = [
     id: 'pitch-overview',
     name: 'Pitch · meeting establishing',
     description:
-      'Wide establishing shot of the London office meeting. Alex on the left presenting, audience on the right, whiteboard with metrics behind him. Slow drift downward.',
+      'Wide establishing of the meeting after the 45° rotation. Alex front-left, table, audience at the right with their backs to camera. Slow drift downward.',
     duration: 7,
     timeline: 'pre',
     filename: '04-pitch-overview',
     keys: [
-      { t: 0.0, pos: [-19, 6, 13], lookAt: [-19, 1.5, 7], zoom: 50 },
-      { t: 1.0, pos: [-19, 3.6, 11.2], lookAt: [-19, 1.5, 7], zoom: 70 },
+      { t: 0.0, pos: [-15, 6, 13], lookAt: [-19.5, 1.5, 7], zoom: 45 },
+      { t: 1.0, pos: [-17, 3.6, 11], lookAt: [-19.5, 1.5, 7], zoom: 65 },
     ],
   },
   {
     id: 'alex-closeup',
     name: 'Pitch · Alex close-up push-in',
     description:
-      'Push-in to Alex. Opens medium over the table edge, lands tight on Alex pitching with the metrics whiteboard behind him. Alex fills most of the frame.',
+      'Push-in to Alex along his +x/+z facing line. Lands tight enough that he fills the frame, with the angled whiteboard partly visible behind him.',
     duration: 7,
     timeline: 'pre',
     filename: '05-alex-closeup',
     keys: [
-      { t: 0.0, pos: [-18, 3.0, 11], lookAt: [-21, 1.7, 7], zoom: 55 },
-      { t: 0.5, pos: [-19.2, 2.5, 9.5], lookAt: [-21, 1.7, 7], zoom: 90 },
-      { t: 1.0, pos: [-20.0, 2.1, 8.6], lookAt: [-21, 1.7, 7], zoom: 130 },
+      { t: 0.0, pos: [-17.5, 3.4, 11], lookAt: [-20.56, 1.7, 5.94], zoom: 55 },
+      { t: 0.5, pos: [-19.0, 2.6, 8.5], lookAt: [-20.56, 1.7, 5.94], zoom: 95 },
+      { t: 1.0, pos: [-19.7, 2.2, 7.2], lookAt: [-20.56, 1.7, 5.94], zoom: 135 },
     ],
   },
   {
     id: 'audience-reveal',
     name: 'Pitch · audience nametag reveal',
     description:
-      "Counter-shot from Alex's side. Camera dollies in on Ryan, Kali, and Monica seated at the table watching. All three nametags clearly readable above their heads.",
+      "Counter-shot from Alex's side at high angle (clears his head). Camera dollies in on Ryan, Kali and Monica facing -x/-z. All three nametags clearly readable above their heads.",
     duration: 8,
     timeline: 'pre',
     filename: '06-audience-reveal',
     keys: [
-      { t: 0.0, pos: [-21, 3.4, 10], lookAt: [-18, 1.5, 7], zoom: 45 },
-      { t: 0.55, pos: [-20, 2.6, 8.6], lookAt: [-18, 1.4, 7], zoom: 80 },
-      { t: 1.0, pos: [-19.4, 2.2, 8.0], lookAt: [-18, 1.4, 7], zoom: 130 },
+      { t: 0.0, pos: [-23, 3.8, 4], lookAt: [-18.4, 1.5, 8], zoom: 50 },
+      { t: 0.55, pos: [-21.6, 2.8, 5.4], lookAt: [-18.4, 1.5, 8], zoom: 90 },
+      { t: 1.0, pos: [-20.6, 2.4, 6.4], lookAt: [-18.4, 1.5, 8], zoom: 140 },
     ],
   },
   {
@@ -122,16 +122,16 @@ export const SHOTS: Shot[] = [
   },
   {
     id: 'winner-reveal',
-    name: 'Winner · close push-in',
+    name: 'Winner · diagonal push-in',
     description:
-      'Push-in on the small winner stage at the far-right of the hackathon space. Opens wide enough to register the trophy + audience risers, lands tight on the celebrant with arms raised.',
+      'Push-in on the small winner stage at the far back-right corner of the hackathon space. Camera approaches from the front-left so the winner — facing diagonally toward the Execution booth — is fully framed against the red WINNER! screen.',
     duration: 7,
     timeline: 'hack',
     filename: '08-winner-reveal',
     keys: [
-      { t: 0.0, pos: [3, 1.6, 12], lookAt: [6, 1.0, 6.5], zoom: 80 },
-      { t: 0.55, pos: [5, 1.4, 9.5], lookAt: [6, 1.0, 6.5], zoom: 120 },
-      { t: 1.0, pos: [6, 1.5, 8], lookAt: [6, 1.0, 6.5], zoom: 180 },
+      { t: 0.0, pos: [1, 1.4, -1.5], lookAt: [6.5, 0.6, -6.3], zoom: 60 },
+      { t: 0.55, pos: [3.2, 1.4, -3.6], lookAt: [6.5, 0.6, -6.3], zoom: 110 },
+      { t: 1.0, pos: [4.6, 1.5, -5.0], lookAt: [6.5, 0.6, -6.3], zoom: 170 },
     ],
   },
 ]

@@ -2,7 +2,7 @@ import { RoundedBox, Text } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 import * as THREE from 'three'
-import { ServerRack, SeatedNPC, useZoneActivity } from './SharedProps'
+import { SeatedNPC, useZoneActivity } from './SharedProps'
 
 const ZONE_CENTER_X = 17
 
@@ -53,7 +53,11 @@ export function PostZone() {
       <ScreenChart pos={[3, 2.4, -10.16]} accent="#ff7596" label="ARR / Q" value="£2.4M" />
       <Sparkline pos={[0, 1.5, -10.16]} />
 
-      {/* Console stations removed for cleaner sightline to the wall screen — operators sit at chairs only */}
+      {/* ---------- CURVED CONSOLE ARRAY — restored. Each operator has a desk to work at. ---------- */}
+      <ConsoleStation pos={[-3.5, 0, -5.5]} rotation={0.35} hue="#7aa1ff" />
+      <ConsoleStation pos={[-1.2, 0, -6.5]} rotation={0.12} hue="#34d399" />
+      <ConsoleStation pos={[1.2, 0, -6.5]} rotation={-0.12} hue="#ff7596" />
+      <ConsoleStation pos={[3.5, 0, -5.5]} rotation={-0.35} hue="#fbbf24" />
 
       {/* ---------- SEATED NPC OPERATORS ---------- */}
       <SeatedNPC pos={[-3.5, 0, -4.5]} rotation={0.35 + Math.PI} shirtColor="#7aa1ff" />
@@ -61,10 +65,7 @@ export function PostZone() {
       <SeatedNPC pos={[1.2, 0, -5.5]} rotation={-0.12 + Math.PI} shirtColor="#ff7596" />
       <SeatedNPC pos={[3.5, 0, -4.5]} rotation={-0.35 + Math.PI} shirtColor="#fbbf24" />
 
-      {/* ---------- BACK INFRASTRUCTURE — server rack stack ---------- */}
-      {[-3, -1.5, 0, 1.5, 3].map((x) => (
-        <ServerRack key={x} pos={[x, 0, -8.4]} />
-      ))}
+      {/* Server racks removed — they were the "5 vertical black boxes" obstructing the wall screen */}
 
       {/* ---------- HOLOGRAPHIC FLOATING DISPLAYS ---------- */}
       <Hologram pos={[-5.5, 2.8, -3]} text="PIPELINE" sub="14 ACTIVE" color="#7aa1ff" />
@@ -96,7 +97,38 @@ export function PostZone() {
   )
 }
 
-// ConsoleStation removed — clears sightline to the wall screen per the declutter spec
+function ConsoleStation({ pos, rotation, hue }: { pos: [number, number, number]; rotation: number; hue: string }) {
+  const matRef = useRef<THREE.MeshStandardMaterial>(null)
+  useFrame((state) => {
+    if (matRef.current) {
+      const phase = Math.sin(state.clock.elapsedTime * 1.4 + pos[0]) * 0.5 + 0.5
+      matRef.current.emissiveIntensity = 0.55 + phase * 0.45
+    }
+  })
+  return (
+    <group position={pos} rotation={[0, rotation, 0]}>
+      {/* Console body */}
+      <RoundedBox args={[2.2, 0.95, 0.9]} radius={0.05} smoothness={2} position={[0, 0.48, 0]} castShadow>
+        <meshStandardMaterial color="#0e1422" roughness={0.6} />
+      </RoundedBox>
+      {/* Top angled monitor surface */}
+      <RoundedBox args={[2.0, 0.06, 0.7]} radius={0.04} smoothness={2} position={[0, 1.0, 0]} rotation={[-0.3, 0, 0]}>
+        <meshStandardMaterial ref={matRef} color="#0a0d1a" emissive={hue} emissiveIntensity={0.6} />
+      </RoundedBox>
+      {/* keyboard */}
+      <RoundedBox args={[1.4, 0.04, 0.32]} radius={0.02} smoothness={2} position={[0, 0.99, 0.32]}>
+        <meshStandardMaterial color="#1f2332" />
+      </RoundedBox>
+      {/* Side LED strips */}
+      {[-1.05, 1.05].map((x, i) => (
+        <mesh key={i} position={[x, 0.48, 0.45]}>
+          <boxGeometry args={[0.04, 0.7, 0.04]} />
+          <meshStandardMaterial color={hue} emissive={hue} emissiveIntensity={1.0} />
+        </mesh>
+      ))}
+    </group>
+  )
+}
 
 function Hologram({
   pos,

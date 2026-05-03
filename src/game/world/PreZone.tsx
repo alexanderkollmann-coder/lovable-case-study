@@ -78,33 +78,38 @@ export function PreZone() {
       <Desk pos={[-5, 0, -3]} rotation={Math.PI} twin />
       <Desk pos={[4, 0, -3]} rotation={Math.PI} twin />
 
-      {/* ---------- ALEX'S PITCH — sideways layout: Alex on the LHS, audience facing him from the RHS ---------- */}
-      {/* Whiteboard furthest left, content faces +x toward audience */}
-      <MetricsWhiteboard pos={[-6, 0, 7]} rotation={Math.PI / 2} title="HACKATHON · Q2 PIPELINE" />
-      {/* Alex stands on Alex's RHS of whiteboard, faces +x (toward audience). Hair cap removed per spec. */}
-      <StandingNPC
-        pos={[-4, 0, 7]}
-        rotation={Math.PI / 2}
-        pose="presenting"
-        shirtColor="#0d111c"
-        showHeart
-        hideHair
-        name="ALEX"
-        nameColor="#ff4d7a"
-      />
+      {/* ---------- ALEX'S PITCH — meeting rotated 45° CW so the camera sees the whiteboard at an angle, Alex's 3/4 face, and the backs of the audience ---------- */}
+      <group position={[-2.5, 0, 7]} rotation={[0, -Math.PI / 4, 0]}>
+        {/* Whiteboard, scaled down ~25% so it doesn't overpower the frame */}
+        <group position={[-3.5, 0, 0]} rotation={[0, Math.PI / 2, 0]} scale={0.78}>
+          <MetricsWhiteboard pos={[0, 0, 0]} title="HACKATHON · Q2 PIPELINE" />
+        </group>
 
-      {/* Conference table running along z-axis, between Alex and audience */}
-      <ConferenceTable pos={[-2, 0, 7]} rotation={Math.PI / 2} size={[2.8, 0.06, 1.0]} />
+        {/* Alex */}
+        <StandingNPC
+          pos={[-1.5, 0, 0]}
+          rotation={Math.PI / 2}
+          pose="presenting"
+          shirtColor="#0d111c"
+          showHeart
+          hideHair
+          name="ALEX"
+          nameColor="#ff4d7a"
+        />
 
-      {/* Audience seated on the +x side of the table, facing Alex (face -x direction) */}
-      <SeatedNPC pos={[-1, 0, 5.6]} rotation={-Math.PI / 2} shirtColor="#7aa1ff" />
-      <SeatedNPC pos={[-1, 0, 7]} rotation={-Math.PI / 2} shirtColor="#34d399" />
-      <SeatedNPC pos={[-1, 0, 8.4]} rotation={-Math.PI / 2} shirtColor="#fbbf24" />
+        {/* Conference table */}
+        <ConferenceTable pos={[0.5, 0, 0]} rotation={Math.PI / 2} size={[2.8, 0.06, 1.0]} />
 
-      {/* Cinematic-only floating nametags (only render while a cinematic shot is playing) */}
-      <CinematicNameTag pos={[-1, 2.1, 5.6]} name="RYAN" color="#7aa1ff" />
-      <CinematicNameTag pos={[-1, 2.1, 7]} name="KALI" color="#34d399" />
-      <CinematicNameTag pos={[-1, 2.1, 8.4]} name="MONICA" color="#fbbf24" />
+        {/* Audience facing Alex */}
+        <SeatedNPC pos={[1.5, 0, -1.4]} rotation={-Math.PI / 2} shirtColor="#7aa1ff" />
+        <SeatedNPC pos={[1.5, 0, 0]} rotation={-Math.PI / 2} shirtColor="#34d399" />
+        <SeatedNPC pos={[1.5, 0, 1.4]} rotation={-Math.PI / 2} shirtColor="#fbbf24" />
+
+        {/* Cinematic-only floating nametags above each audience member */}
+        <CinematicNameTag pos={[1.5, 2.1, -1.4]} name="RYAN" color="#7aa1ff" />
+        <CinematicNameTag pos={[1.5, 2.1, 0]} name="KALI" color="#34d399" />
+        <CinematicNameTag pos={[1.5, 2.1, 1.4]} name="MONICA" color="#fbbf24" />
+      </group>
 
       {/* "Reception" / front desk */}
       <RoundedBox args={[3.6, 0.96, 0.7]} radius={0.06} smoothness={2} position={[-5.5, 0.48, 4]} castShadow>

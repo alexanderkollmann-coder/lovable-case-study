@@ -53,6 +53,9 @@ interface GameState {
   hasSeenHint: boolean
   avatarTarget: Vec3 | null
 
+  /** When true, the cinematic camera takes over and gameplay UI hides. */
+  cinematicShotId: string | null
+
   setTimeline: (t: Timeline) => void
   beginTransitionTo: (t: Timeline) => void
   finishTransition: () => void
@@ -64,6 +67,7 @@ interface GameState {
   dismissHint: () => void
 
   setAvatarTarget: (target: Vec3 | null) => void
+  setCinematicShotId: (id: string | null) => void
 }
 
 export const useGameStore = create<GameState>((set, get) => ({
@@ -74,6 +78,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   soundOn: true,
   hasSeenHint: false,
   avatarTarget: null,
+  cinematicShotId: null,
 
   setTimeline: (timeline) => set({ timeline, pendingTimeline: null, isTransitioning: false }),
 
@@ -98,4 +103,5 @@ export const useGameStore = create<GameState>((set, get) => ({
   dismissHint: () => set({ hasSeenHint: true }),
 
   setAvatarTarget: (target) => set({ avatarTarget: target }),
+  setCinematicShotId: (id) => set({ cinematicShotId: id }),
 }))

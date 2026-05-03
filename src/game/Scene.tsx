@@ -10,13 +10,15 @@ import { Booths } from './Booths'
 import { CloudSweep } from './CloudSweep'
 import { Fireflies } from './Fireflies'
 import { useFrame } from '@react-three/fiber'
+import { ShotPlayer } from '@/cinematic/ShotPlayer'
 
 export function Scene() {
   return (
     <Canvas
       shadows
       dpr={[1, 2]}
-      gl={{ antialias: true, alpha: false }}
+      // `preserveDrawingBuffer` is required for `canvas.captureStream()` recording in cinematic mode
+      gl={{ antialias: true, alpha: false, preserveDrawingBuffer: true }}
       style={{ width: '100%', height: '100%', display: 'block' }}
     >
       <SceneContents />
@@ -38,6 +40,7 @@ function SceneContents() {
       <Avatar />
       <Fireflies />
       <CloudSweep />
+      <ShotPlayer />
     </Suspense>
   )
 }

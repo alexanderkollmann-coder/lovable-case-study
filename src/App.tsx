@@ -10,14 +10,24 @@ import { Footer } from '@/ui/Footer'
 import { BrandLockup } from '@/ui/BrandLockup'
 import { ProgressTracker } from '@/ui/ProgressTracker'
 import { BoothAudio } from '@/ui/BoothAudio'
+import { Cinematic } from '@/cinematic/Cinematic'
+import { useGameStore } from '@/store/gameStore'
 
 function App() {
   const [loading, setLoading] = useState(true)
+  const [cinematicMode, setCinematicMode] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return new URLSearchParams(window.location.search).has('cinematic')
+  })
+  const cinematicShotId = useGameStore((s) => s.cinematicShotId)
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 1100)
     return () => clearTimeout(t)
   }, [])
+
+  // Hide all gameplay UI while a shot is playing (recording or previewing)
+  const hideGameplayUI = cinematicShotId !== null
 
   return (
     <div className="relative w-full h-full overflow-hidden">
@@ -34,22 +44,40 @@ function App() {
         }}
       />
 
-      {/* HUD layer */}
-      <div className="absolute inset-0 z-20 pointer-events-none">
-        <BrandLockup />
-        <Hud />
-        <SoundToggle />
-        <Hint />
-        <ProgressTracker />
-        <TimelineSlider />
-        <Footer />
-      </div>
+      {/* HUD layer — hidden during cinematic shots so it doesn't appear in recordings */}
+      {!hideGameplayUI && (
+        <div className="absolute inset-0 z-20 pointer-events-none">
+          {!cinematicMode && (
+            <>
+              <BrandLockup />
+              <Hud />
+              <SoundToggle />
+              <Hint />
+              <ProgressTracker />
+              <TimelineSlider />
+              <Footer />
+            </>
+          )}
+        </div>
+      )}
 
-      {/* Booth panel */}
-      <BoothPanel />
+      {/* Booth panel (interactive only — never visible during cinematic) */}
+      {!cinematicMode && !hideGameplayUI && <BoothPanel />}
 
-      {/* Audio (proximity-triggered for the Measurement booth) */}
-      <BoothAudio />
+      {/* Audio (proximity-triggered) — disabled in cinematic mode to keep recordings clean */}
+      {!cinematicMode && <BoothAudio />}
+
+      {/* Cinematic recording panel */}
+      {cinematicMode && (
+        <Cinematic
+          onExit={() => {
+            const url = new URL(window.location.href)
+            url.searchParams.delete('cinematic')
+            window.history.replaceState({}, '', url.toString())
+            setCinematicMode(false)
+          }}
+        />
+      )}
 
       {/* Loading splash */}
       <LoadingSplash visible={loading} />

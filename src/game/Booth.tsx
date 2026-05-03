@@ -108,39 +108,6 @@ export function Booth({ meta }: BoothProps) {
         ENTER · PRESS E
       </Text>
 
-      {/* Floating "Press E" hint when nearby */}
-      {isNearby && isActiveTimeline && (
-        <Html position={[0, 2.9, 0]} center distanceFactor={9} occlude={false} zIndexRange={[10, 0]}>
-          <div className="no-select pointer-events-none">
-            <div
-              className="px-3 py-1.5 rounded-full text-xs font-medium tracking-wide animate-glow-pulse"
-              style={{
-                background: 'rgba(15, 18, 30, 0.85)',
-                color: meta.accent,
-                border: `1px solid ${meta.accent}`,
-                boxShadow: `0 0 24px ${meta.accent}66`,
-                backdropFilter: 'blur(6px)',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              <span style={{ opacity: 0.7, marginRight: 6 }}>PRESS</span>
-              <span
-                style={{
-                  display: 'inline-block',
-                  padding: '0 6px',
-                  borderRadius: 4,
-                  border: `1px solid ${meta.accent}`,
-                  fontFamily: 'JetBrains Mono, monospace',
-                  fontWeight: 600,
-                }}
-              >
-                E
-              </span>
-              <span style={{ opacity: 0.7, marginLeft: 6 }}>TO ENTER</span>
-            </div>
-          </div>
-        </Html>
-      )}
     </group>
   )
 }

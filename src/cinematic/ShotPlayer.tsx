@@ -33,6 +33,9 @@ export function ShotPlayer() {
     })
   }, [])
 
+  // Priority -10 so the camera is positioned BEFORE every other useFrame in the scene.
+  // Otherwise materials/lights that read camera state have a one-frame lag, which can
+  // read as items "fading in" at distance thresholds.
   useFrame(() => {
     const id = useGameStore.getState().cinematicShotId
     if (!id) {
@@ -52,8 +55,9 @@ export function ShotPlayer() {
       camera.zoom = zoom
     }
     camera.lookAt(lookAt[0], lookAt[1], lookAt[2])
+    camera.updateMatrixWorld(true)
     camera.updateProjectionMatrix()
-  })
+  }, -10)
 
   return null
 }

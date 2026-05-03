@@ -55,14 +55,14 @@ export const SHOTS: Shot[] = [
     id: 'london-pullback',
     name: 'London · Big Ben + the Eye pullback',
     description:
-      'Starts tight on the London skyline (Big Ben tower in frame, the Eye rotating beside it), then pulls back and tilts down to reveal the office floor below.',
+      'Starts on the office floor with the London skyline framed in the back glass, then dollies back and rises slightly. Constant-ish zoom keeps every item in frame from start so nothing fades into view as the camera moves.',
     duration: 9,
     timeline: 'pre',
     filename: '03-london-pullback',
     keys: [
-      { t: 0.0, pos: [-21, 5, -3], lookAt: [-17, 5, -13], zoom: 80 },
-      { t: 0.6, pos: [-19, 6, 4], lookAt: [-17, 4, -10], zoom: 56 },
-      { t: 1.0, pos: [-13, 9, 14], lookAt: [-17, 2, -6], zoom: 38 },
+      { t: 0.0, pos: [-19, 4.5, 4], lookAt: [-17, 2.5, -10], zoom: 42 },
+      { t: 0.55, pos: [-17, 6, 9], lookAt: [-17, 2, -8], zoom: 40 },
+      { t: 1.0, pos: [-15, 8, 13], lookAt: [-17, 1.8, -6], zoom: 38 },
     ],
   },
   {

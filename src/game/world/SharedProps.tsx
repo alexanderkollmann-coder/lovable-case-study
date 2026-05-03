@@ -1,4 +1,4 @@
-import { RoundedBox, Image as DreiImage, Text } from '@react-three/drei'
+import { RoundedBox, Image as DreiImage, Text, Billboard } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useMemo, useRef } from 'react'
 import * as THREE from 'three'
@@ -322,6 +322,7 @@ export function StandingNPC({
   hairColor = '#1f2332',
   skinColor = '#fde0e7',
   showHeart = false,
+  hideHair = false,
   name,
   nameColor = '#ff4d7a',
 }: {
@@ -332,9 +333,12 @@ export function StandingNPC({
   hairColor?: string
   skinColor?: string
   showHeart?: boolean
+  /** If true, no dark hemisphere hair cap is drawn on the head. */
+  hideHair?: boolean
   name?: string
   nameColor?: string
 }) {
+  const cinematicShotId = useGameStore((s) => s.cinematicShotId)
   const groupRef = useRef<THREE.Group>(null)
   const armOffsetRef = useRef(0)
   // Subtle idle / presenting motion
@@ -375,10 +379,12 @@ export function StandingNPC({
         <meshStandardMaterial color={skinColor} roughness={0.55} />
       </mesh>
       {/* Hair cap */}
-      <mesh position={[0, 1.78, 0]} castShadow>
-        <sphereGeometry args={[0.33, 18, 12, 0, Math.PI * 2, 0, Math.PI / 2]} />
-        <meshStandardMaterial color={hairColor} roughness={0.85} />
-      </mesh>
+      {!hideHair && (
+        <mesh position={[0, 1.78, 0]} castShadow>
+          <sphereGeometry args={[0.33, 18, 12, 0, Math.PI * 2, 0, Math.PI / 2]} />
+          <meshStandardMaterial color={hairColor} roughness={0.85} />
+        </mesh>
+      )}
       {/* Eyes */}
       <mesh position={[0.11, 1.74, 0.27]}>
         <sphereGeometry args={[0.045, 12, 8]} />
@@ -451,29 +457,67 @@ export function StandingNPC({
           </mesh>
         </>
       )}
-      {/* Floating name tag (chest level on lanyard) */}
-      {name && (
-        <group position={[0, 1.05, 0.3]}>
-          <RoundedBox args={[0.5, 0.18, 0.04]} radius={0.02} smoothness={2}>
-            <meshStandardMaterial color="#ffffff" roughness={0.4} />
+      {/* Floating name tag (above head) — only visible while a cinematic shot is playing */}
+      {name && cinematicShotId !== null && (
+        <Billboard position={[0, 2.45, 0]} follow lockX={false} lockY={false} lockZ={false}>
+          <RoundedBox args={[0.95, 0.32, 0.05]} radius={0.04} smoothness={2}>
+            <meshStandardMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={0.25} roughness={0.3} />
           </RoundedBox>
-          <RoundedBox args={[0.5, 0.05, 0.04]} radius={0.01} smoothness={1} position={[0, 0.07, 0.001]}>
-            <meshStandardMaterial color={nameColor} emissive={nameColor} emissiveIntensity={0.35} />
+          <RoundedBox args={[0.95, 0.08, 0.05]} radius={0.02} smoothness={1} position={[0, 0.12, 0.001]}>
+            <meshStandardMaterial color={nameColor} emissive={nameColor} emissiveIntensity={0.6} />
           </RoundedBox>
           <Text
-            position={[0, -0.012, 0.025]}
-            fontSize={0.075}
+            position={[0, -0.025, 0.03]}
+            fontSize={0.16}
             color="#1f2332"
             anchorX="center"
             anchorY="middle"
-            letterSpacing={0.1}
-            maxWidth={0.45}
+            letterSpacing={0.08}
+            maxWidth={0.85}
           >
             {name.toUpperCase()}
           </Text>
-        </group>
+        </Billboard>
       )}
     </group>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Cinematic-only floating name tag — used for SeatedNPCs (audience members)   */
+/* -------------------------------------------------------------------------- */
+
+export function CinematicNameTag({
+  pos,
+  name,
+  color = '#ff4d7a',
+}: {
+  pos: [number, number, number]
+  name: string
+  color?: string
+}) {
+  const cinematicShotId = useGameStore((s) => s.cinematicShotId)
+  if (cinematicShotId === null) return null
+  return (
+    <Billboard position={pos} follow lockX={false} lockY={false} lockZ={false}>
+      <RoundedBox args={[0.95, 0.32, 0.05]} radius={0.04} smoothness={2}>
+        <meshStandardMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={0.3} roughness={0.3} />
+      </RoundedBox>
+      <RoundedBox args={[0.95, 0.08, 0.05]} radius={0.02} smoothness={1} position={[0, 0.12, 0.001]}>
+        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.7} />
+      </RoundedBox>
+      <Text
+        position={[0, -0.025, 0.03]}
+        fontSize={0.16}
+        color="#1f2332"
+        anchorX="center"
+        anchorY="middle"
+        letterSpacing={0.08}
+        maxWidth={0.85}
+      >
+        {name.toUpperCase()}
+      </Text>
+    </Billboard>
   )
 }
 

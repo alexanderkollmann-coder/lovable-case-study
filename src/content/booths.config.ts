@@ -1,13 +1,13 @@
 import type { Timeline, Vec3 } from '@/store/gameStore'
 
 export type BoothId =
-  | 'targeting'
-  | 'stakeholders'
   | 'value'
+  | 'targeting'
   | 'formats'
   | 'execution'
-  | 'scale'
+  | 'gtm'
   | 'measurement'
+  | 'scale'
 
 export interface BoothMeta {
   id: BoothId
@@ -16,7 +16,7 @@ export interface BoothMeta {
   rotation?: number
   label: string
   subtitle: string
-  accent: string // hex
+  accent: string
   iconName:
     | 'target'
     | 'users'
@@ -25,76 +25,69 @@ export interface BoothMeta {
     | 'zap'
     | 'trending-up'
     | 'gauge'
-  /** path-relative module loader for content markdown */
   load: () => Promise<{ default: string }>
 }
 
 const booths: BoothMeta[] = [
+  // ========== PRE-HACKATHON ==========
+  {
+    id: 'value',
+    timeline: 'pre',
+    position: [-23, 0, -2],
+    rotation: 0, // square to camera per spec
+    label: 'Value Prop',
+    subtitle: 'Why hackathons. Seeing is believing.',
+    accent: '#5e88ff',
+    iconName: 'sparkles',
+    load: () => import('./booths/01-value-proposition.md?raw'),
+  },
   {
     id: 'targeting',
     timeline: 'pre',
-    position: [-20, 0, -6],
-    rotation: 0.6,
-    label: 'Targeting',
-    subtitle: 'Who we go after, in what order, and why',
-    accent: '#7aa1ff',
-    iconName: 'target',
-    load: () => import('./booths/01-targeting.md?raw'),
-  },
-  {
-    id: 'stakeholders',
-    timeline: 'pre',
     position: [-13, 0, 7],
     rotation: -0.4,
-    label: 'Stakeholders',
-    subtitle: 'Who owns what, internally and externally',
-    accent: '#5e88ff',
-    iconName: 'users',
-    load: () => import('./booths/02-stakeholders.md?raw'),
+    label: 'Targeting',
+    subtitle: 'How we got to Allianz Partners.',
+    accent: '#7aa1ff',
+    iconName: 'target',
+    load: () => import('./booths/02-targeting.md?raw'),
   },
-  {
-    id: 'value',
-    timeline: 'hack',
-    position: [-5, 0, -8],
-    rotation: 0.3,
-    label: 'Value Proposition',
-    subtitle: 'Why an enterprise picks Lovable for this',
-    accent: '#ff7596',
-    iconName: 'sparkles',
-    load: () => import('./booths/03-value-proposition.md?raw'),
-  },
+
+  // ========== HACKATHON ==========
   {
     id: 'formats',
     timeline: 'hack',
-    position: [0, 0, 6],
-    rotation: -0.2,
-    label: 'Hackathon Formats',
-    subtitle: 'Half-day exec to 2-day flagship — when each fits',
-    accent: '#ff4d7a',
+    position: [-5, 0, -7],
+    rotation: 0.3,
+    label: 'Formats',
+    subtitle: 'Half-day to multi-week — and why we picked this one.',
+    accent: '#ff7596',
     iconName: 'layout',
-    load: () => import('./booths/04-hackathon-formats.md?raw'),
+    load: () => import('./booths/03-formats.md?raw'),
   },
   {
     id: 'execution',
     timeline: 'hack',
-    position: [5, 0, -8],
-    rotation: 0.5,
-    label: 'Execution Strategy',
-    subtitle: 'First call to 24h MOU lock-in',
-    accent: '#e63366',
+    position: [-5, 0, 8],
+    rotation: -0.2,
+    label: 'Execution',
+    subtitle: 'The day — beat by beat.',
+    accent: '#ff4d7a',
     iconName: 'zap',
-    load: () => import('./booths/05-execution-strategy.md?raw'),
+    load: () => import('./booths/04-execution.md?raw'),
   },
+
+  // ========== POST-HACKATHON ==========
   {
-    id: 'scale',
+    id: 'gtm',
     timeline: 'post',
     position: [13, 0, 7],
     rotation: -0.5,
-    label: 'Scale',
-    subtitle: '1:1 → 1:Few → 1:Many, without losing depth',
+    label: 'GTM Motion',
+    subtitle: 'Hackathon → 30d POC → 90d SoW → Contract.',
     accent: '#34d399',
-    iconName: 'trending-up',
-    load: () => import('./booths/06-scale.md?raw'),
+    iconName: 'users',
+    load: () => import('./booths/05-gtm-motion.md?raw'),
   },
   {
     id: 'measurement',
@@ -102,10 +95,21 @@ const booths: BoothMeta[] = [
     position: [20, 0, -6],
     rotation: 0.6,
     label: 'Measurement',
-    subtitle: 'How we know it is working',
+    subtitle: 'How we know it is working.',
     accent: '#0f9b6c',
     iconName: 'gauge',
-    load: () => import('./booths/07-measurement.md?raw'),
+    load: () => import('./booths/06-measurement.md?raw'),
+  },
+  {
+    id: 'scale',
+    timeline: 'post',
+    position: [22, 0, 5],
+    rotation: -0.3,
+    label: 'Scale',
+    subtitle: 'The blueprint — next 20 European enterprises.',
+    accent: '#6ee7b7',
+    iconName: 'trending-up',
+    load: () => import('./booths/07-scale.md?raw'),
   },
 ]
 

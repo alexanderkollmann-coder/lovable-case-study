@@ -115,17 +115,20 @@ export function HackZone() {
       <SideScreen pos={[-7.5, 0, -3]} rotation={Math.PI / 2} message="LIVE · TEAMS BUILDING" />
       <SideScreen pos={[7.5, 0, -3]} rotation={-Math.PI / 2} message="JUDGES · 23 MINS REMAINING" />
 
-      {/* ---------- WINNER STAGE ---------- */}
-      <Trophy pos={[-3, 0, 8]} />
-      <WinnerScreen pos={[0, 0, 8.2]} />
-      <StandingNPC
-        pos={[0, 0, 9.4]}
-        rotation={0}
-        pose="winner"
-        shirtColor="#ff4d7a"
-        showHeart
-        skinColor="#fde0e7"
-      />
+      {/* ---------- WINNER STAGE — small + far right per spec ---------- */}
+      <Trophy pos={[-2, 0, 8]} />
+      {/* Wrapping in a scaled group shrinks the winner + screen to roughly audience-standee size */}
+      <group position={[6, 0, 6]} scale={0.55}>
+        <WinnerScreen pos={[0, 0, 0]} />
+        <StandingNPC
+          pos={[0, 0, 1.6]}
+          rotation={0}
+          pose="winner"
+          shirtColor="#ff4d7a"
+          showHeart
+          skinColor="#fde0e7"
+        />
+      </group>
 
       {/* ---------- HANGING BANNERS ---------- */}
       <Banner pos={[-7, 0, -8.5]} color="#ff5577" />

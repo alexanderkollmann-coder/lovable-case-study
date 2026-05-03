@@ -140,6 +140,10 @@ interface GameState {
   renderPaused: boolean
   toggleRenderPaused: () => void
 
+  /** Whether the intro video has been dismissed (user clicked the CTA). */
+  introComplete: boolean
+  setIntroComplete: (v: boolean) => void
+
   setTimeline: (t: Timeline) => void
   beginTransitionTo: (t: Timeline) => void
   finishTransition: () => void

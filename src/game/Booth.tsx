@@ -47,12 +47,6 @@ export function Booth({ meta }: BoothProps) {
       ref={groupRef}
       position={meta.position}
       rotation={[0, meta.rotation ?? 0, 0]}
-      onPointerDown={(e) => {
-        if (e.button !== 0) return
-        if (!isActiveTimeline) return
-        e.stopPropagation()
-        useGameStore.getState().openBooth(meta.id)
-      }}
     >
       {/* Glow ring on ground when nearby */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 0]}>

@@ -1,4 +1,3 @@
-import { RoundedBox } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useMemo, useRef } from 'react'
 import * as THREE from 'three'
@@ -46,7 +45,6 @@ export function World({ onGroundClick }: { onGroundClick: (point: THREE.Vector3)
       ))}
 
       <Perimeter />
-      <BoundaryGates />
 
       <PreZone />
       <HackZone />
@@ -124,63 +122,55 @@ function ZoneFloor({ timeline, center, size }: ZoneSpec) {
   )
 }
 
+/**
+ * Sleek light-strip border that runs around the world boundary. Thin emissive lines
+ * with a subtle pulse — reads as a stage's edge lighting rather than a chunky wall.
+ */
 function Perimeter() {
-  const segments: Array<[number, number, number, number]> = [
-    [0, MAP_HALF_Z + 0.4, MAP_HALF_X * 2, 0.6],
-    [0, -MAP_HALF_Z - 0.4, MAP_HALF_X * 2, 0.6],
-    [-MAP_HALF_X - 0.4, 0, 0.6, MAP_HALF_Z * 2 + 1.2],
-    [MAP_HALF_X + 0.4, 0, 0.6, MAP_HALF_Z * 2 + 1.2],
-  ]
   return (
     <group>
-      {segments.map(([x, z, w, d], i) => (
-        <RoundedBox key={i} args={[w, 0.4, d]} radius={0.1} position={[x, 0.2, z]} smoothness={2}>
-          <meshStandardMaterial color="#1a1f2e" roughness={0.9} />
-        </RoundedBox>
-      ))}
+      <PerimeterEdge x={0} z={MAP_HALF_Z + 0.05} length={MAP_HALF_X * 2 + 0.4} axis="x" />
+      <PerimeterEdge x={0} z={-MAP_HALF_Z - 0.05} length={MAP_HALF_X * 2 + 0.4} axis="x" />
+      <PerimeterEdge x={-MAP_HALF_X - 0.05} z={0} length={MAP_HALF_Z * 2 + 0.2} axis="z" />
+      <PerimeterEdge x={MAP_HALF_X + 0.05} z={0} length={MAP_HALF_Z * 2 + 0.2} axis="z" />
     </group>
   )
 }
 
-/**
- * Visible "gates" between zones — chevron-style portal hints that pulse to invite
- * the player across. Reinforces the auto-switch UX.
- */
-function BoundaryGates() {
-  return (
-    <>
-      <Gate x={-8.5} fromColor="#7aa1ff" toColor="#ff5577" />
-      <Gate x={8.5} fromColor="#ff5577" toColor="#34d399" />
-    </>
-  )
-}
-
-function Gate({ x, fromColor, toColor }: { x: number; fromColor: string; toColor: string }) {
-  const gateRef = useRef<THREE.Group>(null)
-  const leftMatRef = useRef<THREE.MeshStandardMaterial>(null)
-  const rightMatRef = useRef<THREE.MeshStandardMaterial>(null)
+function PerimeterEdge({
+  x,
+  z,
+  length,
+  axis,
+}: {
+  x: number
+  z: number
+  length: number
+  axis: 'x' | 'z'
+}) {
+  const matRef = useRef<THREE.MeshStandardMaterial>(null)
   useFrame((state) => {
-    const t = state.clock.elapsedTime
-    if (leftMatRef.current) leftMatRef.current.emissiveIntensity = 0.6 + Math.sin(t * 1.6) * 0.2
-    if (rightMatRef.current) rightMatRef.current.emissiveIntensity = 0.6 + Math.sin(t * 1.6 + Math.PI) * 0.2
-    if (gateRef.current) gateRef.current.position.y = Math.sin(t * 0.8) * 0.05
+    if (matRef.current) {
+      const t = state.clock.elapsedTime
+      matRef.current.emissiveIntensity = 0.6 + Math.sin(t * 0.4 + (x + z) * 0.05) * 0.18
+    }
   })
+  const w = axis === 'x' ? length : 0.04
+  const d = axis === 'x' ? 0.04 : length
   return (
-    <group ref={gateRef} position={[x, 0.001, 0]}>
-      {/* Chevron strip on the floor */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[0.35, MAP_HALF_Z * 2 - 1]} />
-        <meshStandardMaterial color="#0a0d1a" emissive="#ff7596" emissiveIntensity={0.4} roughness={0.5} />
-      </mesh>
-      {/* Side pillars */}
-      <mesh position={[-0.2, 1.4, MAP_HALF_Z - 0.6]}>
-        <boxGeometry args={[0.12, 2.6, 0.12]} />
-        <meshStandardMaterial ref={leftMatRef} color={fromColor} emissive={fromColor} emissiveIntensity={0.6} />
-      </mesh>
-      <mesh position={[0.2, 1.4, -MAP_HALF_Z + 0.6]}>
-        <boxGeometry args={[0.12, 2.6, 0.12]} />
-        <meshStandardMaterial ref={rightMatRef} color={toColor} emissive={toColor} emissiveIntensity={0.6} />
-      </mesh>
-    </group>
+    <mesh position={[x, 0.04, z]}>
+      <boxGeometry args={[w, 0.025, d]} />
+      <meshStandardMaterial
+        ref={matRef}
+        color="#ffffff"
+        emissive="#a8c5ff"
+        emissiveIntensity={0.6}
+        transparent
+        opacity={0.78}
+      />
+    </mesh>
   )
 }
+
+// BoundaryGates removed — they obscured the view in hack timeline. Timeline transitions still fire
+// automatically via Avatar's border-cross detection.

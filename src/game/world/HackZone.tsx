@@ -78,10 +78,7 @@ export function HackZone() {
         <meshStandardMaterial color="#0a0d1a" emissive="#ff4d7a" emissiveIntensity={0.18} />
       </RoundedBox>
 
-      {/* ---------- SPOTLIGHTS HANGING FROM CEILING ---------- */}
-      <SpotlightRig pos={[-4, 5, -7]} target={[-3, 0.8, -8]} color="#ff7596" />
-      <SpotlightRig pos={[4, 5, -7]} target={[3, 0.8, -8]} color="#ff7596" />
-      <SpotlightRig pos={[0, 5.4, -5]} target={[0, 0, 0]} color="#ffd87a" />
+      {/* Spotlights removed — they were obscuring the Lovable billboard from the camera angle */}
 
       {/* ---------- HACKATHON DESKS — pit area ---------- */}
       {/* Back row stays full; front row is trimmed because the Hackathon Team takes centre */}
@@ -111,8 +108,7 @@ export function HackZone() {
         <Standee key={`s2-${x}`} pos={[x, 0.36, 5.8]} hue={i + 3} />
       ))}
 
-      {/* ---------- SIDE PROJECTOR SCREENS ---------- */}
-      <SideScreen pos={[-7.5, 0, -3]} rotation={Math.PI / 2} message="LIVE · TEAMS BUILDING" />
+      {/* ---------- SIDE PROJECTOR SCREEN — left one (with its black stand) removed ---------- */}
       <SideScreen pos={[7.5, 0, -3]} rotation={-Math.PI / 2} message="JUDGES · 23 MINS REMAINING" />
 
       {/* ---------- WINNER STAGE — far-right back corner, facing diagonally toward Execution booth ---------- */}
@@ -134,65 +130,14 @@ export function HackZone() {
       <Banner pos={[7, 0, -8.5]} color="#ff5577" />
       <Banner pos={[7, 0, 8.5]} color="#34d399" />
 
-      {/* ---------- SNACK BAR ---------- */}
+      {/* ---------- SNACK BAR + perched Lovable heart ---------- */}
       <SnackBar pos={[-6.5, 0, 1]} />
-
-      {/* ---------- FLOATING LOVABLE HEARTS over desks (atmosphere) ---------- */}
-      <LovableHeartFloating pos={[-2.4, 4.2, -1]} scale={0.6} />
-      <LovableHeartFloating pos={[2.4, 4.4, -1]} scale={0.6} rotation={Math.PI / 5} />
+      <LovableHeartFloating pos={[-6.5, 1.95, 1]} scale={0.32} />
     </group>
   )
 }
 
-function SpotlightRig({
-  pos,
-  target,
-  color,
-}: {
-  pos: [number, number, number]
-  target: [number, number, number]
-  color: string
-}) {
-  const lightRef = useRef<THREE.SpotLight>(null)
-  const targetRef = useRef<THREE.Object3D>(new THREE.Object3D())
-
-  useFrame(() => {
-    if (lightRef.current && targetRef.current) {
-      targetRef.current.position.set(target[0], target[1], target[2])
-      targetRef.current.updateMatrixWorld()
-      lightRef.current.target = targetRef.current
-    }
-  })
-
-  return (
-    <group position={pos}>
-      {/* The spotlight fixture */}
-      <mesh castShadow>
-        <cylinderGeometry args={[0.18, 0.28, 0.4, 12]} />
-        <meshStandardMaterial color="#0a0d1a" />
-      </mesh>
-      <mesh position={[0, -0.22, 0]}>
-        <coneGeometry args={[0.22, 0.3, 12]} />
-        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={1.2} />
-      </mesh>
-      {/* Fixture pole */}
-      <mesh position={[0, 0.45, 0]}>
-        <cylinderGeometry args={[0.04, 0.04, 0.8, 6]} />
-        <meshStandardMaterial color="#1f2332" />
-      </mesh>
-      {/* The actual light */}
-      <spotLight
-        ref={lightRef}
-        color={color}
-        intensity={1.4}
-        angle={0.6}
-        penumbra={0.6}
-        distance={20}
-      />
-      <primitive object={targetRef.current} />
-    </group>
-  )
-}
+// SpotlightRig removed — lamps were obscuring the Lovable billboard
 
 function SideScreen({
   pos,

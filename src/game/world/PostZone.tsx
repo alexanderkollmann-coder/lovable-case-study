@@ -67,11 +67,7 @@ export function PostZone() {
 
       {/* Server racks removed — they were the "5 vertical black boxes" obstructing the wall screen */}
 
-      {/* ---------- LIVE METRIC DISPLAYS — each one is a distinct mechanic, not a generic light box ---------- */}
-      <PipelineFlow pos={[-5.5, 2.8, -3]} color="#7aa1ff" />
-      <DeploysStack pos={[5.5, 2.6, -3]} color="#34d399" />
-      <LatencyWave pos={[-4.5, 3.2, 4]} color="#ff7596" />
-      <UptimeGauge pos={[4.5, 3.2, 4]} color="#fbbf24" />
+      {/* Floating metric widgets removed — all stats now consolidated on the standup board */}
 
       {/* ---------- STATS STANDUP — back-left summary kiosk facing centre ---------- */}
       <StatsStandup pos={[-7, 0, -8.5]} rotation={0.689} />
@@ -133,135 +129,7 @@ function ConsoleStation({ pos, rotation, hue }: { pos: [number, number, number];
   )
 }
 
-/** A horizontal pipe with glowing spheres flowing through it — left to right. */
-function PipelineFlow({ pos, color = '#7aa1ff', count = 6 }: { pos: [number, number, number]; color?: string; count?: number }) {
-  const particleRefs = useRef<(THREE.Mesh | null)[]>([])
-  const WIDTH = 2.0
-  useFrame((state) => {
-    const t = state.clock.elapsedTime
-    particleRefs.current.forEach((mesh, i) => {
-      if (!mesh) return
-      const phase = ((t * 0.45 + i / count) % 1)
-      mesh.position.x = -WIDTH / 2 + phase * WIDTH
-      const m = mesh.material as THREE.MeshStandardMaterial
-      const fade = phase < 0.08 ? phase / 0.08 : phase > 0.92 ? (1 - phase) / 0.08 : 1
-      m.opacity = fade
-    })
-  })
-  return (
-    <group position={pos}>
-      <mesh rotation={[0, 0, Math.PI / 2]}>
-        <cylinderGeometry args={[0.16, 0.16, WIDTH + 0.2, 18, 1, true]} />
-        <meshStandardMaterial color="#0a0d1a" emissive={color} emissiveIntensity={0.18} side={THREE.DoubleSide} transparent opacity={0.35} />
-      </mesh>
-      {[-1, 1].map((sign) => (
-        <mesh key={sign} position={[(WIDTH / 2 + 0.1) * sign, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
-          <torusGeometry args={[0.16, 0.025, 8, 24]} />
-          <meshStandardMaterial color={color} emissive={color} emissiveIntensity={1.0} />
-        </mesh>
-      ))}
-      {Array.from({ length: count }).map((_, i) => (
-        <mesh
-          key={i}
-          ref={(el) => {
-            particleRefs.current[i] = el
-          }}
-        >
-          <sphereGeometry args={[0.085, 12, 8]} />
-          <meshStandardMaterial color={color} emissive={color} emissiveIntensity={1.6} transparent opacity={1} />
-        </mesh>
-      ))}
-      <Text position={[0, -0.46, 0]} fontSize={0.16} color={color} anchorX="center" letterSpacing={0.18}>
-        PIPELINE
-      </Text>
-      <Text position={[0, -0.78, 0]} fontSize={0.34} color="#ffffff" anchorX="center" letterSpacing={0.08}>
-        14 ACTIVE
-      </Text>
-    </group>
-  )
-}
-
-/** A short stack of cubes that pulse from bottom-up — one cube per recent deploy. */
-function DeploysStack({ pos, color = '#34d399' }: { pos: [number, number, number]; color?: string }) {
-  const cubeRefs = useRef<(THREE.Mesh | null)[]>([])
-  const COUNT = 6
-  useFrame((state) => {
-    const t = state.clock.elapsedTime
-    cubeRefs.current.forEach((cube, i) => {
-      if (!cube) return
-      const phase = (t * 0.55 + i * 0.18) % 1.0
-      const intensity = 0.35 + Math.max(0, Math.sin(phase * Math.PI * 2)) * 1.6
-      const m = cube.material as THREE.MeshStandardMaterial
-      m.emissiveIntensity = intensity
-    })
-  })
-  return (
-    <group position={pos}>
-      {Array.from({ length: COUNT }).map((_, i) => (
-        <mesh
-          key={i}
-          ref={(el) => {
-            cubeRefs.current[i] = el
-          }}
-          position={[0, -0.55 + i * 0.18, 0]}
-        >
-          <boxGeometry args={[0.62 - i * 0.04, 0.13, 0.62 - i * 0.04]} />
-          <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.6} />
-        </mesh>
-      ))}
-      <Text position={[0, -0.82, 0]} fontSize={0.16} color={color} anchorX="center" letterSpacing={0.18}>
-        DEPLOYS
-      </Text>
-      <Text position={[0, -1.14, 0]} fontSize={0.34} color="#ffffff" anchorX="center" letterSpacing={0.08}>
-        6 / DAY
-      </Text>
-    </group>
-  )
-}
-
-/** A scrolling sine-wave readout — looks like a real-time oscilloscope. */
-function LatencyWave({ pos, color = '#ff7596' }: { pos: [number, number, number]; color?: string }) {
-  const dotRefs = useRef<(THREE.Mesh | null)[]>([])
-  const COUNT = 22
-  const WIDTH = 2.4
-  useFrame((state) => {
-    const t = state.clock.elapsedTime
-    for (let i = 0; i < COUNT; i++) {
-      const dot = dotRefs.current[i]
-      if (!dot) continue
-      const x = -WIDTH / 2 + (i / (COUNT - 1)) * WIDTH
-      const y = Math.sin(i * 0.55 + t * 2.4) * 0.18 + Math.sin(i * 0.27 + t * 1.3) * 0.08
-      dot.position.set(x, y, 0)
-    }
-  })
-  return (
-    <group position={pos}>
-      {/* Baseline */}
-      <mesh position={[0, 0, -0.01]}>
-        <boxGeometry args={[WIDTH, 0.006, 0.001]} />
-        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.3} transparent opacity={0.4} />
-      </mesh>
-      {/* Wave dots */}
-      {Array.from({ length: COUNT }).map((_, i) => (
-        <mesh
-          key={i}
-          ref={(el) => {
-            dotRefs.current[i] = el
-          }}
-        >
-          <sphereGeometry args={[0.05, 8, 6]} />
-          <meshStandardMaterial color={color} emissive={color} emissiveIntensity={1.4} />
-        </mesh>
-      ))}
-      <Text position={[0, -0.5, 0]} fontSize={0.16} color={color} anchorX="center" letterSpacing={0.18}>
-        LATENCY
-      </Text>
-      <Text position={[0, -0.82, 0]} fontSize={0.34} color="#ffffff" anchorX="center" letterSpacing={0.08}>
-        142ms
-      </Text>
-    </group>
-  )
-}
+// Floating PipelineFlow / DeploysStack / LatencyWave components removed — metrics live on the StatsStandup
 
 /** Standup display — consolidates Pipeline / Deploys / Latency / Uptime into one focal kiosk. */
 function StatsStandup({ pos, rotation = 0 }: { pos: [number, number, number]; rotation?: number }) {
@@ -349,34 +217,7 @@ function KPITile({
   )
 }
 
-/** A circular gauge ring with a bright travelling segment — like a steady, slow loading indicator. */
-function UptimeGauge({ pos, color = '#fbbf24' }: { pos: [number, number, number]; color?: string }) {
-  const segmentRef = useRef<THREE.Mesh>(null)
-  useFrame((state) => {
-    if (segmentRef.current) segmentRef.current.rotation.z = state.clock.elapsedTime * 0.32
-  })
-  return (
-    <group position={pos}>
-      {/* Background ring */}
-      <mesh>
-        <torusGeometry args={[0.55, 0.04, 14, 60]} />
-        <meshStandardMaterial color="#1a1f2e" emissive={color} emissiveIntensity={0.22} />
-      </mesh>
-      {/* Rotating bright segment */}
-      <mesh ref={segmentRef}>
-        <torusGeometry args={[0.55, 0.07, 14, 60, Math.PI * 0.45]} />
-        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={1.5} />
-      </mesh>
-      {/* Inner value */}
-      <Text position={[0, 0.05, 0]} fontSize={0.22} color="#ffffff" anchorX="center" anchorY="middle" letterSpacing={0.05}>
-        99.97%
-      </Text>
-      <Text position={[0, -0.92, 0]} fontSize={0.16} color={color} anchorX="center" letterSpacing={0.18}>
-        UPTIME
-      </Text>
-    </group>
-  )
-}
+// UptimeGauge removed — uptime now appears on the StatsStandup
 
 function ScreenChart({
   pos,

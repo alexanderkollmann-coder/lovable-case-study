@@ -41,7 +41,7 @@ export function useKeyboard() {
       if (key && !stateRef.current[key]) {
         stateRef.current[key] = true
       }
-      if (e.code === 'KeyE' || e.code === 'Space' || e.code === 'Enter') {
+      if (e.code === 'KeyE') {
         if (!stateRef.current.interact) {
           stateRef.current.interactPressedThisFrame = true
         }
@@ -51,7 +51,7 @@ export function useKeyboard() {
     const handleUp = (e: KeyboardEvent) => {
       const key = codeMap[e.code]
       if (key) stateRef.current[key] = false
-      if (e.code === 'KeyE' || e.code === 'Space' || e.code === 'Enter') {
+      if (e.code === 'KeyE') {
         stateRef.current.interact = false
       }
     }

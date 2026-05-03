@@ -84,6 +84,9 @@ function App() {
 
       {/* Loading splash */}
       <LoadingSplash visible={loading} />
+
+      {/* Tiny render-pause toggle (bottom-right) — keeps laptop cool while idle */}
+      {!cinematicMode && <RenderPauseToggle />}
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import { Canvas } from '@react-three/fiber'
 import { Suspense, useMemo } from 'react'
 import * as THREE from 'three'
-import { useGameStore, TIMELINE_COLORS } from '@/store/gameStore'
+import { useGameStore, PALETTES } from '@/store/gameStore'
 import { Camera } from './Camera'
 import { Lighting } from './Lighting'
 import { World } from './World'
@@ -46,11 +46,16 @@ function SceneContents() {
 }
 
 function SkyAndFog({ fogColor }: { fogColor: THREE.Color }) {
+  const tmp = useMemo(() => new THREE.Color(), [])
   useFrame((state, delta) => {
-    const timeline = useGameStore.getState().timeline
-    const palette = TIMELINE_COLORS[timeline]
-    fogColor.lerp(new THREE.Color(palette.fog), 1 - Math.exp(-3 * delta))
-    state.scene.background = fogColor
+    const palette = PALETTES[useGameStore.getState().palette]
+    tmp.set(palette.fog)
+    fogColor.lerp(tmp, 1 - Math.exp(-3 * delta))
+    // Background uses the palette's "background" colour (often slightly different from fog)
+    if (!(state.scene.background instanceof THREE.Color)) {
+      state.scene.background = new THREE.Color()
+    }
+    ;(state.scene.background as THREE.Color).lerp(new THREE.Color(palette.background), 1 - Math.exp(-3 * delta))
     if (!state.scene.fog) {
       state.scene.fog = new THREE.Fog(fogColor, 32, 80)
     } else {

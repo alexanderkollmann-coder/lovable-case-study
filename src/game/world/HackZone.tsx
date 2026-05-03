@@ -73,8 +73,8 @@ export function HackZone() {
         <meshStandardMaterial color="#ff4d7a" emissive="#ff4d7a" emissiveIntensity={1.4} />
       </mesh>
 
-      {/* Stage podium for keynote */}
-      <RoundedBox args={[1.0, 1.2, 0.7]} radius={0.06} smoothness={2} position={[-3, 1.1, -8.4]} castShadow>
+      {/* Stage podium — moved to the left edge so the billboard text reads cleanly */}
+      <RoundedBox args={[1.0, 1.2, 0.7]} radius={0.06} smoothness={2} position={[-5, 1.1, -8.4]} castShadow>
         <meshStandardMaterial color="#0a0d1a" emissive="#ff4d7a" emissiveIntensity={0.18} />
       </RoundedBox>
 
@@ -130,8 +130,7 @@ export function HackZone() {
         />
       </group>
 
-      {/* ---------- HANGING BANNERS — bottom-left blue stand removed per spec ---------- */}
-      <Banner pos={[-7, 0, -8.5]} color="#ff5577" />
+      {/* ---------- HANGING BANNERS — back-left red banner also dropped (Formats booth takes its place) ---------- */}
       <Banner pos={[7, 0, -8.5]} color="#ff5577" />
       <Banner pos={[7, 0, 8.5]} color="#34d399" />
 

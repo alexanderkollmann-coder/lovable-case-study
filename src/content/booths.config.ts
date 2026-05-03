@@ -58,7 +58,8 @@ const booths: BoothMeta[] = [
   {
     id: 'formats',
     timeline: 'hack',
-    position: [-5, 0, -7],
+    // Tucked into the back-left corner where the red banner used to hang
+    position: [-7, 0, -8.5],
     rotation: 0.3,
     label: 'Formats',
     subtitle: 'Half-day to multi-week — and why we picked this one.',
@@ -93,10 +94,10 @@ const booths: BoothMeta[] = [
   {
     id: 'measurement',
     timeline: 'post',
-    // Far right of post zone, just to the right of the Uptime display
-    position: [23, 0, 4],
-    // Diagonal — sign points back toward the centre of the zone
-    rotation: -2.158,
+    // Far back-right corner of post zone — mirroring the winner's position in hack
+    position: [24, 0, -7],
+    // Faces back toward the centre of the zone (world 17, 0, 0)
+    rotation: -Math.PI / 4,
     label: 'Measurement',
     subtitle: 'How we know it is working.',
     accent: '#0f9b6c',

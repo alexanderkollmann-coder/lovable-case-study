@@ -2,7 +2,7 @@ import { RoundedBox } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useMemo, useRef } from 'react'
 import * as THREE from 'three'
-import { useGameStore, TIMELINE_COLORS } from '@/store/gameStore'
+import { useGameStore, TIMELINE_COLORS, PALETTES } from '@/store/gameStore'
 import type { Timeline } from '@/store/gameStore'
 import { PreZone } from './world/PreZone'
 import { HackZone } from './world/HackZone'
@@ -37,20 +37,9 @@ export const WORLD_BOUNDS = {
 export function World({ onGroundClick }: { onGroundClick: (point: THREE.Vector3) => void }) {
   return (
     <group>
-      {/* Master ground plane — collects click-to-walk raycasts */}
-      <mesh
-        rotation={[-Math.PI / 2, 0, 0]}
-        position={[0, 0, 0]}
-        receiveShadow
-        onPointerDown={(e) => {
-          if (e.button !== 0) return
-          e.stopPropagation()
-          onGroundClick(e.point.clone())
-        }}
-      >
-        <planeGeometry args={[MAP_HALF_X * 2, MAP_HALF_Z * 2, 1, 1]} />
-        <meshStandardMaterial color="#0a0d18" roughness={1} metalness={0} />
-      </mesh>
+      {/* Master ground plane — colour follows the active palette */}
+      <MasterGround onGroundClick={onGroundClick} />
+
 
       {ZONES.map((zone) => (
         <ZoneFloor key={zone.timeline} {...zone} />
@@ -65,6 +54,32 @@ export function World({ onGroundClick }: { onGroundClick: (point: THREE.Vector3)
 
       <ZoneLights />
     </group>
+  )
+}
+
+function MasterGround({ onGroundClick }: { onGroundClick: (point: THREE.Vector3) => void }) {
+  const matRef = useRef<THREE.MeshStandardMaterial>(null)
+  const tmp = useMemo(() => new THREE.Color(), [])
+  useFrame((_, delta) => {
+    if (!matRef.current) return
+    const palette = PALETTES[useGameStore.getState().palette]
+    tmp.set(palette.groundColor)
+    matRef.current.color.lerp(tmp, 1 - Math.exp(-3 * delta))
+  })
+  return (
+    <mesh
+      rotation={[-Math.PI / 2, 0, 0]}
+      position={[0, 0, 0]}
+      receiveShadow
+      onPointerDown={(e) => {
+        if (e.button !== 0) return
+        e.stopPropagation()
+        onGroundClick(e.point.clone())
+      }}
+    >
+      <planeGeometry args={[MAP_HALF_X * 2, MAP_HALF_Z * 2, 1, 1]} />
+      <meshStandardMaterial ref={matRef} color="#0a0d18" roughness={1} metalness={0} />
+    </mesh>
   )
 }
 

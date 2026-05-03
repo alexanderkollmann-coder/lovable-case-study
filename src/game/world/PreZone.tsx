@@ -100,13 +100,7 @@ export function PreZone() {
         <CinematicNameTag pos={[1.5, 2.1, 1.4]} name="MONICA" color="#fbbf24" />
       </group>
 
-      {/* "Reception" / front desk */}
-      <RoundedBox args={[3.6, 0.96, 0.7]} radius={0.06} smoothness={2} position={[-5.5, 0.48, 4]} castShadow>
-        <meshStandardMaterial color="#3a4d80" roughness={0.55} />
-      </RoundedBox>
-      <RoundedBox args={[3.6, 0.04, 0.92]} radius={0.04} smoothness={2} position={[-5.5, 0.98, 4]} castShadow>
-        <meshStandardMaterial color="#1f2332" roughness={0.5} />
-      </RoundedBox>
+      {/* Reception desk removed — it was sitting in the same area as the meeting whiteboard */}
 
       {/* Coffee station */}
       <CoffeeMachine pos={[-2, 0, 5.5]} />

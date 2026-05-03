@@ -73,6 +73,9 @@ export function PostZone() {
       <LatencyWave pos={[-4.5, 3.2, 4]} color="#ff7596" />
       <UptimeGauge pos={[4.5, 3.2, 4]} color="#fbbf24" />
 
+      {/* ---------- STATS STANDUP — back-left summary kiosk facing centre ---------- */}
+      <StatsStandup pos={[-7, 0, -8.5]} rotation={0.689} />
+
       {/* ---------- AMBIENT LIGHTING ---------- */}
       <pointLight position={[0, 4, -5]} intensity={0.6} distance={20} color="#34d399" />
       <pointLight position={[-5, 3, 3]} intensity={0.35} distance={14} color="#7aa1ff" />
@@ -255,6 +258,92 @@ function LatencyWave({ pos, color = '#ff7596' }: { pos: [number, number, number]
       </Text>
       <Text position={[0, -0.82, 0]} fontSize={0.34} color="#ffffff" anchorX="center" letterSpacing={0.08}>
         142ms
+      </Text>
+    </group>
+  )
+}
+
+/** Standup display — consolidates Pipeline / Deploys / Latency / Uptime into one focal kiosk. */
+function StatsStandup({ pos, rotation = 0 }: { pos: [number, number, number]; rotation?: number }) {
+  return (
+    <group position={pos} rotation={[0, rotation, 0]}>
+      {/* Outer glowing edge */}
+      <RoundedBox args={[3.2, 2.6, 0.10]} radius={0.06} smoothness={2} position={[0, 1.7, -0.02]} castShadow>
+        <meshStandardMaterial color="#1a1f2e" emissive="#34d399" emissiveIntensity={0.45} />
+      </RoundedBox>
+      {/* Display panel */}
+      <RoundedBox args={[3.0, 2.4, 0.12]} radius={0.06} smoothness={2} position={[0, 1.7, 0]} castShadow>
+        <meshStandardMaterial color="#0a0d1a" />
+      </RoundedBox>
+
+      {/* Header */}
+      <Text position={[0, 2.78, 0.07]} fontSize={0.18} color="#9ae5c5" anchorX="center" letterSpacing={0.18}>
+        LIVE OPS · POC PIPELINE
+      </Text>
+      <mesh position={[0, 2.62, 0.07]}>
+        <boxGeometry args={[2.0, 0.012, 0.001]} />
+        <meshStandardMaterial color="#34d399" emissive="#34d399" emissiveIntensity={0.6} />
+      </mesh>
+
+      {/* 2x2 grid of KPI tiles */}
+      <KPITile pos={[-0.72, 1.96, 0.07]} label="PIPELINE" value="14" sub="ACTIVE" color="#7aa1ff" />
+      <KPITile pos={[0.72, 1.96, 0.07]} label="DEPLOYS" value="6" sub="/ DAY" color="#34d399" />
+      <KPITile pos={[-0.72, 1.0, 0.07]} label="LATENCY" value="142" sub="ms" color="#ff7596" />
+      <KPITile pos={[0.72, 1.0, 0.07]} label="UPTIME" value="99.97" sub="%" color="#fbbf24" />
+
+      {/* Stand legs */}
+      <mesh position={[-1.3, 0.25, 0]}>
+        <boxGeometry args={[0.1, 0.5, 0.1]} />
+        <meshStandardMaterial color="#1f2332" />
+      </mesh>
+      <mesh position={[1.3, 0.25, 0]}>
+        <boxGeometry args={[0.1, 0.5, 0.1]} />
+        <meshStandardMaterial color="#1f2332" />
+      </mesh>
+      {/* Base bar */}
+      <RoundedBox args={[2.6, 0.06, 0.2]} radius={0.02} smoothness={1} position={[0, 0.06, 0]}>
+        <meshStandardMaterial color="#1f2332" />
+      </RoundedBox>
+    </group>
+  )
+}
+
+function KPITile({
+  pos,
+  label,
+  value,
+  sub,
+  color,
+}: {
+  pos: [number, number, number]
+  label: string
+  value: string
+  sub: string
+  color: string
+}) {
+  return (
+    <group position={pos}>
+      {/* Tile background */}
+      <mesh>
+        <planeGeometry args={[1.30, 0.86]} />
+        <meshStandardMaterial color="#0e1422" emissive={color} emissiveIntensity={0.18} />
+      </mesh>
+      {/* Top accent strip */}
+      <mesh position={[0, 0.41, 0.001]}>
+        <boxGeometry args={[1.30, 0.012, 0.001]} />
+        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.85} />
+      </mesh>
+      {/* Label */}
+      <Text position={[0, 0.28, 0.003]} fontSize={0.085} color={color} anchorX="center" letterSpacing={0.18}>
+        {label}
+      </Text>
+      {/* Value */}
+      <Text position={[0, -0.02, 0.003]} fontSize={0.32} color="#ffffff" anchorX="center" letterSpacing={0.05}>
+        {value}
+      </Text>
+      {/* Sub */}
+      <Text position={[0, -0.30, 0.003]} fontSize={0.085} color={color} anchorX="center" letterSpacing={0.18}>
+        {sub}
       </Text>
     </group>
   )

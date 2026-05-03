@@ -1,45 +1,53 @@
 import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 import * as THREE from 'three'
-import { useGameStore, TIMELINE_COLORS } from '@/store/gameStore'
+import { useGameStore, PALETTES } from '@/store/gameStore'
 import { damp } from '@/lib/utils'
 
+/**
+ * Global lighting. Drives ambient + directional + fill from the active palette.
+ * Per-zone accent colour shifts come from the spotlights in `ZoneLights.tsx`,
+ * not from the global ambient — so palette can stay consistent across timelines.
+ */
 export function Lighting() {
   const ambientRef = useRef<THREE.AmbientLight>(null)
   const dirRef = useRef<THREE.DirectionalLight>(null)
   const fillRef = useRef<THREE.DirectionalLight>(null)
 
-  const targetColor = useRef(new THREE.Color(TIMELINE_COLORS.hack.accent))
+  const ambientTarget = useRef(new THREE.Color(PALETTES.cinematic.ambientColor))
+  const dirTarget = useRef(new THREE.Color(PALETTES.cinematic.directionalColor))
+  const fillTarget = useRef(new THREE.Color(PALETTES.cinematic.fog))
 
   useFrame((state, delta) => {
-    const timeline = useGameStore.getState().timeline
-    const palette = TIMELINE_COLORS[timeline]
-    targetColor.current.set(palette.sky)
+    const palette = PALETTES[useGameStore.getState().palette]
+    ambientTarget.current.set(palette.ambientColor)
+    dirTarget.current.set(palette.directionalColor)
+    fillTarget.current.set(palette.fog)
 
+    const lerpRate = 1 - Math.exp(-3 * delta)
     if (ambientRef.current) {
-      ambientRef.current.color.lerp(targetColor.current, 1 - Math.exp(-3 * delta))
+      ambientRef.current.color.lerp(ambientTarget.current, lerpRate)
+      ambientRef.current.intensity = damp(ambientRef.current.intensity, palette.ambientIntensity, 4, delta)
     }
     if (dirRef.current) {
-      dirRef.current.color.lerp(new THREE.Color(palette.accent).lerp(new THREE.Color('#fff'), 0.5), 1 - Math.exp(-3 * delta))
+      dirRef.current.color.lerp(dirTarget.current, lerpRate)
+      const t = state.clock.elapsedTime
+      const target = palette.directionalIntensity + Math.sin(t * 0.4) * 0.05
+      dirRef.current.intensity = damp(dirRef.current.intensity, target, 4, delta)
     }
     if (fillRef.current) {
-      fillRef.current.color.lerp(new THREE.Color(palette.fog), 1 - Math.exp(-3 * delta))
-    }
-
-    // gentle "breathing" dir intensity (lower base now — the per-zone spot lights carry the active zone)
-    if (dirRef.current) {
-      const t = state.clock.elapsedTime
-      dirRef.current.intensity = damp(dirRef.current.intensity, 0.75 + Math.sin(t * 0.4) * 0.05, 4, delta)
+      fillRef.current.color.lerp(fillTarget.current, lerpRate)
     }
   })
 
+  const initial = PALETTES.cinematic
   return (
     <>
-      <ambientLight ref={ambientRef} intensity={0.32} />
+      <ambientLight ref={ambientRef} intensity={initial.ambientIntensity} />
       <directionalLight
         ref={dirRef}
         position={[6, 22, 14]}
-        intensity={0.75}
+        intensity={initial.directionalIntensity}
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}

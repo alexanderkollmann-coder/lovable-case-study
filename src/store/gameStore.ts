@@ -31,6 +31,83 @@ export const TIMELINE_COLORS: Record<Timeline, { sky: string; ground: string; ac
 
 export type Vec3 = [number, number, number]
 
+/* -------------------------------------------------------------------------- */
+/*  Palette / theme system — cycles through global colour moods                */
+/* -------------------------------------------------------------------------- */
+
+export type Palette = 'cinematic' | 'boardroom' | 'sunset' | 'energetic'
+
+export const PALETTE_ORDER: Palette[] = ['cinematic', 'boardroom', 'sunset', 'energetic']
+
+export const PALETTES: Record<Palette, {
+  name: string
+  description: string
+  background: string
+  fog: string
+  groundColor: string
+  ambientIntensity: number
+  ambientColor: string
+  directionalIntensity: number
+  directionalColor: string
+  /** swatch shown on the cycle button */
+  swatch: string
+  /** approximate brightness — 'dark' | 'light' — for HUD adjustments */
+  mood: 'dark' | 'light'
+}> = {
+  cinematic: {
+    name: 'Cinematic',
+    description: 'Dark, moody, film-like',
+    background: '#0a0d18',
+    fog: '#0e1422',
+    groundColor: '#0a0d18',
+    ambientIntensity: 0.32,
+    ambientColor: '#ffffff',
+    directionalIntensity: 0.75,
+    directionalColor: '#ffffff',
+    swatch: '#1a1f2e',
+    mood: 'dark',
+  },
+  boardroom: {
+    name: 'Boardroom',
+    description: 'Light, professional, easy to read',
+    background: '#e8e2d2',
+    fog: '#d6cfbb',
+    groundColor: '#bcb29a',
+    ambientIntensity: 0.95,
+    ambientColor: '#fff8ec',
+    directionalIntensity: 1.1,
+    directionalColor: '#fff4e0',
+    swatch: '#e8e2d2',
+    mood: 'light',
+  },
+  sunset: {
+    name: 'Sunset',
+    description: 'Warm gold, golden hour',
+    background: '#1f0f18',
+    fog: '#3a1f25',
+    groundColor: '#2c1820',
+    ambientIntensity: 0.55,
+    ambientColor: '#ffb78a',
+    directionalIntensity: 1.05,
+    directionalColor: '#ffc488',
+    swatch: '#ff8a4d',
+    mood: 'dark',
+  },
+  energetic: {
+    name: 'Energetic',
+    description: 'Bright, saturated, high-energy',
+    background: '#fbe5ec',
+    fog: '#f6d3df',
+    groundColor: '#e8b8cc',
+    ambientIntensity: 1.05,
+    ambientColor: '#fff8f0',
+    directionalIntensity: 1.4,
+    directionalColor: '#ffffff',
+    swatch: '#ff5e91',
+    mood: 'light',
+  },
+}
+
 /**
  * Boundaries (in world-space x) between the three timeline zones.
  * These match the zone-center spacing in World.tsx (centers at -17, 0, +17).
@@ -56,6 +133,9 @@ interface GameState {
   /** When true, the cinematic camera takes over and gameplay UI hides. */
   cinematicShotId: string | null
 
+  /** Active visual palette. Cycle through PALETTE_ORDER. */
+  palette: Palette
+
   setTimeline: (t: Timeline) => void
   beginTransitionTo: (t: Timeline) => void
   finishTransition: () => void
@@ -68,6 +148,7 @@ interface GameState {
 
   setAvatarTarget: (target: Vec3 | null) => void
   setCinematicShotId: (id: string | null) => void
+  cyclePalette: () => void
 }
 
 export const useGameStore = create<GameState>((set, get) => ({
@@ -79,6 +160,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   hasSeenHint: false,
   avatarTarget: null,
   cinematicShotId: null,
+  palette: 'cinematic',
 
   setTimeline: (timeline) => set({ timeline, pendingTimeline: null, isTransitioning: false }),
 
@@ -104,4 +186,10 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   setAvatarTarget: (target) => set({ avatarTarget: target }),
   setCinematicShotId: (id) => set({ cinematicShotId: id }),
+  cyclePalette: () =>
+    set((state) => {
+      const idx = PALETTE_ORDER.indexOf(state.palette)
+      const next = PALETTE_ORDER[(idx + 1) % PALETTE_ORDER.length]
+      return { palette: next }
+    }),
 }))

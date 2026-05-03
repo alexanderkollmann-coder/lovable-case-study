@@ -165,6 +165,8 @@ export const useGameStore = create<GameState>((set, get) => ({
   avatarTarget: null,
   cinematicShotId: null,
   palette: 'energetic',
+  renderPaused: false,
+  toggleRenderPaused: () => set((s) => ({ renderPaused: !s.renderPaused })),
 
   setTimeline: (timeline) => set({ timeline, pendingTimeline: null, isTransitioning: false }),
 

@@ -501,26 +501,7 @@ function VideoCallTile({
         <meshStandardMaterial color={tileBg} emissive={tileBg} emissiveIntensity={0.15} roughness={0.85} />
       </mesh>
 
-      {/* --- Character — torso visible, friendly face --- */}
-      {/* Shirt / shoulders — softer shape, lighter colour, with collar V */}
-      <mesh position={[0, -0.95, 0.005]}>
-        <RoundedBox args={[1.55, 0.85, 0.04]} radius={0.30} smoothness={3}>
-          <meshStandardMaterial color={shirt} roughness={0.7} />
-        </RoundedBox>
-      </mesh>
-      {/* Collar V — a triangular notch in skin tone showing the open shirt */}
-      <mesh position={[0, -0.55, 0.012]} rotation={[0, 0, Math.PI]}>
-        <planeGeometry args={[0.30, 0.22]} />
-        <meshStandardMaterial color={tileBg} />
-      </mesh>
-      <mesh position={[-0.10, -0.50, 0.013]} rotation={[0, 0, 0.45]}>
-        <planeGeometry args={[0.30, 0.04]} />
-        <meshStandardMaterial color={shirt} roughness={0.6} />
-      </mesh>
-      <mesh position={[0.10, -0.50, 0.013]} rotation={[0, 0, -0.45]}>
-        <planeGeometry args={[0.30, 0.04]} />
-        <meshStandardMaterial color={shirt} roughness={0.6} />
-      </mesh>
+      {/* --- Character — clean torso, hair-free head, friendly face --- */}
       {/* Neck */}
       <mesh position={[0, -0.34, 0.008]}>
         <planeGeometry args={[0.30, 0.20]} />
@@ -531,16 +512,23 @@ function VideoCallTile({
         <planeGeometry args={[0.42, 0.05]} />
         <meshStandardMaterial color="#000000" transparent opacity={0.12} />
       </mesh>
-      {/* Head — skin-tone sphere */}
+      {/* Shirt / shoulders — rounded torso silhouette with a subtle collar curve.
+          Sits just above the nametag bar so the bottom is cleanly covered by the
+          name strip below; no awkward shirt edges poking past the nametag. */}
+      <mesh position={[0, -0.74, 0.005]}>
+        <RoundedBox args={[1.55, 0.50, 0.04]} radius={0.22} smoothness={3}>
+          <meshStandardMaterial color={shirt} roughness={0.7} />
+        </RoundedBox>
+      </mesh>
+      {/* Collar curve — soft darker shadow under the chin where the shirt meets the neck */}
+      <mesh position={[0, -0.50, 0.011]}>
+        <planeGeometry args={[0.55, 0.04]} />
+        <meshStandardMaterial color="#000000" transparent opacity={0.18} />
+      </mesh>
+      {/* Head — skin-tone sphere, no hair */}
       <mesh position={[0, 0.10, 0.10]} castShadow>
         <sphereGeometry args={[0.52, 48, 36]} />
         <meshStandardMaterial color={skin} roughness={0.55} metalness={0.02} />
-      </mesh>
-      {/* Hair — small dome that sits CLEARLY on top of the head, well above the brow.
-          Previous version wrapped down to eye level and read as a beanie / burglar mask. */}
-      <mesh position={[0, 0.40, 0.10]} castShadow>
-        <sphereGeometry args={[0.46, 36, 24, 0, Math.PI * 2, 0, Math.PI * 0.45]} />
-        <meshStandardMaterial color={hair} roughness={0.85} />
       </mesh>
       {/* Friendly raised-outer-corners eyebrows */}
       <mesh position={[-0.17, 0.24, 0.60]} rotation={[0, 0, 0.18]}>
@@ -609,35 +597,34 @@ function VideoCallTile({
         </mesh>
       )}
 
-      {/* Name strip bottom-left */}
-      <mesh position={[-0.55, -1.07, 0.011]}>
-        <planeGeometry args={[0.95, 0.22]} />
-        <meshStandardMaterial color="#0a0d1a" opacity={0.78} transparent />
+      {/* Full-width name strip across the bottom — covers the lower body cleanly */}
+      <mesh position={[0, -1.08, 0.011]}>
+        <planeGeometry args={[W, 0.26]} />
+        <meshStandardMaterial color="#0a0d1a" opacity={0.92} transparent />
       </mesh>
       <Text
-        position={[-0.55, -1.02, 0.013]}
+        position={[-W / 2 + 0.12, -1.03, 0.013]}
         fontSize={0.085}
         color="#ffffff"
-        anchorX="center"
+        anchorX="left"
         anchorY="middle"
         letterSpacing={0.06}
-        maxWidth={0.90}
       >
         {name}
       </Text>
       <Text
-        position={[-0.55, -1.13, 0.013]}
+        position={[-W / 2 + 0.12, -1.14, 0.013]}
         fontSize={0.048}
         color={hue}
-        anchorX="center"
+        anchorX="left"
         anchorY="middle"
         letterSpacing={0.18}
       >
         {role}
       </Text>
-      {/* Mic indicator bottom-right */}
-      <mesh position={[0.85, -1.07, 0.011]}>
-        <circleGeometry args={[0.07, 14]} />
+      {/* Mic indicator far-right of the name bar */}
+      <mesh position={[W / 2 - 0.14, -1.08, 0.013]}>
+        <circleGeometry args={[0.060, 14]} />
         <meshStandardMaterial color={speaking ? '#34d399' : '#ffffff'} emissive={speaking ? '#34d399' : '#000000'} emissiveIntensity={speaking ? 0.9 : 0} opacity={0.9} transparent />
       </mesh>
     </group>

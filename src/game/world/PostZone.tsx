@@ -612,13 +612,8 @@ function ScreenChart({ pos }: { pos: [number, number, number] }) {
   // Pre-computed data points (0..1 normalised)
   const series1 = [0.20, 0.28, 0.32, 0.30, 0.42, 0.55, 0.58, 0.62, 0.71, 0.78, 0.85, 0.92]
   const series2 = [0.15, 0.18, 0.22, 0.28, 0.30, 0.36, 0.40, 0.45, 0.50, 0.55, 0.60, 0.66]
-  const sweepRef = useRef<THREE.Mesh>(null)
-  useFrame((state) => {
-    if (sweepRef.current) {
-      const t = (state.clock.elapsedTime * 0.35) % 1
-      sweepRef.current.position.x = -W / 2 + 0.4 + t * (W - 0.6)
-    }
-  })
+  // (sweep animation removed per request)
+
   // Chart drawing area
   const padL = 0.4, padR = 0.2, padT = 0.55, padB = 0.45
   const cw = W - padL - padR

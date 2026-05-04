@@ -496,57 +496,100 @@ function VideoCallTile({
         <meshStandardMaterial color={hue} emissive={hue} emissiveIntensity={0.30} roughness={0.7} />
       </mesh>
 
-      {/* --- Character face (matches our world's avatars) --- */}
+      {/* --- Character face (higher fidelity, no hat) --- */}
       {/* Shoulders / shirt */}
-      <mesh position={[0, -0.78, 0.005]}>
-        <planeGeometry args={[1.55, 0.85]} />
-        <meshStandardMaterial color="#1f2332" />
+      <mesh position={[0, -0.85, 0.005]}>
+        <RoundedBox args={[1.70, 0.95, 0.04]} radius={0.10} smoothness={2}>
+          <meshStandardMaterial color="#1f2332" roughness={0.7} />
+        </RoundedBox>
+      </mesh>
+      {/* Collar accent */}
+      <mesh position={[0, -0.45, 0.012]}>
+        <planeGeometry args={[0.42, 0.10]} />
+        <meshStandardMaterial color={hue} emissive={hue} emissiveIntensity={0.35} />
       </mesh>
       {/* Neck */}
-      <mesh position={[0, -0.32, 0.006]}>
-        <planeGeometry args={[0.30, 0.18]} />
+      <mesh position={[0, -0.32, 0.008]}>
+        <planeGeometry args={[0.34, 0.20]} />
         <meshStandardMaterial color={skin} />
       </mesh>
-      {/* Head (skin) */}
-      <mesh position={[0, 0.10, 0.007]}>
-        <circleGeometry args={[0.50, 32]} />
-        <meshStandardMaterial color={skin} />
+      {/* Neck shadow under jaw */}
+      <mesh position={[0, -0.26, 0.009]}>
+        <planeGeometry args={[0.46, 0.06]} />
+        <meshStandardMaterial color="#000000" transparent opacity={0.18} />
       </mesh>
-      {/* Hair cap — top half-disc */}
-      <mesh position={[0, 0.22, 0.008]}>
-        <circleGeometry args={[0.52, 32, 0, Math.PI]} />
+      {/* Head — dimensional sphere for better fidelity than a flat disc */}
+      <mesh position={[0, 0.10, 0.10]} castShadow>
+        <sphereGeometry args={[0.52, 48, 36]} />
+        <meshStandardMaterial color={skin} roughness={0.55} metalness={0.02} />
+      </mesh>
+      {/* Hair — back/top of head as a sphere segment, tucked behind */}
+      <mesh position={[0, 0.22, 0.05]} castShadow>
+        <sphereGeometry args={[0.54, 36, 28, 0, Math.PI * 2, 0, Math.PI * 0.55]} />
+        <meshStandardMaterial color={hair} roughness={0.85} />
+      </mesh>
+      {/* Eyebrows */}
+      <mesh position={[-0.16, 0.22, 0.60]}>
+        <planeGeometry args={[0.13, 0.022]} />
         <meshStandardMaterial color={hair} />
       </mesh>
-      {/* Eyes */}
-      <mesh position={[-0.16, 0.12, 0.010]}>
-        <circleGeometry args={[0.045, 16]} />
+      <mesh position={[0.16, 0.22, 0.60]}>
+        <planeGeometry args={[0.13, 0.022]} />
+        <meshStandardMaterial color={hair} />
+      </mesh>
+      {/* Eyes (whites) */}
+      <mesh position={[-0.16, 0.13, 0.60]}>
+        <circleGeometry args={[0.065, 24]} />
+        <meshStandardMaterial color="#ffffff" />
+      </mesh>
+      <mesh position={[0.16, 0.13, 0.60]}>
+        <circleGeometry args={[0.065, 24]} />
+        <meshStandardMaterial color="#ffffff" />
+      </mesh>
+      {/* Iris */}
+      <mesh position={[-0.16, 0.13, 0.61]}>
+        <circleGeometry args={[0.038, 20]} />
+        <meshStandardMaterial color="#3a4d80" />
+      </mesh>
+      <mesh position={[0.16, 0.13, 0.61]}>
+        <circleGeometry args={[0.038, 20]} />
+        <meshStandardMaterial color="#3a4d80" />
+      </mesh>
+      {/* Pupils */}
+      <mesh position={[-0.16, 0.13, 0.62]}>
+        <circleGeometry args={[0.018, 16]} />
         <meshStandardMaterial color="#0a0d1a" />
       </mesh>
-      <mesh position={[0.16, 0.12, 0.010]}>
-        <circleGeometry args={[0.045, 16]} />
+      <mesh position={[0.16, 0.13, 0.62]}>
+        <circleGeometry args={[0.018, 16]} />
         <meshStandardMaterial color="#0a0d1a" />
       </mesh>
       {/* Eye highlights */}
-      <mesh position={[-0.148, 0.135, 0.011]}>
-        <circleGeometry args={[0.012, 10]} />
+      <mesh position={[-0.150, 0.14, 0.625]}>
+        <circleGeometry args={[0.010, 10]} />
         <meshStandardMaterial color="#ffffff" />
       </mesh>
-      <mesh position={[0.172, 0.135, 0.011]}>
-        <circleGeometry args={[0.012, 10]} />
+      <mesh position={[0.170, 0.14, 0.625]}>
+        <circleGeometry args={[0.010, 10]} />
         <meshStandardMaterial color="#ffffff" />
+      </mesh>
+      {/* Nose — soft shadow triangle */}
+      <mesh position={[0, 0.00, 0.62]}>
+        <planeGeometry args={[0.05, 0.14]} />
+        <meshStandardMaterial color="#000000" transparent opacity={0.10} />
       </mesh>
       {/* Cheeks — soft blush */}
-      <mesh position={[-0.24, -0.02, 0.009]}>
-        <circleGeometry args={[0.06, 16]} />
-        <meshStandardMaterial color="#ff7596" transparent opacity={0.45} />
+      <mesh position={[-0.26, -0.04, 0.60]}>
+        <circleGeometry args={[0.07, 18]} />
+        <meshStandardMaterial color="#ff7596" transparent opacity={0.35} />
       </mesh>
-      <mesh position={[0.24, -0.02, 0.009]}>
-        <circleGeometry args={[0.06, 16]} />
-        <meshStandardMaterial color="#ff7596" transparent opacity={0.45} />
+      <mesh position={[0.26, -0.04, 0.60]}>
+        <circleGeometry args={[0.07, 18]} />
+        <meshStandardMaterial color="#ff7596" transparent opacity={0.35} />
       </mesh>
-      {/* Mouth — smile arc, animates open when speaking */}
-      <mesh position={[0, -0.10, 0.010]}>
-        <planeGeometry args={[0.18, speaking ? 0.06 : 0.03]} />
+      {/* Mouth — animates open when speaking */}
+      <mesh position={[0, -0.14, 0.61]}>
+        <planeGeometry args={[0.20, speaking ? 0.07 : 0.025]} />
         <meshStandardMaterial color="#5a2a3a" />
       </mesh>
 

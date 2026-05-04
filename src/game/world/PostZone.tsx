@@ -48,27 +48,15 @@ export function PostZone() {
         <planeGeometry args={[9.4, 3.5]} />
         <meshStandardMaterial ref={screenMatRef} color="#0a0d1a" emissive="#34d399" emissiveIntensity={0.55} />
       </mesh>
-      {/* Title — top-left of screen */}
-      <Text
-        position={[-3.2, 4.05, -10.16]}
-        fontSize={0.20}
-        color="#9ae5c5"
-        anchorX="left"
-        anchorY="middle"
-        letterSpacing={0.18}
-      >
-        ● LIVE · POC REVIEW · ACME BANK + LOVABLE
-      </Text>
-
       {/* Lovable logo — top-right of the green screen (real asset) */}
       <LovableLogo pos={[4.10, 4.05, -10.15]} />
 
-      {/* Two external (client) participants — left side of screen */}
-      <VideoCallTile pos={[-2.85, 2.20, -10.16]} name="MARK CHEN" role="ACME BANK · CTO" hue="#7aa1ff" skin="#e3b899" hair="#1a1410" speaking />
-      <VideoCallTile pos={[-0.55, 2.20, -10.16]} name="PRIYA RAO" role="ACME BANK · HEAD OF AI" hue="#fbbf24" skin="#c89472" hair="#0e0a08" />
+      {/* Centered: two external client participants + chart, all aligned at screen center */}
+      <VideoCallTile pos={[-2.95, 2.40, -10.16]} name="MARK CHEN" role="ACME BANK · CTO" hue="#7aa1ff" skin="#e3b899" hair="#1a1410" speaking />
+      <VideoCallTile pos={[-0.85, 2.40, -10.16]} name="PRIYA RAO" role="ACME BANK · HEAD OF AI" hue="#fbbf24" skin="#c89472" hair="#0e0a08" />
 
-      {/* Chart — right side of screen */}
-      <ScreenChart pos={[2.45, 2.20, -10.16]} />
+      {/* Chart — right of the two participants, centered as a group */}
+      <ScreenChart pos={[1.95, 2.40, -10.16]} />
 
       {/* ---------- CURVED CONSOLE ARRAY — restored. Each operator has a desk to work at. ---------- */}
       <ConsoleStation pos={[-3.5, 0, -5.5]} rotation={0.35} hue="#7aa1ff" />
@@ -508,57 +496,100 @@ function VideoCallTile({
         <meshStandardMaterial color={hue} emissive={hue} emissiveIntensity={0.30} roughness={0.7} />
       </mesh>
 
-      {/* --- Character face (matches our world's avatars) --- */}
+      {/* --- Character face (higher fidelity, no hat) --- */}
       {/* Shoulders / shirt */}
-      <mesh position={[0, -0.78, 0.005]}>
-        <planeGeometry args={[1.55, 0.85]} />
-        <meshStandardMaterial color="#1f2332" />
+      <mesh position={[0, -0.85, 0.005]}>
+        <RoundedBox args={[1.70, 0.95, 0.04]} radius={0.10} smoothness={2}>
+          <meshStandardMaterial color="#1f2332" roughness={0.7} />
+        </RoundedBox>
+      </mesh>
+      {/* Collar accent */}
+      <mesh position={[0, -0.45, 0.012]}>
+        <planeGeometry args={[0.42, 0.10]} />
+        <meshStandardMaterial color={hue} emissive={hue} emissiveIntensity={0.35} />
       </mesh>
       {/* Neck */}
-      <mesh position={[0, -0.32, 0.006]}>
-        <planeGeometry args={[0.30, 0.18]} />
+      <mesh position={[0, -0.32, 0.008]}>
+        <planeGeometry args={[0.34, 0.20]} />
         <meshStandardMaterial color={skin} />
       </mesh>
-      {/* Head (skin) */}
-      <mesh position={[0, 0.10, 0.007]}>
-        <circleGeometry args={[0.50, 32]} />
-        <meshStandardMaterial color={skin} />
+      {/* Neck shadow under jaw */}
+      <mesh position={[0, -0.26, 0.009]}>
+        <planeGeometry args={[0.46, 0.06]} />
+        <meshStandardMaterial color="#000000" transparent opacity={0.18} />
       </mesh>
-      {/* Hair cap — top half-disc */}
-      <mesh position={[0, 0.22, 0.008]}>
-        <circleGeometry args={[0.52, 32, 0, Math.PI]} />
+      {/* Head — dimensional sphere for better fidelity than a flat disc */}
+      <mesh position={[0, 0.10, 0.10]} castShadow>
+        <sphereGeometry args={[0.52, 48, 36]} />
+        <meshStandardMaterial color={skin} roughness={0.55} metalness={0.02} />
+      </mesh>
+      {/* Hair — back/top of head as a sphere segment, tucked behind */}
+      <mesh position={[0, 0.22, 0.05]} castShadow>
+        <sphereGeometry args={[0.54, 36, 28, 0, Math.PI * 2, 0, Math.PI * 0.55]} />
+        <meshStandardMaterial color={hair} roughness={0.85} />
+      </mesh>
+      {/* Eyebrows */}
+      <mesh position={[-0.16, 0.22, 0.60]}>
+        <planeGeometry args={[0.13, 0.022]} />
         <meshStandardMaterial color={hair} />
       </mesh>
-      {/* Eyes */}
-      <mesh position={[-0.16, 0.12, 0.010]}>
-        <circleGeometry args={[0.045, 16]} />
+      <mesh position={[0.16, 0.22, 0.60]}>
+        <planeGeometry args={[0.13, 0.022]} />
+        <meshStandardMaterial color={hair} />
+      </mesh>
+      {/* Eyes (whites) */}
+      <mesh position={[-0.16, 0.13, 0.60]}>
+        <circleGeometry args={[0.065, 24]} />
+        <meshStandardMaterial color="#ffffff" />
+      </mesh>
+      <mesh position={[0.16, 0.13, 0.60]}>
+        <circleGeometry args={[0.065, 24]} />
+        <meshStandardMaterial color="#ffffff" />
+      </mesh>
+      {/* Iris */}
+      <mesh position={[-0.16, 0.13, 0.61]}>
+        <circleGeometry args={[0.038, 20]} />
+        <meshStandardMaterial color="#3a4d80" />
+      </mesh>
+      <mesh position={[0.16, 0.13, 0.61]}>
+        <circleGeometry args={[0.038, 20]} />
+        <meshStandardMaterial color="#3a4d80" />
+      </mesh>
+      {/* Pupils */}
+      <mesh position={[-0.16, 0.13, 0.62]}>
+        <circleGeometry args={[0.018, 16]} />
         <meshStandardMaterial color="#0a0d1a" />
       </mesh>
-      <mesh position={[0.16, 0.12, 0.010]}>
-        <circleGeometry args={[0.045, 16]} />
+      <mesh position={[0.16, 0.13, 0.62]}>
+        <circleGeometry args={[0.018, 16]} />
         <meshStandardMaterial color="#0a0d1a" />
       </mesh>
       {/* Eye highlights */}
-      <mesh position={[-0.148, 0.135, 0.011]}>
-        <circleGeometry args={[0.012, 10]} />
+      <mesh position={[-0.150, 0.14, 0.625]}>
+        <circleGeometry args={[0.010, 10]} />
         <meshStandardMaterial color="#ffffff" />
       </mesh>
-      <mesh position={[0.172, 0.135, 0.011]}>
-        <circleGeometry args={[0.012, 10]} />
+      <mesh position={[0.170, 0.14, 0.625]}>
+        <circleGeometry args={[0.010, 10]} />
         <meshStandardMaterial color="#ffffff" />
+      </mesh>
+      {/* Nose — soft shadow triangle */}
+      <mesh position={[0, 0.00, 0.62]}>
+        <planeGeometry args={[0.05, 0.14]} />
+        <meshStandardMaterial color="#000000" transparent opacity={0.10} />
       </mesh>
       {/* Cheeks — soft blush */}
-      <mesh position={[-0.24, -0.02, 0.009]}>
-        <circleGeometry args={[0.06, 16]} />
-        <meshStandardMaterial color="#ff7596" transparent opacity={0.45} />
+      <mesh position={[-0.26, -0.04, 0.60]}>
+        <circleGeometry args={[0.07, 18]} />
+        <meshStandardMaterial color="#ff7596" transparent opacity={0.35} />
       </mesh>
-      <mesh position={[0.24, -0.02, 0.009]}>
-        <circleGeometry args={[0.06, 16]} />
-        <meshStandardMaterial color="#ff7596" transparent opacity={0.45} />
+      <mesh position={[0.26, -0.04, 0.60]}>
+        <circleGeometry args={[0.07, 18]} />
+        <meshStandardMaterial color="#ff7596" transparent opacity={0.35} />
       </mesh>
-      {/* Mouth — smile arc, animates open when speaking */}
-      <mesh position={[0, -0.10, 0.010]}>
-        <planeGeometry args={[0.18, speaking ? 0.06 : 0.03]} />
+      {/* Mouth — animates open when speaking */}
+      <mesh position={[0, -0.14, 0.61]}>
+        <planeGeometry args={[0.20, speaking ? 0.07 : 0.025]} />
         <meshStandardMaterial color="#5a2a3a" />
       </mesh>
 
@@ -601,9 +632,9 @@ function VideoCallTile({
 
 function LovableLogo({ pos }: { pos: [number, number, number] }) {
   const tex = useTexture('/logos/lovable-light.png')
-  // Aspect ~ wide wordmark+heart. Render as a transparent plane.
-  const W = 1.3
-  const H = 0.34
+  // Asset is 911x155 → aspect 5.878. Match exactly so the logo isn't squished/skewed.
+  const W = 1.40
+  const H = W / (911 / 155)
   return (
     <mesh position={pos}>
       <planeGeometry args={[W, H]} />
@@ -624,13 +655,8 @@ function ScreenChart({ pos }: { pos: [number, number, number] }) {
   // Pre-computed data points (0..1 normalised)
   const series1 = [0.20, 0.28, 0.32, 0.30, 0.42, 0.55, 0.58, 0.62, 0.71, 0.78, 0.85, 0.92]
   const series2 = [0.15, 0.18, 0.22, 0.28, 0.30, 0.36, 0.40, 0.45, 0.50, 0.55, 0.60, 0.66]
-  const sweepRef = useRef<THREE.Mesh>(null)
-  useFrame((state) => {
-    if (sweepRef.current) {
-      const t = (state.clock.elapsedTime * 0.35) % 1
-      sweepRef.current.position.x = -W / 2 + 0.4 + t * (W - 0.6)
-    }
-  })
+  // (sweep animation removed per request)
+
   // Chart drawing area
   const padL = 0.4, padR = 0.2, padT = 0.55, padB = 0.45
   const cw = W - padL - padR
@@ -703,11 +729,7 @@ function ScreenChart({ pos }: { pos: [number, number, number] }) {
       {/* Series 2 — secondary (blue) line */}
       <ChartLine pts={series2.map((v, i) => [xAt(i), yAt(v)] as [number, number])} color="#7aa1ff" thickness={0.016} />
 
-      {/* Animated sweep highlight */}
-      <mesh ref={sweepRef} position={[x0, y0 + ch / 2, 0.011]}>
-        <planeGeometry args={[0.02, ch]} />
-        <meshBasicMaterial color="#9ae5c5" transparent opacity={0.35} />
-      </mesh>
+      {/* (animated sweep highlight removed) */}
 
       {/* Legend */}
       <group position={[W / 2 - 0.95, -H / 2 + 0.14, 0.005]}>
@@ -871,18 +893,14 @@ function MeetingEasel({ pos, rotation = 0 }: { pos: [number, number, number]; ro
       <Text position={[0, 1.92, 0.04]} fontSize={0.09} color="#34d399" anchorX="center" letterSpacing={0.18}>
         DELIVERY PLAN — WK 3
       </Text>
-      {/* Tripod legs */}
-      <mesh position={[-0.55, 0.7, 0.2]} rotation={[0.2, 0, 0.05]}>
-        <cylinderGeometry args={[0.025, 0.03, 1.4, 8]} />
-        <meshStandardMaterial color="#1f2332" />
+      {/* Single cylindrical leg + round base */}
+      <mesh position={[0, 0.55, 0]} castShadow>
+        <cylinderGeometry args={[0.045, 0.055, 1.0, 16]} />
+        <meshStandardMaterial color="#0a0d1a" roughness={0.55} metalness={0.4} />
       </mesh>
-      <mesh position={[0.55, 0.7, 0.2]} rotation={[0.2, 0, -0.05]}>
-        <cylinderGeometry args={[0.025, 0.03, 1.4, 8]} />
-        <meshStandardMaterial color="#1f2332" />
-      </mesh>
-      <mesh position={[0, 0.7, -0.25]} rotation={[-0.25, 0, 0]}>
-        <cylinderGeometry args={[0.025, 0.03, 1.4, 8]} />
-        <meshStandardMaterial color="#1f2332" />
+      <mesh position={[0, 0.04, 0]} castShadow>
+        <cylinderGeometry args={[0.32, 0.36, 0.06, 32]} />
+        <meshStandardMaterial color="#0a0d1a" roughness={0.5} metalness={0.4} />
       </mesh>
     </group>
   )

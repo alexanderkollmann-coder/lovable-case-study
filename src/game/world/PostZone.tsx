@@ -1,4 +1,4 @@
-import { RoundedBox, Text } from '@react-three/drei'
+import { RoundedBox, Text, useTexture } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 import * as THREE from 'three'

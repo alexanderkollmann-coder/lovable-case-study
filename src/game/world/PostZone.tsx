@@ -83,7 +83,7 @@ export function PostZone() {
       <SeatedNPC pos={[3.5, 0, -4.5]} rotation={-0.35 + Math.PI} shirtColor="#fbbf24" />
 
       {/* ---------- IN-PERSON CLIENT MEETING — front-center, closest to camera (between consoles and front edge) ---------- */}
-      <ClientMeeting pos={[0, 0, 4.0]} rotation={Math.PI} />
+      <ClientMeeting pos={[0, 0, 4.0]} rotation={0} />
 
       {/* ---------- STATS STANDUP — back-left summary kiosk facing centre ---------- */}
       <StatsStandup pos={[-7, 0, -8.5]} rotation={0.689} />

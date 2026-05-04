@@ -589,9 +589,9 @@ function VideoCallTile({
 
 function LovableLogo({ pos }: { pos: [number, number, number] }) {
   const tex = useTexture('/logos/lovable-light.png')
-  // Aspect ~ wide wordmark+heart. Render as a transparent plane.
-  const W = 1.3
-  const H = 0.34
+  // Asset is 911x155 → aspect 5.878. Match exactly so the logo isn't squished/skewed.
+  const W = 1.40
+  const H = W / (911 / 155)
   return (
     <mesh position={pos}>
       <planeGeometry args={[W, H]} />

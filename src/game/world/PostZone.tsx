@@ -47,8 +47,9 @@ export function PostZone() {
         <planeGeometry args={[9.4, 3.5]} />
         <meshStandardMaterial ref={screenMatRef} color="#0a0d1a" emissive="#34d399" emissiveIntensity={0.55} />
       </mesh>
+      {/* Title — sits equidistant between top of face tiles (y=3.5) and inner bezel top (~y=4.4) */}
       <Text
-        position={[0, 3.95, -10.16]}
+        position={[-1.6, 3.95, -10.16]}
         fontSize={0.22}
         color="#9ae5c5"
         anchorX="center"
@@ -58,14 +59,14 @@ export function PostZone() {
         ● LIVE · POC REVIEW · ACME BANK + LOVABLE
       </Text>
 
-      {/* Video-call grid — 4 remote tiles + 1 active speaker */}
-      <VideoCallTile pos={[-3.55, 2.70, -10.16]} name="JESSICA · LEAD SE" role="LOVABLE" hue="#ff7596" speaking />
-      <VideoCallTile pos={[-1.20, 2.70, -10.16]} name="MARK · CTO" role="ACME BANK" hue="#7aa1ff" />
-      <VideoCallTile pos={[1.20, 2.70, -10.16]} name="PRIYA · HEAD OF AI" role="ACME BANK" hue="#fbbf24" />
-      <VideoCallTile pos={[3.55, 2.70, -10.16]} name="DAN · PROD ENG" role="LOVABLE" hue="#34d399" />
+      {/* Lovable logo — top-right of the green screen */}
+      <LovableLogo pos={[4.15, 3.95, -10.15]} />
 
-      {/* Bottom strip — shared screen mock-up */}
-      <SharedScreenStrip pos={[0, 1.55, -10.16]} />
+      {/* Video-call grid — 4 vertical face tiles, larger, with character faces */}
+      <VideoCallTile pos={[-3.45, 2.30, -10.16]} name="JESSICA" role="LOVABLE · LEAD SE" hue="#ff7596" skin="#f1c9a5" hair="#3a2418" speaking />
+      <VideoCallTile pos={[-1.15, 2.30, -10.16]} name="MARK" role="ACME BANK · CTO" hue="#7aa1ff" skin="#e3b899" hair="#1a1410" />
+      <VideoCallTile pos={[1.15, 2.30, -10.16]} name="PRIYA" role="ACME BANK · HEAD OF AI" hue="#fbbf24" skin="#c89472" hair="#0e0a08" />
+      <VideoCallTile pos={[3.45, 2.30, -10.16]} name="DAN" role="LOVABLE · PROD ENG" hue="#34d399" skin="#eec3a3" hair="#6b4a2a" />
 
       {/* ---------- CURVED CONSOLE ARRAY — restored. Each operator has a desk to work at. ---------- */}
       <ConsoleStation pos={[-3.5, 0, -5.5]} rotation={0.35} hue="#7aa1ff" />

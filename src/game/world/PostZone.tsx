@@ -462,15 +462,13 @@ function VideoCallTile({
   name,
   role,
   hue,
-  skin = '#e8c19c',
-  hair = '#3a2a20',
-  shirt = '#4d6a99',
   speaking = false,
 }: {
   pos: [number, number, number]
   name: string
   role: string
   hue: string
+  /** legacy props kept so existing callers compile — no longer used */
   skin?: string
   hair?: string
   shirt?: string
@@ -486,8 +484,17 @@ function VideoCallTile({
   // Tile: 2.05 wide x 2.40 tall (vertical orientation)
   const W = 2.05
   const H = 2.40
-  // Soft warm office-light background — readable, not the dark accent of before.
-  const tileBg = '#cfd6df'
+  // Camera-off Zoom-style placeholder: dark backdrop with a coloured initial-disc.
+  const tileBg = '#1a2030'
+
+  // First letter of each word in the name (max 2)
+  const initials = name
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join('')
+
   return (
     <group position={pos}>
       {/* Glowing border (only highlights when speaking) */}
@@ -495,109 +502,30 @@ function VideoCallTile({
         <planeGeometry args={[W + 0.10, H + 0.10]} />
         <meshStandardMaterial ref={borderRef} color="#0a0d1a" emissive={hue} emissiveIntensity={0.25} />
       </mesh>
-      {/* Tile background — neutral office-light grey, like a real video feed */}
+      {/* Tile background — dark Zoom "camera off" feel */}
       <mesh>
         <planeGeometry args={[W, H]} />
-        <meshStandardMaterial color={tileBg} emissive={tileBg} emissiveIntensity={0.15} roughness={0.85} />
+        <meshStandardMaterial color={tileBg} emissive={tileBg} emissiveIntensity={0.25} roughness={0.85} />
       </mesh>
 
-      {/* --- Character — clean torso, hair-free head, friendly face --- */}
-      {/* Neck */}
-      <mesh position={[0, -0.34, 0.008]}>
-        <planeGeometry args={[0.30, 0.20]} />
-        <meshStandardMaterial color={skin} />
+      {/* Initial disc — solid coloured circle with white initials, the standard
+          camera-off placeholder you see on every video-call platform */}
+      <mesh position={[0, 0.10, 0.005]}>
+        <circleGeometry args={[0.62, 48]} />
+        <meshStandardMaterial color={hue} emissive={hue} emissiveIntensity={0.45} roughness={0.6} />
       </mesh>
-      {/* Soft jaw shadow */}
-      <mesh position={[0, -0.28, 0.009]}>
-        <planeGeometry args={[0.42, 0.05]} />
-        <meshStandardMaterial color="#000000" transparent opacity={0.12} />
-      </mesh>
-      {/* Shirt / shoulders — rounded torso silhouette with a subtle collar curve.
-          Sits just above the nametag bar so the bottom is cleanly covered by the
-          name strip below; no awkward shirt edges poking past the nametag. */}
-      <mesh position={[0, -0.74, 0.005]}>
-        <RoundedBox args={[1.55, 0.50, 0.04]} radius={0.22} smoothness={3}>
-          <meshStandardMaterial color={shirt} roughness={0.7} />
-        </RoundedBox>
-      </mesh>
-      {/* Collar curve — soft darker shadow under the chin where the shirt meets the neck */}
-      <mesh position={[0, -0.50, 0.011]}>
-        <planeGeometry args={[0.55, 0.04]} />
-        <meshStandardMaterial color="#000000" transparent opacity={0.18} />
-      </mesh>
-      {/* Head — skin-tone sphere, no hair */}
-      <mesh position={[0, 0.10, 0.10]} castShadow>
-        <sphereGeometry args={[0.52, 48, 36]} />
-        <meshStandardMaterial color={skin} roughness={0.55} metalness={0.02} />
-      </mesh>
-      {/* Friendly raised-outer-corners eyebrows */}
-      <mesh position={[-0.17, 0.24, 0.60]} rotation={[0, 0, 0.18]}>
-        <planeGeometry args={[0.14, 0.022]} />
-        <meshStandardMaterial color={hair} />
-      </mesh>
-      <mesh position={[0.17, 0.24, 0.60]} rotation={[0, 0, -0.18]}>
-        <planeGeometry args={[0.14, 0.022]} />
-        <meshStandardMaterial color={hair} />
-      </mesh>
-      {/* Eyes (whites) — slightly squinted by being thinner verticals (happy eyes) */}
-      <mesh position={[-0.16, 0.13, 0.60]}>
-        <circleGeometry args={[0.062, 24]} />
-        <meshStandardMaterial color="#ffffff" />
-      </mesh>
-      <mesh position={[0.16, 0.13, 0.60]}>
-        <circleGeometry args={[0.062, 24]} />
-        <meshStandardMaterial color="#ffffff" />
-      </mesh>
-      {/* Iris */}
-      <mesh position={[-0.16, 0.13, 0.61]}>
-        <circleGeometry args={[0.036, 20]} />
-        <meshStandardMaterial color="#3a4d80" />
-      </mesh>
-      <mesh position={[0.16, 0.13, 0.61]}>
-        <circleGeometry args={[0.036, 20]} />
-        <meshStandardMaterial color="#3a4d80" />
-      </mesh>
-      {/* Pupils */}
-      <mesh position={[-0.16, 0.13, 0.62]}>
-        <circleGeometry args={[0.017, 16]} />
-        <meshStandardMaterial color="#0a0d1a" />
-      </mesh>
-      <mesh position={[0.16, 0.13, 0.62]}>
-        <circleGeometry args={[0.017, 16]} />
-        <meshStandardMaterial color="#0a0d1a" />
-      </mesh>
-      {/* Eye highlights — sparkle for friendliness */}
-      <mesh position={[-0.150, 0.14, 0.625]}>
-        <circleGeometry args={[0.011, 10]} />
-        <meshStandardMaterial color="#ffffff" />
-      </mesh>
-      <mesh position={[0.170, 0.14, 0.625]}>
-        <circleGeometry args={[0.011, 10]} />
-        <meshStandardMaterial color="#ffffff" />
-      </mesh>
-      {/* Cheeks — warm blush gives a happy expression */}
-      <mesh position={[-0.28, -0.05, 0.60]}>
-        <circleGeometry args={[0.08, 18]} />
-        <meshStandardMaterial color="#ff7596" transparent opacity={0.30} />
-      </mesh>
-      <mesh position={[0.28, -0.05, 0.60]}>
-        <circleGeometry args={[0.08, 18]} />
-        <meshStandardMaterial color="#ff7596" transparent opacity={0.30} />
-      </mesh>
-      {/* Smile — half-ring arc for resting smile, oval when speaking */}
-      {speaking ? (
-        <mesh position={[0, -0.16, 0.62]}>
-          <circleGeometry args={[0.055, 18]} />
-          <meshStandardMaterial color="#5a2a3a" />
-        </mesh>
-      ) : (
-        <mesh position={[0, -0.10, 0.62]}>
-          <ringGeometry args={[0.105, 0.135, 24, 1, Math.PI, Math.PI]} />
-          <meshStandardMaterial color="#5a2a3a" side={THREE.DoubleSide} />
-        </mesh>
-      )}
+      <Text
+        position={[0, 0.10, 0.012]}
+        fontSize={0.62}
+        color="#ffffff"
+        anchorX="center"
+        anchorY="middle"
+        letterSpacing={0.02}
+      >
+        {initials}
+      </Text>
 
-      {/* Full-width name strip across the bottom — covers the lower body cleanly */}
+      {/* Full-width name strip across the bottom */}
       <mesh position={[0, -1.08, 0.011]}>
         <planeGeometry args={[W, 0.26]} />
         <meshStandardMaterial color="#0a0d1a" opacity={0.92} transparent />

@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { useGameStore } from '@/store/gameStore'
 import { SHOTS, type Shot } from './shots'
 import { recordCanvas, downloadBlob, pickSupportedMimeType, extensionFor } from './recordCanvas'
-import { Film, Download, Loader2, Camera, X } from 'lucide-react'
+import { Film, Download, Loader2, Camera, X, Bug } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface RecState {
@@ -22,6 +22,8 @@ export function Cinematic({ onExit }: { onExit: () => void }) {
   const [rec, setRec] = useState<RecState>({ shotId: null, status: 'idle', progress: 0 })
   const [previewing, setPreviewing] = useState<string | null>(null)
   const setCinematicShotId = useGameStore((s) => s.setCinematicShotId)
+  const setCinematicShotT = useGameStore((s) => s.setCinematicShotT)
+  const setCinematicAutoAdvance = useGameStore((s) => s.setCinematicAutoAdvance)
 
   const isBusy = rec.status === 'preparing' || rec.status === 'recording' || rec.status === 'finalizing'
 
@@ -98,12 +100,23 @@ export function Cinematic({ onExit }: { onExit: () => void }) {
       return
     }
     useGameStore.getState().setTimeline(shot.timeline)
+    setCinematicShotT(0)
+    setCinematicAutoAdvance(true)
     setCinematicShotId(shot.id)
     setPreviewing(shot.id)
     setTimeout(() => {
       setCinematicShotId(null)
       setPreviewing(null)
     }, shot.duration * 1000 + 200)
+  }
+
+  function handleDebug(shot: Shot) {
+    if (isBusy) return
+    useGameStore.getState().setTimeline(shot.timeline)
+    setCinematicShotT(0)
+    setCinematicAutoAdvance(false)
+    setCinematicShotId(shot.id)
+    setPreviewing(null)
   }
 
   // While a shot is *recording*, hide the panel so the canvas is unobstructed
@@ -171,6 +184,16 @@ export function Cinematic({ onExit }: { onExit: () => void }) {
                         {shot.duration}s · {shot.timeline}
                       </div>
                       <div className="flex gap-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDebug(shot)}
+                          disabled={isBusy}
+                          title="Open in debug HUD (paused, scrubbable)"
+                        >
+                          <Bug className="w-3 h-3" />
+                          Debug
+                        </Button>
                         <Button
                           variant="ghost"
                           size="sm"

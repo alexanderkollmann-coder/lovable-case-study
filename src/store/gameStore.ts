@@ -133,6 +133,12 @@ interface GameState {
   /** When true, the cinematic camera takes over and gameplay UI hides. */
   cinematicShotId: string | null
 
+  /** Current playback position within the active shot, 0..1 — the source of truth ShotPlayer reads. */
+  cinematicShotT: number
+
+  /** When true, the shot t advances automatically each frame from the clock. When false, t holds and can be scrubbed. */
+  cinematicAutoAdvance: boolean
+
   /** Active visual palette. Cycle through PALETTE_ORDER. */
   palette: Palette
 
@@ -148,6 +154,8 @@ interface GameState {
 
   setAvatarTarget: (target: Vec3 | null) => void
   setCinematicShotId: (id: string | null) => void
+  setCinematicShotT: (t: number) => void
+  setCinematicAutoAdvance: (auto: boolean) => void
   cyclePalette: () => void
 }
 
@@ -160,6 +168,8 @@ export const useGameStore = create<GameState>((set, get) => ({
   hasSeenHint: false,
   avatarTarget: null,
   cinematicShotId: null,
+  cinematicShotT: 0,
+  cinematicAutoAdvance: true,
   palette: 'energetic',
 
   setTimeline: (timeline) => set({ timeline, pendingTimeline: null, isTransitioning: false }),
@@ -186,6 +196,8 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   setAvatarTarget: (target) => set({ avatarTarget: target }),
   setCinematicShotId: (id) => set({ cinematicShotId: id }),
+  setCinematicShotT: (t) => set({ cinematicShotT: Math.max(0, Math.min(1, t)) }),
+  setCinematicAutoAdvance: (auto) => set({ cinematicAutoAdvance: auto }),
   cyclePalette: () =>
     set((state) => {
       const idx = PALETTE_ORDER.indexOf(state.palette)

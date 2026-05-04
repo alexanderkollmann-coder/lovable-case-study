@@ -12,6 +12,7 @@ import { ProgressTracker } from '@/ui/ProgressTracker'
 import { BoothAudio } from '@/ui/BoothAudio'
 import { ThemeToggle } from '@/ui/ThemeToggle'
 import { Cinematic } from '@/cinematic/Cinematic'
+import { CinematicDebugHud } from '@/cinematic/CinematicDebugHud'
 import { useGameStore } from '@/store/gameStore'
 
 function App() {
@@ -80,6 +81,9 @@ function App() {
           }}
         />
       )}
+
+      {/* Cinematic debug HUD — only when a shot is active */}
+      {cinematicMode && <CinematicDebugHud />}
 
       {/* Loading splash */}
       <LoadingSplash visible={loading} />

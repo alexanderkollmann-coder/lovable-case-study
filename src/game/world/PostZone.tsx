@@ -47,8 +47,9 @@ export function PostZone() {
         <planeGeometry args={[9.4, 3.5]} />
         <meshStandardMaterial ref={screenMatRef} color="#0a0d1a" emissive="#34d399" emissiveIntensity={0.55} />
       </mesh>
+      {/* Title — sits equidistant between top of face tiles (y=3.5) and inner bezel top (~y=4.4) */}
       <Text
-        position={[0, 3.95, -10.16]}
+        position={[-1.6, 3.95, -10.16]}
         fontSize={0.22}
         color="#9ae5c5"
         anchorX="center"
@@ -58,14 +59,14 @@ export function PostZone() {
         ● LIVE · POC REVIEW · ACME BANK + LOVABLE
       </Text>
 
-      {/* Video-call grid — 4 remote tiles + 1 active speaker */}
-      <VideoCallTile pos={[-3.55, 2.70, -10.16]} name="JESSICA · LEAD SE" role="LOVABLE" hue="#ff7596" speaking />
-      <VideoCallTile pos={[-1.20, 2.70, -10.16]} name="MARK · CTO" role="ACME BANK" hue="#7aa1ff" />
-      <VideoCallTile pos={[1.20, 2.70, -10.16]} name="PRIYA · HEAD OF AI" role="ACME BANK" hue="#fbbf24" />
-      <VideoCallTile pos={[3.55, 2.70, -10.16]} name="DAN · PROD ENG" role="LOVABLE" hue="#34d399" />
+      {/* Lovable logo — top-right of the green screen */}
+      <LovableLogo pos={[4.15, 3.95, -10.15]} />
 
-      {/* Bottom strip — shared screen mock-up */}
-      <SharedScreenStrip pos={[0, 1.55, -10.16]} />
+      {/* Video-call grid — 4 vertical face tiles, larger, with character faces */}
+      <VideoCallTile pos={[-3.45, 2.30, -10.16]} name="JESSICA" role="LOVABLE · LEAD SE" hue="#ff7596" skin="#f1c9a5" hair="#3a2418" speaking />
+      <VideoCallTile pos={[-1.15, 2.30, -10.16]} name="MARK" role="ACME BANK · CTO" hue="#7aa1ff" skin="#e3b899" hair="#1a1410" />
+      <VideoCallTile pos={[1.15, 2.30, -10.16]} name="PRIYA" role="ACME BANK · HEAD OF AI" hue="#fbbf24" skin="#c89472" hair="#0e0a08" />
+      <VideoCallTile pos={[3.45, 2.30, -10.16]} name="DAN" role="LOVABLE · PROD ENG" hue="#34d399" skin="#eec3a3" hair="#6b4a2a" />
 
       {/* ---------- CURVED CONSOLE ARRAY — restored. Each operator has a desk to work at. ---------- */}
       <ConsoleStation pos={[-3.5, 0, -5.5]} rotation={0.35} hue="#7aa1ff" />
@@ -79,8 +80,8 @@ export function PostZone() {
       <SeatedNPC pos={[1.2, 0, -5.5]} rotation={-0.12 + Math.PI} shirtColor="#ff7596" />
       <SeatedNPC pos={[3.5, 0, -4.5]} rotation={-0.35 + Math.PI} shirtColor="#fbbf24" />
 
-      {/* ---------- IN-PERSON CLIENT MEETING — front-right, on-site PoC working session ---------- */}
-      <ClientMeeting pos={[3.8, 0, 3.0]} rotation={-0.55} />
+      {/* ---------- IN-PERSON CLIENT MEETING — front-center, closest to camera (between consoles and front edge) ---------- */}
+      <ClientMeeting pos={[0, 0, 4.0]} rotation={Math.PI} />
 
       {/* ---------- STATS STANDUP — back-left summary kiosk facing centre ---------- */}
       <StatsStandup pos={[-7, 0, -8.5]} rotation={0.689} />
@@ -93,19 +94,6 @@ export function PostZone() {
 
       {/* ---------- FLOOR GRID — subtle iso grid for "tech" feel ---------- */}
       <FloorGrid />
-
-      {/* ---------- "WAR ROOM" sign ---------- */}
-      <Text
-        position={[0, 0.04, 8]}
-        rotation={[-Math.PI / 2, 0, 0]}
-        fontSize={0.55}
-        color="#34d399"
-        anchorX="center"
-        anchorY="middle"
-        letterSpacing={0.18}
-      >
-        DEPLOYMENT · WAR ROOM
-      </Text>
 
       {/* ---------- BACKGROUND FILLERS — make the war room feel populated ---------- */}
       {/* Sprint board on left wall */}
@@ -486,62 +474,114 @@ function VideoCallTile({
   name,
   role,
   hue,
+  skin = '#e8c19c',
+  hair = '#1f1410',
   speaking = false,
 }: {
   pos: [number, number, number]
   name: string
   role: string
   hue: string
+  skin?: string
+  hair?: string
   speaking?: boolean
 }) {
   const borderRef = useRef<THREE.MeshStandardMaterial>(null)
   useFrame((state) => {
     if (!borderRef.current) return
-    const base = speaking ? 0.9 : 0.25
+    const base = speaking ? 0.9 : 0.22
     const pulse = speaking ? Math.sin(state.clock.elapsedTime * 3.4) * 0.4 + 0.5 : 0
     borderRef.current.emissiveIntensity = base + pulse * 0.6
   })
+  // Tile: 2.05 wide x 2.40 tall (vertical orientation)
+  const W = 2.05
+  const H = 2.40
   return (
     <group position={pos}>
-      {/* Border */}
-      <mesh position={[0, 0, -0.002]}>
-        <planeGeometry args={[2.10, 1.30]} />
+      {/* Glowing border */}
+      <mesh position={[0, 0, -0.003]}>
+        <planeGeometry args={[W + 0.10, H + 0.10]} />
         <meshStandardMaterial ref={borderRef} color="#0a0d1a" emissive={hue} emissiveIntensity={0.25} />
       </mesh>
-      {/* Tile background (warm desk-light gradient feel) */}
+      {/* Tile background — warm desk-light gradient feel */}
       <mesh>
-        <planeGeometry args={[2.0, 1.20]} />
-        <meshStandardMaterial color={hue} emissive={hue} emissiveIntensity={0.35} roughness={0.7} />
+        <planeGeometry args={[W, H]} />
+        <meshStandardMaterial color={hue} emissive={hue} emissiveIntensity={0.30} roughness={0.7} />
       </mesh>
-      {/* Silhouette shoulders */}
-      <mesh position={[0, -0.5, 0.005]}>
-        <planeGeometry args={[1.6, 0.55]} />
-        <meshStandardMaterial color="#0a0d1a" opacity={0.72} transparent />
+
+      {/* --- Character face (matches our world's avatars) --- */}
+      {/* Shoulders / shirt */}
+      <mesh position={[0, -0.78, 0.005]}>
+        <planeGeometry args={[1.55, 0.85]} />
+        <meshStandardMaterial color="#1f2332" />
       </mesh>
-      {/* Silhouette head */}
-      <mesh position={[0, 0.05, 0.006]}>
-        <circleGeometry args={[0.32, 24]} />
-        <meshStandardMaterial color="#0a0d1a" opacity={0.78} transparent />
+      {/* Neck */}
+      <mesh position={[0, -0.32, 0.006]}>
+        <planeGeometry args={[0.30, 0.18]} />
+        <meshStandardMaterial color={skin} />
       </mesh>
-      {/* Name bar */}
-      <mesh position={[-0.55, -0.52, 0.01]}>
-        <planeGeometry args={[0.85, 0.16]} />
-        <meshStandardMaterial color="#000000" opacity={0.55} transparent />
+      {/* Head (skin) */}
+      <mesh position={[0, 0.10, 0.007]}>
+        <circleGeometry args={[0.50, 32]} />
+        <meshStandardMaterial color={skin} />
+      </mesh>
+      {/* Hair cap — top half-disc */}
+      <mesh position={[0, 0.22, 0.008]}>
+        <circleGeometry args={[0.52, 32, 0, Math.PI]} />
+        <meshStandardMaterial color={hair} />
+      </mesh>
+      {/* Eyes */}
+      <mesh position={[-0.16, 0.12, 0.010]}>
+        <circleGeometry args={[0.045, 16]} />
+        <meshStandardMaterial color="#0a0d1a" />
+      </mesh>
+      <mesh position={[0.16, 0.12, 0.010]}>
+        <circleGeometry args={[0.045, 16]} />
+        <meshStandardMaterial color="#0a0d1a" />
+      </mesh>
+      {/* Eye highlights */}
+      <mesh position={[-0.148, 0.135, 0.011]}>
+        <circleGeometry args={[0.012, 10]} />
+        <meshStandardMaterial color="#ffffff" />
+      </mesh>
+      <mesh position={[0.172, 0.135, 0.011]}>
+        <circleGeometry args={[0.012, 10]} />
+        <meshStandardMaterial color="#ffffff" />
+      </mesh>
+      {/* Cheeks — soft blush */}
+      <mesh position={[-0.24, -0.02, 0.009]}>
+        <circleGeometry args={[0.06, 16]} />
+        <meshStandardMaterial color="#ff7596" transparent opacity={0.45} />
+      </mesh>
+      <mesh position={[0.24, -0.02, 0.009]}>
+        <circleGeometry args={[0.06, 16]} />
+        <meshStandardMaterial color="#ff7596" transparent opacity={0.45} />
+      </mesh>
+      {/* Mouth — smile arc, animates open when speaking */}
+      <mesh position={[0, -0.10, 0.010]}>
+        <planeGeometry args={[0.18, speaking ? 0.06 : 0.03]} />
+        <meshStandardMaterial color="#5a2a3a" />
+      </mesh>
+
+      {/* Name strip bottom-left */}
+      <mesh position={[-0.55, -1.07, 0.011]}>
+        <planeGeometry args={[0.90, 0.20]} />
+        <meshStandardMaterial color="#000000" opacity={0.6} transparent />
       </mesh>
       <Text
-        position={[-0.55, -0.50, 0.012]}
-        fontSize={0.07}
+        position={[-0.55, -1.03, 0.013]}
+        fontSize={0.085}
         color="#ffffff"
         anchorX="center"
         anchorY="middle"
         letterSpacing={0.06}
-        maxWidth={0.82}
+        maxWidth={0.86}
       >
         {name}
       </Text>
       <Text
-        position={[-0.55, -0.58, 0.012]}
-        fontSize={0.045}
+        position={[-0.55, -1.13, 0.013]}
+        fontSize={0.048}
         color={hue}
         anchorX="center"
         anchorY="middle"
@@ -549,55 +589,40 @@ function VideoCallTile({
       >
         {role}
       </Text>
-      {/* Mute / cam icons row */}
-      <mesh position={[0.78, -0.52, 0.01]}>
-        <circleGeometry args={[0.06, 12]} />
-        <meshStandardMaterial color={speaking ? '#34d399' : '#ffffff'} emissive={speaking ? '#34d399' : '#000000'} emissiveIntensity={speaking ? 0.8 : 0} opacity={0.85} transparent />
+      {/* Mic indicator bottom-right */}
+      <mesh position={[0.85, -1.07, 0.011]}>
+        <circleGeometry args={[0.07, 14]} />
+        <meshStandardMaterial color={speaking ? '#34d399' : '#ffffff'} emissive={speaking ? '#34d399' : '#000000'} emissiveIntensity={speaking ? 0.9 : 0} opacity={0.9} transparent />
       </mesh>
     </group>
   )
 }
 
-/**
- * The "shared screen" strip below the video tiles — a mocked-up doc/code share.
- * Uses two columns of pseudo "lines of text" + a small chart accent.
- */
-function SharedScreenStrip({ pos }: { pos: [number, number, number] }) {
-  const lines = Array.from({ length: 6 })
+/* --------------------------- LOVABLE LOGO (top-right of green screen) --------------------------- */
+
+function LovableLogo({ pos }: { pos: [number, number, number] }) {
   return (
     <group position={pos}>
-      {/* Frame */}
-      <mesh position={[0, 0, -0.002]}>
-        <planeGeometry args={[9.4, 1.10]} />
-        <meshStandardMaterial color="#0a0d1a" emissive="#9ae5c5" emissiveIntensity={0.18} />
-      </mesh>
-      {/* Header bar */}
-      <mesh position={[0, 0.46, 0.005]}>
-        <planeGeometry args={[9.2, 0.16]} />
-        <meshStandardMaterial color="#1a1f2e" />
-      </mesh>
-      <Text position={[-4.4, 0.46, 0.008]} fontSize={0.085} color="#9ae5c5" anchorX="left" anchorY="middle" letterSpacing={0.18}>
-        SHARED · poc-acme-bank / risk-scoring.tsx
+      {/* Heart icon */}
+      <Text
+        position={[-0.30, 0, 0]}
+        fontSize={0.32}
+        color="#ffffff"
+        anchorX="center"
+        anchorY="middle"
+      >
+        ♥
       </Text>
-      <Text position={[4.4, 0.46, 0.008]} fontSize={0.07} color="#7aa1ff" anchorX="right" anchorY="middle" letterSpacing={0.18}>
-        JESSICA IS SCREEN-SHARING
-      </Text>
-      {/* Left column — code lines */}
-      {lines.map((_, i) => (
-        <mesh key={`l${i}`} position={[-2.6, 0.26 - i * 0.13, 0.006]}>
-          <planeGeometry args={[3.6 - (i % 3) * 0.6, 0.05]} />
-          <meshStandardMaterial color="#7aa1ff" emissive="#7aa1ff" emissiveIntensity={0.4} />
-        </mesh>
-      ))}
-      {/* Right column — bar chart preview */}
-      {[0.5, 0.85, 0.65, 0.95, 0.78, 0.92, 0.70, 0.88].map((h, i) => (
-        <mesh key={`b${i}`} position={[1.4 + i * 0.32, -0.05 + h * 0.18, 0.006]}>
-          <planeGeometry args={[0.22, h * 0.42]} />
-          <meshStandardMaterial color="#34d399" emissive="#34d399" emissiveIntensity={0.65} />
-        </mesh>
-      ))}
-      <Text position={[2.5, 0.30, 0.008]} fontSize={0.07} color="#34d399" anchorX="center" anchorY="middle" letterSpacing={0.18}>
-        WEEK 3 · ACCURACY +42%
+      {/* Wordmark */}
+      <Text
+        position={[0.12, 0, 0]}
+        fontSize={0.20}
+        color="#ffffff"
+        anchorX="left"
+        anchorY="middle"
+        letterSpacing={0.04}
+      >
+        lovable
       </Text>
     </group>
   )

@@ -5,6 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:fresh": "git fetch lovable --quiet && git merge lovable/main --no-edit && vite",
+    "sync": "git fetch lovable --quiet && git merge lovable/main --no-edit",
+    "sync:push": "git push lovable main",
     "build": "tsc -b && vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",

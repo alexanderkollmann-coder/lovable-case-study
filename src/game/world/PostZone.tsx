@@ -1,4 +1,4 @@
-import { RoundedBox, Text } from '@react-three/drei'
+import { RoundedBox, Text, useTexture } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 import * as THREE from 'three'
@@ -39,7 +39,8 @@ export function PostZone() {
       <PostHackBackdrop />
 
       {/* ---------- BIG CENTRAL WALL SCREEN ---------- */}
-      <RoundedBox args={[10, 4.0, 0.4]} radius={0.06} smoothness={2} position={[0, 2.5, -10.4]} castShadow>
+      {/* Thin bezel: only ~0.12 padding around the active surface */}
+      <RoundedBox args={[9.64, 3.74, 0.4]} radius={0.04} smoothness={2} position={[0, 2.5, -10.4]} castShadow>
         <meshStandardMaterial color="#0a0d1a" />
       </RoundedBox>
       {/* Active screen surface */}
@@ -47,26 +48,27 @@ export function PostZone() {
         <planeGeometry args={[9.4, 3.5]} />
         <meshStandardMaterial ref={screenMatRef} color="#0a0d1a" emissive="#34d399" emissiveIntensity={0.55} />
       </mesh>
-      {/* Title — sits equidistant between top of face tiles (y=3.5) and inner bezel top (~y=4.4) */}
+      {/* Title — top-left of screen */}
       <Text
-        position={[-1.6, 3.95, -10.16]}
-        fontSize={0.22}
+        position={[-3.2, 4.05, -10.16]}
+        fontSize={0.20}
         color="#9ae5c5"
-        anchorX="center"
+        anchorX="left"
         anchorY="middle"
         letterSpacing={0.18}
       >
         ● LIVE · POC REVIEW · ACME BANK + LOVABLE
       </Text>
 
-      {/* Lovable logo — top-right of the green screen */}
-      <LovableLogo pos={[4.15, 3.95, -10.15]} />
+      {/* Lovable logo — top-right of the green screen (real asset) */}
+      <LovableLogo pos={[4.10, 4.05, -10.15]} />
 
-      {/* Video-call grid — 4 vertical face tiles, larger, with character faces */}
-      <VideoCallTile pos={[-3.45, 2.30, -10.16]} name="JESSICA" role="LOVABLE · LEAD SE" hue="#ff7596" skin="#f1c9a5" hair="#3a2418" speaking />
-      <VideoCallTile pos={[-1.15, 2.30, -10.16]} name="MARK" role="ACME BANK · CTO" hue="#7aa1ff" skin="#e3b899" hair="#1a1410" />
-      <VideoCallTile pos={[1.15, 2.30, -10.16]} name="PRIYA" role="ACME BANK · HEAD OF AI" hue="#fbbf24" skin="#c89472" hair="#0e0a08" />
-      <VideoCallTile pos={[3.45, 2.30, -10.16]} name="DAN" role="LOVABLE · PROD ENG" hue="#34d399" skin="#eec3a3" hair="#6b4a2a" />
+      {/* Two external (client) participants — left side of screen */}
+      <VideoCallTile pos={[-2.85, 2.20, -10.16]} name="MARK CHEN" role="ACME BANK · CTO" hue="#7aa1ff" skin="#e3b899" hair="#1a1410" speaking />
+      <VideoCallTile pos={[-0.55, 2.20, -10.16]} name="PRIYA RAO" role="ACME BANK · HEAD OF AI" hue="#fbbf24" skin="#c89472" hair="#0e0a08" />
+
+      {/* Chart — right side of screen */}
+      <ScreenChart pos={[2.45, 2.20, -10.16]} />
 
       {/* ---------- CURVED CONSOLE ARRAY — restored. Each operator has a desk to work at. ---------- */}
       <ConsoleStation pos={[-3.5, 0, -5.5]} rotation={0.35} hue="#7aa1ff" />
@@ -81,7 +83,7 @@ export function PostZone() {
       <SeatedNPC pos={[3.5, 0, -4.5]} rotation={-0.35 + Math.PI} shirtColor="#fbbf24" />
 
       {/* ---------- IN-PERSON CLIENT MEETING — front-center, closest to camera (between consoles and front edge) ---------- */}
-      <ClientMeeting pos={[0, 0, 4.0]} rotation={Math.PI} />
+      <ClientMeeting pos={[0, 0, 4.0]} rotation={0} />
 
       {/* ---------- STATS STANDUP — back-left summary kiosk facing centre ---------- */}
       <StatsStandup pos={[-7, 0, -8.5]} rotation={0.689} />
@@ -402,19 +404,16 @@ function StatsStandup({ pos, rotation = 0 }: { pos: [number, number, number]; ro
       <KPITile pos={[-0.72, 1.0, 0.07]} label="LATENCY" value="142" sub="ms" color="#ff7596" />
       <KPITile pos={[0.72, 1.0, 0.07]} label="UPTIME" value="99.97" sub="%" color="#fbbf24" />
 
-      {/* Stand legs */}
-      <mesh position={[-1.3, 0.25, 0]}>
-        <boxGeometry args={[0.1, 0.5, 0.1]} />
-        <meshStandardMaterial color="#1f2332" />
+      {/* Single central leg */}
+      <mesh position={[0, 0.30, 0]} castShadow>
+        <cylinderGeometry args={[0.06, 0.08, 0.55, 16]} />
+        <meshStandardMaterial color="#0a0d1a" roughness={0.55} metalness={0.4} />
       </mesh>
-      <mesh position={[1.3, 0.25, 0]}>
-        <boxGeometry args={[0.1, 0.5, 0.1]} />
-        <meshStandardMaterial color="#1f2332" />
+      {/* Round base disc */}
+      <mesh position={[0, 0.025, 0]} castShadow>
+        <cylinderGeometry args={[0.55, 0.62, 0.05, 32]} />
+        <meshStandardMaterial color="#0a0d1a" roughness={0.5} metalness={0.4} />
       </mesh>
-      {/* Base bar */}
-      <RoundedBox args={[2.6, 0.06, 0.2]} radius={0.02} smoothness={1} position={[0, 0.06, 0]}>
-        <meshStandardMaterial color="#1f2332" />
-      </RoundedBox>
     </group>
   )
 }
@@ -601,29 +600,159 @@ function VideoCallTile({
 /* --------------------------- LOVABLE LOGO (top-right of green screen) --------------------------- */
 
 function LovableLogo({ pos }: { pos: [number, number, number] }) {
+  const tex = useTexture('/logos/lovable-light.png')
+  // Aspect ~ wide wordmark+heart. Render as a transparent plane.
+  const W = 1.3
+  const H = 0.34
+  return (
+    <mesh position={pos}>
+      <planeGeometry args={[W, H]} />
+      <meshBasicMaterial map={tex} transparent toneMapped={false} />
+    </mesh>
+  )
+}
+
+/* --------------------------- SCREEN CHART (right side of wall screen) --------------------------- */
+
+/**
+ * Animated dual-line chart with axes, gridlines, KPI strip, and a sparkline-style
+ * area fill. Sized to occupy the right ~3.6 wide region of the 9.4-wide screen.
+ */
+function ScreenChart({ pos }: { pos: [number, number, number] }) {
+  const W = 3.6
+  const H = 2.40
+  // Pre-computed data points (0..1 normalised)
+  const series1 = [0.20, 0.28, 0.32, 0.30, 0.42, 0.55, 0.58, 0.62, 0.71, 0.78, 0.85, 0.92]
+  const series2 = [0.15, 0.18, 0.22, 0.28, 0.30, 0.36, 0.40, 0.45, 0.50, 0.55, 0.60, 0.66]
+  const sweepRef = useRef<THREE.Mesh>(null)
+  useFrame((state) => {
+    if (sweepRef.current) {
+      const t = (state.clock.elapsedTime * 0.35) % 1
+      sweepRef.current.position.x = -W / 2 + 0.4 + t * (W - 0.6)
+    }
+  })
+  // Chart drawing area
+  const padL = 0.4, padR = 0.2, padT = 0.55, padB = 0.45
+  const cw = W - padL - padR
+  const ch = H - padT - padB
+  const x0 = -W / 2 + padL
+  const y0 = -H / 2 + padB
+  const xAt = (i: number) => x0 + (i / (series1.length - 1)) * cw
+  const yAt = (v: number) => y0 + v * ch
+
   return (
     <group position={pos}>
-      {/* Heart icon */}
-      <Text
-        position={[-0.30, 0, 0]}
-        fontSize={0.32}
-        color="#ffffff"
-        anchorX="center"
-        anchorY="middle"
-      >
-        ♥
+      {/* Panel background */}
+      <mesh position={[0, 0, -0.003]}>
+        <planeGeometry args={[W + 0.06, H + 0.06]} />
+        <meshStandardMaterial color="#0a0d1a" emissive="#34d399" emissiveIntensity={0.18} />
+      </mesh>
+      <mesh>
+        <planeGeometry args={[W, H]} />
+        <meshStandardMaterial color="#0e1a16" emissive="#0e2a22" emissiveIntensity={0.35} roughness={0.8} />
+      </mesh>
+
+      {/* Title strip */}
+      <Text position={[-W / 2 + 0.12, H / 2 - 0.18, 0.005]} fontSize={0.13} color="#9ae5c5" anchorX="left" letterSpacing={0.16}>
+        POC ADOPTION · 12 WK TREND
       </Text>
-      {/* Wordmark */}
-      <Text
-        position={[0.12, 0, 0]}
-        fontSize={0.20}
-        color="#ffffff"
-        anchorX="left"
-        anchorY="middle"
-        letterSpacing={0.04}
-      >
-        lovable
+      <Text position={[W / 2 - 0.12, H / 2 - 0.18, 0.005]} fontSize={0.11} color="#34d399" anchorX="right" letterSpacing={0.10}>
+        ▲ +38%
       </Text>
+
+      {/* KPI strip */}
+      <group position={[0, H / 2 - 0.42, 0.005]}>
+        <ChartKPI x={-W / 2 + 0.50} label="USERS" value="2.4k" color="#7aa1ff" />
+        <ChartKPI x={-W / 2 + 1.30} label="WORKFLOWS" value="186" color="#34d399" />
+        <ChartKPI x={-W / 2 + 2.20} label="SAVED HRS" value="940" color="#fbbf24" />
+        <ChartKPI x={-W / 2 + 3.10} label="NPS" value="71" color="#ff7596" />
+      </group>
+
+      {/* Horizontal gridlines */}
+      {[0.25, 0.5, 0.75].map((g, i) => (
+        <mesh key={`g${i}`} position={[x0 + cw / 2, y0 + g * ch, 0.004]}>
+          <planeGeometry args={[cw, 0.005]} />
+          <meshBasicMaterial color="#2a3a32" transparent opacity={0.6} />
+        </mesh>
+      ))}
+      {/* Y axis labels */}
+      {[0, 0.5, 1].map((g, i) => (
+        <Text key={`yl${i}`} position={[x0 - 0.06, y0 + g * ch, 0.005]} fontSize={0.075} color="#5a8a7a" anchorX="right" anchorY="middle">
+          {Math.round(g * 100)}
+        </Text>
+      ))}
+      {/* X axis */}
+      <mesh position={[x0 + cw / 2, y0, 0.004]}>
+        <planeGeometry args={[cw, 0.008]} />
+        <meshBasicMaterial color="#34d399" transparent opacity={0.7} />
+      </mesh>
+      {['W1', 'W3', 'W6', 'W9', 'W12'].map((lbl, i, arr) => (
+        <Text key={lbl} position={[x0 + (i / (arr.length - 1)) * cw, y0 - 0.13, 0.005]} fontSize={0.07} color="#5a8a7a" anchorX="center">
+          {lbl}
+        </Text>
+      ))}
+
+      {/* Series 1 — primary (green) line + dots */}
+      <ChartLine pts={series1.map((v, i) => [xAt(i), yAt(v)] as [number, number])} color="#34d399" thickness={0.022} />
+      {series1.map((v, i) => (
+        <mesh key={`d1${i}`} position={[xAt(i), yAt(v), 0.012]}>
+          <circleGeometry args={[0.035, 14]} />
+          <meshBasicMaterial color="#34d399" />
+        </mesh>
+      ))}
+      {/* Series 2 — secondary (blue) line */}
+      <ChartLine pts={series2.map((v, i) => [xAt(i), yAt(v)] as [number, number])} color="#7aa1ff" thickness={0.016} />
+
+      {/* Animated sweep highlight */}
+      <mesh ref={sweepRef} position={[x0, y0 + ch / 2, 0.011]}>
+        <planeGeometry args={[0.02, ch]} />
+        <meshBasicMaterial color="#9ae5c5" transparent opacity={0.35} />
+      </mesh>
+
+      {/* Legend */}
+      <group position={[W / 2 - 0.95, -H / 2 + 0.14, 0.005]}>
+        <mesh position={[-0.36, 0, 0]}><planeGeometry args={[0.10, 0.02]} /><meshBasicMaterial color="#34d399" /></mesh>
+        <Text position={[-0.16, 0, 0]} fontSize={0.07} color="#9ae5c5" anchorX="left">ADOPTION</Text>
+        <mesh position={[0.34, 0, 0]}><planeGeometry args={[0.10, 0.02]} /><meshBasicMaterial color="#7aa1ff" /></mesh>
+        <Text position={[0.54, 0, 0]} fontSize={0.07} color="#9ae5c5" anchorX="left">TARGET</Text>
+      </group>
+    </group>
+  )
+}
+
+function ChartKPI({ x, label, value, color }: { x: number; label: string; value: string; color: string }) {
+  return (
+    <group position={[x, 0, 0]}>
+      <Text position={[0, 0.08, 0]} fontSize={0.16} color="#ffffff" anchorX="center" anchorY="middle">
+        {value}
+      </Text>
+      <Text position={[0, -0.08, 0]} fontSize={0.062} color={color} anchorX="center" anchorY="middle" letterSpacing={0.18}>
+        {label}
+      </Text>
+    </group>
+  )
+}
+
+/** Draws a polyline as a series of thin rotated planes between consecutive points. */
+function ChartLine({ pts, color, thickness = 0.02 }: { pts: [number, number][]; color: string; thickness?: number }) {
+  const segs: Array<{ x: number; y: number; len: number; angle: number }> = []
+  for (let i = 0; i < pts.length - 1; i++) {
+    const [ax, ay] = pts[i]
+    const [bx, by] = pts[i + 1]
+    const dx = bx - ax
+    const dy = by - ay
+    const len = Math.hypot(dx, dy)
+    const angle = Math.atan2(dy, dx)
+    segs.push({ x: (ax + bx) / 2, y: (ay + by) / 2, len, angle })
+  }
+  return (
+    <group>
+      {segs.map((s, i) => (
+        <mesh key={i} position={[s.x, s.y, 0.010]} rotation={[0, 0, s.angle]}>
+          <planeGeometry args={[s.len, thickness]} />
+          <meshBasicMaterial color={color} />
+        </mesh>
+      ))}
     </group>
   )
 }

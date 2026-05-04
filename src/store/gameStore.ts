@@ -142,6 +142,14 @@ interface GameState {
   /** Active visual palette. Cycle through PALETTE_ORDER. */
   palette: Palette
 
+  /** When true, the R3F render loop is paused to save CPU/GPU while idle. */
+  renderPaused: boolean
+  toggleRenderPaused: () => void
+
+  /** Whether the intro video has been dismissed (user clicked the CTA). */
+  introComplete: boolean
+  setIntroComplete: (v: boolean) => void
+
   setTimeline: (t: Timeline) => void
   beginTransitionTo: (t: Timeline) => void
   finishTransition: () => void
@@ -171,6 +179,13 @@ export const useGameStore = create<GameState>((set, get) => ({
   cinematicShotT: 0,
   cinematicAutoAdvance: true,
   palette: 'energetic',
+  renderPaused: false,
+  toggleRenderPaused: () => set((s) => ({ renderPaused: !s.renderPaused })),
+
+  introComplete:
+    typeof window !== 'undefined' &&
+    new URLSearchParams(window.location.search).has('skipIntro'),
+  setIntroComplete: (v) => set({ introComplete: v }),
 
   setTimeline: (timeline) => set({ timeline, pendingTimeline: null, isTransitioning: false }),
 

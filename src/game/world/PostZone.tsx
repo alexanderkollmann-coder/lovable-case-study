@@ -39,7 +39,8 @@ export function PostZone() {
       <PostHackBackdrop />
 
       {/* ---------- BIG CENTRAL WALL SCREEN ---------- */}
-      <RoundedBox args={[10, 4.0, 0.4]} radius={0.06} smoothness={2} position={[0, 2.5, -10.4]} castShadow>
+      {/* Thin bezel: only ~0.12 padding around the active surface */}
+      <RoundedBox args={[9.64, 3.74, 0.4]} radius={0.04} smoothness={2} position={[0, 2.5, -10.4]} castShadow>
         <meshStandardMaterial color="#0a0d1a" />
       </RoundedBox>
       {/* Active screen surface */}
@@ -47,26 +48,27 @@ export function PostZone() {
         <planeGeometry args={[9.4, 3.5]} />
         <meshStandardMaterial ref={screenMatRef} color="#0a0d1a" emissive="#34d399" emissiveIntensity={0.55} />
       </mesh>
-      {/* Title — sits equidistant between top of face tiles (y=3.5) and inner bezel top (~y=4.4) */}
+      {/* Title — top-left of screen */}
       <Text
-        position={[-1.6, 3.95, -10.16]}
-        fontSize={0.22}
+        position={[-3.2, 4.05, -10.16]}
+        fontSize={0.20}
         color="#9ae5c5"
-        anchorX="center"
+        anchorX="left"
         anchorY="middle"
         letterSpacing={0.18}
       >
         ● LIVE · POC REVIEW · ACME BANK + LOVABLE
       </Text>
 
-      {/* Lovable logo — top-right of the green screen */}
-      <LovableLogo pos={[4.15, 3.95, -10.15]} />
+      {/* Lovable logo — top-right of the green screen (real asset) */}
+      <LovableLogo pos={[4.10, 4.05, -10.15]} />
 
-      {/* Video-call grid — 4 vertical face tiles, larger, with character faces */}
-      <VideoCallTile pos={[-3.45, 2.30, -10.16]} name="JESSICA" role="LOVABLE · LEAD SE" hue="#ff7596" skin="#f1c9a5" hair="#3a2418" speaking />
-      <VideoCallTile pos={[-1.15, 2.30, -10.16]} name="MARK" role="ACME BANK · CTO" hue="#7aa1ff" skin="#e3b899" hair="#1a1410" />
-      <VideoCallTile pos={[1.15, 2.30, -10.16]} name="PRIYA" role="ACME BANK · HEAD OF AI" hue="#fbbf24" skin="#c89472" hair="#0e0a08" />
-      <VideoCallTile pos={[3.45, 2.30, -10.16]} name="DAN" role="LOVABLE · PROD ENG" hue="#34d399" skin="#eec3a3" hair="#6b4a2a" />
+      {/* Two external (client) participants — left side of screen */}
+      <VideoCallTile pos={[-2.85, 2.20, -10.16]} name="MARK CHEN" role="ACME BANK · CTO" hue="#7aa1ff" skin="#e3b899" hair="#1a1410" speaking />
+      <VideoCallTile pos={[-0.55, 2.20, -10.16]} name="PRIYA RAO" role="ACME BANK · HEAD OF AI" hue="#fbbf24" skin="#c89472" hair="#0e0a08" />
+
+      {/* Chart — right side of screen */}
+      <ScreenChart pos={[2.45, 2.20, -10.16]} />
 
       {/* ---------- CURVED CONSOLE ARRAY — restored. Each operator has a desk to work at. ---------- */}
       <ConsoleStation pos={[-3.5, 0, -5.5]} rotation={0.35} hue="#7aa1ff" />

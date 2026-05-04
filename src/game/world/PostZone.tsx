@@ -80,8 +80,8 @@ export function PostZone() {
       <SeatedNPC pos={[1.2, 0, -5.5]} rotation={-0.12 + Math.PI} shirtColor="#ff7596" />
       <SeatedNPC pos={[3.5, 0, -4.5]} rotation={-0.35 + Math.PI} shirtColor="#fbbf24" />
 
-      {/* ---------- IN-PERSON CLIENT MEETING — front-right, on-site PoC working session ---------- */}
-      <ClientMeeting pos={[3.8, 0, 3.0]} rotation={-0.55} />
+      {/* ---------- IN-PERSON CLIENT MEETING — front-center, closest to camera (between consoles and front edge) ---------- */}
+      <ClientMeeting pos={[0, 0, 4.0]} rotation={Math.PI} />
 
       {/* ---------- STATS STANDUP — back-left summary kiosk facing centre ---------- */}
       <StatsStandup pos={[-7, 0, -8.5]} rotation={0.689} />
@@ -94,19 +94,6 @@ export function PostZone() {
 
       {/* ---------- FLOOR GRID — subtle iso grid for "tech" feel ---------- */}
       <FloorGrid />
-
-      {/* ---------- "WAR ROOM" sign ---------- */}
-      <Text
-        position={[0, 0.04, 8]}
-        rotation={[-Math.PI / 2, 0, 0]}
-        fontSize={0.55}
-        color="#34d399"
-        anchorX="center"
-        anchorY="middle"
-        letterSpacing={0.18}
-      >
-        DEPLOYMENT · WAR ROOM
-      </Text>
 
       {/* ---------- BACKGROUND FILLERS — make the war room feel populated ---------- */}
       {/* Sprint board on left wall */}

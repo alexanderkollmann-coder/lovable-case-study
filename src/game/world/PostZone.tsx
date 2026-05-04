@@ -850,18 +850,14 @@ function MeetingEasel({ pos, rotation = 0 }: { pos: [number, number, number]; ro
       <Text position={[0, 1.92, 0.04]} fontSize={0.09} color="#34d399" anchorX="center" letterSpacing={0.18}>
         DELIVERY PLAN — WK 3
       </Text>
-      {/* Tripod legs */}
-      <mesh position={[-0.55, 0.7, 0.2]} rotation={[0.2, 0, 0.05]}>
-        <cylinderGeometry args={[0.025, 0.03, 1.4, 8]} />
-        <meshStandardMaterial color="#1f2332" />
+      {/* Single cylindrical leg + round base */}
+      <mesh position={[0, 0.55, 0]} castShadow>
+        <cylinderGeometry args={[0.045, 0.055, 1.0, 16]} />
+        <meshStandardMaterial color="#0a0d1a" roughness={0.55} metalness={0.4} />
       </mesh>
-      <mesh position={[0.55, 0.7, 0.2]} rotation={[0.2, 0, -0.05]}>
-        <cylinderGeometry args={[0.025, 0.03, 1.4, 8]} />
-        <meshStandardMaterial color="#1f2332" />
-      </mesh>
-      <mesh position={[0, 0.7, -0.25]} rotation={[-0.25, 0, 0]}>
-        <cylinderGeometry args={[0.025, 0.03, 1.4, 8]} />
-        <meshStandardMaterial color="#1f2332" />
+      <mesh position={[0, 0.04, 0]} castShadow>
+        <cylinderGeometry args={[0.32, 0.36, 0.06, 32]} />
+        <meshStandardMaterial color="#0a0d1a" roughness={0.5} metalness={0.4} />
       </mesh>
     </group>
   )

@@ -2,7 +2,14 @@ import { RoundedBox, Text } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 import * as THREE from 'three'
-import { SeatedNPC, useZoneActivity, Plant, Bookshelf } from './SharedProps'
+import {
+  SeatedNPC,
+  useZoneActivity,
+  Plant,
+  Bookshelf,
+  ConferenceTable,
+  NamePlacard,
+} from './SharedProps'
 
 const ZONE_CENTER_X = 17
 

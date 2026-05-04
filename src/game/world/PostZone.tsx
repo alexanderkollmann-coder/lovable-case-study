@@ -48,20 +48,24 @@ export function PostZone() {
         <meshStandardMaterial ref={screenMatRef} color="#0a0d1a" emissive="#34d399" emissiveIntensity={0.55} />
       </mesh>
       <Text
-        position={[0, 3.6, -10.16]}
-        fontSize={0.32}
+        position={[0, 3.95, -10.16]}
+        fontSize={0.22}
         color="#9ae5c5"
         anchorX="center"
         anchorY="middle"
         letterSpacing={0.18}
       >
-        DEPLOYMENT · POC PIPELINE · ACTIVE
+        ● LIVE · POC REVIEW · ACME BANK + LOVABLE
       </Text>
-      {/* Mock dashboard charts */}
-      <ScreenChart pos={[-3, 2.4, -10.16]} accent="#34d399" label="ACTIVE POCs" value="14" />
-      <ScreenChart pos={[0, 2.4, -10.16]} accent="#7aa1ff" label="MOU SIGNED" value="22" />
-      <ScreenChart pos={[3, 2.4, -10.16]} accent="#ff7596" label="ARR / Q" value="£2.4M" />
-      <Sparkline pos={[0, 1.5, -10.16]} />
+
+      {/* Video-call grid — 4 remote tiles + 1 active speaker */}
+      <VideoCallTile pos={[-3.55, 2.70, -10.16]} name="JESSICA · LEAD SE" role="LOVABLE" hue="#ff7596" speaking />
+      <VideoCallTile pos={[-1.20, 2.70, -10.16]} name="MARK · CTO" role="ACME BANK" hue="#7aa1ff" />
+      <VideoCallTile pos={[1.20, 2.70, -10.16]} name="PRIYA · HEAD OF AI" role="ACME BANK" hue="#fbbf24" />
+      <VideoCallTile pos={[3.55, 2.70, -10.16]} name="DAN · PROD ENG" role="LOVABLE" hue="#34d399" />
+
+      {/* Bottom strip — shared screen mock-up */}
+      <SharedScreenStrip pos={[0, 1.55, -10.16]} />
 
       {/* ---------- CURVED CONSOLE ARRAY — restored. Each operator has a desk to work at. ---------- */}
       <ConsoleStation pos={[-3.5, 0, -5.5]} rotation={0.35} hue="#7aa1ff" />
@@ -69,18 +73,18 @@ export function PostZone() {
       <ConsoleStation pos={[1.2, 0, -6.5]} rotation={-0.12} hue="#ff7596" />
       <ConsoleStation pos={[3.5, 0, -5.5]} rotation={-0.35} hue="#fbbf24" />
 
-      {/* ---------- SEATED NPC OPERATORS ---------- */}
+      {/* ---------- SEATED NPC OPERATORS — Lovable SEs on remote calls with the client ---------- */}
       <SeatedNPC pos={[-3.5, 0, -4.5]} rotation={0.35 + Math.PI} shirtColor="#7aa1ff" />
       <SeatedNPC pos={[-1.2, 0, -5.5]} rotation={0.12 + Math.PI} shirtColor="#34d399" />
       <SeatedNPC pos={[1.2, 0, -5.5]} rotation={-0.12 + Math.PI} shirtColor="#ff7596" />
       <SeatedNPC pos={[3.5, 0, -4.5]} rotation={-0.35 + Math.PI} shirtColor="#fbbf24" />
 
-      {/* Server racks removed — they were the "5 vertical black boxes" obstructing the wall screen */}
-
-      {/* Floating metric widgets removed — all stats now consolidated on the standup board */}
+      {/* ---------- IN-PERSON CLIENT MEETING — front-right, on-site PoC working session ---------- */}
+      <ClientMeeting pos={[3.8, 0, 3.0]} rotation={-0.55} />
 
       {/* ---------- STATS STANDUP — back-left summary kiosk facing centre ---------- */}
       <StatsStandup pos={[-7, 0, -8.5]} rotation={0.689} />
+
 
       {/* ---------- AMBIENT LIGHTING ---------- */}
       <pointLight position={[0, 4, -5]} intensity={0.6} distance={20} color="#34d399" />

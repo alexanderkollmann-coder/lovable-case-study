@@ -43,20 +43,21 @@ export function PostZone() {
       <RoundedBox args={[9.64, 3.74, 0.4]} radius={0.04} smoothness={2} position={[0, 2.5, -10.4]} castShadow>
         <meshStandardMaterial color="#0a0d1a" />
       </RoundedBox>
-      {/* Active screen surface */}
+      {/* Active screen surface — matte dark to read as a Zoom call window */}
       <mesh position={[0, 2.5, -10.18]}>
         <planeGeometry args={[9.4, 3.5]} />
-        <meshStandardMaterial ref={screenMatRef} color="#0a0d1a" emissive="#34d399" emissiveIntensity={0.55} />
+        <meshStandardMaterial ref={screenMatRef} color="#1a1f2e" emissive="#1a1f2e" emissiveIntensity={0.35} />
       </mesh>
-      {/* Lovable logo — top-right of the green screen (real asset) */}
-      <LovableLogo pos={[4.10, 4.05, -10.15]} />
 
-      {/* Centered: two external client participants + chart, all aligned at screen center */}
-      <VideoCallTile pos={[-2.95, 2.40, -10.16]} name="MARK CHEN" role="ACME BANK · CTO" hue="#7aa1ff" skin="#e3b899" hair="#1a1410" speaking />
-      <VideoCallTile pos={[-0.85, 2.40, -10.16]} name="PRIYA RAO" role="ACME BANK · HEAD OF AI" hue="#fbbf24" skin="#c89472" hair="#0e0a08" />
+      {/* Zoom-call chrome */}
+      <ZoomCallChrome />
 
-      {/* Chart — right of the two participants, centered as a group */}
-      <ScreenChart pos={[1.95, 2.40, -10.16]} />
+      {/* Two external client participants + success-criteria panel */}
+      <VideoCallTile pos={[-2.95, 2.40, -10.16]} name="MARK CHEN" role="ACME BANK · CTO" hue="#4a6fa5" skin="#e3b899" hair="#2a1f18" shirt="#3d5a8f" speaking />
+      <VideoCallTile pos={[-0.85, 2.40, -10.16]} name="PRIYA RAO" role="ACME BANK · HEAD OF AI" hue="#a85a8a" skin="#c89472" hair="#1f1108" shirt="#7c3a6c" />
+
+      {/* Success-criteria panel — right of the two participants */}
+      <SuccessCriteria pos={[1.95, 2.40, -10.16]} />
 
       {/* ---------- CURVED CONSOLE ARRAY — restored. Each operator has a desk to work at. ---------- */}
       <ConsoleStation pos={[-3.5, 0, -5.5]} rotation={0.35} hue="#7aa1ff" />
@@ -462,7 +463,8 @@ function VideoCallTile({
   role,
   hue,
   skin = '#e8c19c',
-  hair = '#1f1410',
+  hair = '#3a2a20',
+  shirt = '#4d6a99',
   speaking = false,
 }: {
   pos: [number, number, number]
@@ -471,6 +473,7 @@ function VideoCallTile({
   hue: string
   skin?: string
   hair?: string
+  shirt?: string
   speaking?: boolean
 }) {
   const borderRef = useRef<THREE.MeshStandardMaterial>(null)
@@ -483,129 +486,142 @@ function VideoCallTile({
   // Tile: 2.05 wide x 2.40 tall (vertical orientation)
   const W = 2.05
   const H = 2.40
+  // Soft warm office-light background — readable, not the dark accent of before.
+  const tileBg = '#cfd6df'
   return (
     <group position={pos}>
-      {/* Glowing border */}
+      {/* Glowing border (only highlights when speaking) */}
       <mesh position={[0, 0, -0.003]}>
         <planeGeometry args={[W + 0.10, H + 0.10]} />
         <meshStandardMaterial ref={borderRef} color="#0a0d1a" emissive={hue} emissiveIntensity={0.25} />
       </mesh>
-      {/* Tile background — warm desk-light gradient feel */}
+      {/* Tile background — neutral office-light grey, like a real video feed */}
       <mesh>
         <planeGeometry args={[W, H]} />
-        <meshStandardMaterial color={hue} emissive={hue} emissiveIntensity={0.30} roughness={0.7} />
+        <meshStandardMaterial color={tileBg} emissive={tileBg} emissiveIntensity={0.15} roughness={0.85} />
       </mesh>
 
-      {/* --- Character face (higher fidelity, no hat) --- */}
-      {/* Shoulders / shirt */}
-      <mesh position={[0, -0.85, 0.005]}>
-        <RoundedBox args={[1.70, 0.95, 0.04]} radius={0.10} smoothness={2}>
-          <meshStandardMaterial color="#1f2332" roughness={0.7} />
+      {/* --- Character — torso visible, friendly face --- */}
+      {/* Shirt / shoulders — softer shape, lighter colour, with collar V */}
+      <mesh position={[0, -0.95, 0.005]}>
+        <RoundedBox args={[1.55, 0.85, 0.04]} radius={0.30} smoothness={3}>
+          <meshStandardMaterial color={shirt} roughness={0.7} />
         </RoundedBox>
       </mesh>
-      {/* Collar accent */}
-      <mesh position={[0, -0.45, 0.012]}>
-        <planeGeometry args={[0.42, 0.10]} />
-        <meshStandardMaterial color={hue} emissive={hue} emissiveIntensity={0.35} />
+      {/* Collar V — a triangular notch in skin tone showing the open shirt */}
+      <mesh position={[0, -0.55, 0.012]} rotation={[0, 0, Math.PI]}>
+        <planeGeometry args={[0.30, 0.22]} />
+        <meshStandardMaterial color={tileBg} />
+      </mesh>
+      <mesh position={[-0.10, -0.50, 0.013]} rotation={[0, 0, 0.45]}>
+        <planeGeometry args={[0.30, 0.04]} />
+        <meshStandardMaterial color={shirt} roughness={0.6} />
+      </mesh>
+      <mesh position={[0.10, -0.50, 0.013]} rotation={[0, 0, -0.45]}>
+        <planeGeometry args={[0.30, 0.04]} />
+        <meshStandardMaterial color={shirt} roughness={0.6} />
       </mesh>
       {/* Neck */}
-      <mesh position={[0, -0.32, 0.008]}>
-        <planeGeometry args={[0.34, 0.20]} />
+      <mesh position={[0, -0.34, 0.008]}>
+        <planeGeometry args={[0.30, 0.20]} />
         <meshStandardMaterial color={skin} />
       </mesh>
-      {/* Neck shadow under jaw */}
-      <mesh position={[0, -0.26, 0.009]}>
-        <planeGeometry args={[0.46, 0.06]} />
-        <meshStandardMaterial color="#000000" transparent opacity={0.18} />
+      {/* Soft jaw shadow */}
+      <mesh position={[0, -0.28, 0.009]}>
+        <planeGeometry args={[0.42, 0.05]} />
+        <meshStandardMaterial color="#000000" transparent opacity={0.12} />
       </mesh>
-      {/* Head — dimensional sphere for better fidelity than a flat disc */}
+      {/* Head — skin-tone sphere */}
       <mesh position={[0, 0.10, 0.10]} castShadow>
         <sphereGeometry args={[0.52, 48, 36]} />
         <meshStandardMaterial color={skin} roughness={0.55} metalness={0.02} />
       </mesh>
-      {/* Hair — back/top of head as a sphere segment, tucked behind */}
-      <mesh position={[0, 0.22, 0.05]} castShadow>
-        <sphereGeometry args={[0.54, 36, 28, 0, Math.PI * 2, 0, Math.PI * 0.55]} />
+      {/* Hair — small dome that sits CLEARLY on top of the head, well above the brow.
+          Previous version wrapped down to eye level and read as a beanie / burglar mask. */}
+      <mesh position={[0, 0.40, 0.10]} castShadow>
+        <sphereGeometry args={[0.46, 36, 24, 0, Math.PI * 2, 0, Math.PI * 0.45]} />
         <meshStandardMaterial color={hair} roughness={0.85} />
       </mesh>
-      {/* Eyebrows */}
-      <mesh position={[-0.16, 0.22, 0.60]}>
-        <planeGeometry args={[0.13, 0.022]} />
+      {/* Friendly raised-outer-corners eyebrows */}
+      <mesh position={[-0.17, 0.24, 0.60]} rotation={[0, 0, 0.18]}>
+        <planeGeometry args={[0.14, 0.022]} />
         <meshStandardMaterial color={hair} />
       </mesh>
-      <mesh position={[0.16, 0.22, 0.60]}>
-        <planeGeometry args={[0.13, 0.022]} />
+      <mesh position={[0.17, 0.24, 0.60]} rotation={[0, 0, -0.18]}>
+        <planeGeometry args={[0.14, 0.022]} />
         <meshStandardMaterial color={hair} />
       </mesh>
-      {/* Eyes (whites) */}
+      {/* Eyes (whites) — slightly squinted by being thinner verticals (happy eyes) */}
       <mesh position={[-0.16, 0.13, 0.60]}>
-        <circleGeometry args={[0.065, 24]} />
+        <circleGeometry args={[0.062, 24]} />
         <meshStandardMaterial color="#ffffff" />
       </mesh>
       <mesh position={[0.16, 0.13, 0.60]}>
-        <circleGeometry args={[0.065, 24]} />
+        <circleGeometry args={[0.062, 24]} />
         <meshStandardMaterial color="#ffffff" />
       </mesh>
       {/* Iris */}
       <mesh position={[-0.16, 0.13, 0.61]}>
-        <circleGeometry args={[0.038, 20]} />
+        <circleGeometry args={[0.036, 20]} />
         <meshStandardMaterial color="#3a4d80" />
       </mesh>
       <mesh position={[0.16, 0.13, 0.61]}>
-        <circleGeometry args={[0.038, 20]} />
+        <circleGeometry args={[0.036, 20]} />
         <meshStandardMaterial color="#3a4d80" />
       </mesh>
       {/* Pupils */}
       <mesh position={[-0.16, 0.13, 0.62]}>
-        <circleGeometry args={[0.018, 16]} />
+        <circleGeometry args={[0.017, 16]} />
         <meshStandardMaterial color="#0a0d1a" />
       </mesh>
       <mesh position={[0.16, 0.13, 0.62]}>
-        <circleGeometry args={[0.018, 16]} />
+        <circleGeometry args={[0.017, 16]} />
         <meshStandardMaterial color="#0a0d1a" />
       </mesh>
-      {/* Eye highlights */}
+      {/* Eye highlights — sparkle for friendliness */}
       <mesh position={[-0.150, 0.14, 0.625]}>
-        <circleGeometry args={[0.010, 10]} />
+        <circleGeometry args={[0.011, 10]} />
         <meshStandardMaterial color="#ffffff" />
       </mesh>
       <mesh position={[0.170, 0.14, 0.625]}>
-        <circleGeometry args={[0.010, 10]} />
+        <circleGeometry args={[0.011, 10]} />
         <meshStandardMaterial color="#ffffff" />
       </mesh>
-      {/* Nose — soft shadow triangle */}
-      <mesh position={[0, 0.00, 0.62]}>
-        <planeGeometry args={[0.05, 0.14]} />
-        <meshStandardMaterial color="#000000" transparent opacity={0.10} />
+      {/* Cheeks — warm blush gives a happy expression */}
+      <mesh position={[-0.28, -0.05, 0.60]}>
+        <circleGeometry args={[0.08, 18]} />
+        <meshStandardMaterial color="#ff7596" transparent opacity={0.30} />
       </mesh>
-      {/* Cheeks — soft blush */}
-      <mesh position={[-0.26, -0.04, 0.60]}>
-        <circleGeometry args={[0.07, 18]} />
-        <meshStandardMaterial color="#ff7596" transparent opacity={0.35} />
+      <mesh position={[0.28, -0.05, 0.60]}>
+        <circleGeometry args={[0.08, 18]} />
+        <meshStandardMaterial color="#ff7596" transparent opacity={0.30} />
       </mesh>
-      <mesh position={[0.26, -0.04, 0.60]}>
-        <circleGeometry args={[0.07, 18]} />
-        <meshStandardMaterial color="#ff7596" transparent opacity={0.35} />
-      </mesh>
-      {/* Mouth — animates open when speaking */}
-      <mesh position={[0, -0.14, 0.61]}>
-        <planeGeometry args={[0.20, speaking ? 0.07 : 0.025]} />
-        <meshStandardMaterial color="#5a2a3a" />
-      </mesh>
+      {/* Smile — half-ring arc for resting smile, oval when speaking */}
+      {speaking ? (
+        <mesh position={[0, -0.16, 0.62]}>
+          <circleGeometry args={[0.055, 18]} />
+          <meshStandardMaterial color="#5a2a3a" />
+        </mesh>
+      ) : (
+        <mesh position={[0, -0.10, 0.62]}>
+          <ringGeometry args={[0.105, 0.135, 24, 1, Math.PI, Math.PI]} />
+          <meshStandardMaterial color="#5a2a3a" side={THREE.DoubleSide} />
+        </mesh>
+      )}
 
       {/* Name strip bottom-left */}
       <mesh position={[-0.55, -1.07, 0.011]}>
-        <planeGeometry args={[0.90, 0.20]} />
-        <meshStandardMaterial color="#000000" opacity={0.6} transparent />
+        <planeGeometry args={[0.95, 0.22]} />
+        <meshStandardMaterial color="#0a0d1a" opacity={0.78} transparent />
       </mesh>
       <Text
-        position={[-0.55, -1.03, 0.013]}
+        position={[-0.55, -1.02, 0.013]}
         fontSize={0.085}
         color="#ffffff"
         anchorX="center"
         anchorY="middle"
         letterSpacing={0.06}
-        maxWidth={0.86}
+        maxWidth={0.90}
       >
         {name}
       </Text>
@@ -628,153 +644,247 @@ function VideoCallTile({
   )
 }
 
-/* --------------------------- LOVABLE LOGO (top-right of green screen) --------------------------- */
+/* --------------------------- ZOOM-CALL CHROME (header + footer bar) --------------------------- */
 
-function LovableLogo({ pos }: { pos: [number, number, number] }) {
+/**
+ * Zoom-style UI chrome wrapped around the participant tiles. Top bar carries a
+ * REC pill, meeting title, and timer. Bottom bar carries call-control icons,
+ * participant count, and a small "powered by Lovable" wordmark — replacing the
+ * floating Lovable logo that previously hung outside the active screen area.
+ */
+function ZoomCallChrome() {
   const tex = useTexture('/logos/lovable-light.png')
-  // Asset is 911x155 → aspect 5.878. Match exactly so the logo isn't squished/skewed.
-  const W = 1.40
-  const H = W / (911 / 155)
+  // Logo aspect — keep exact so it isn't skewed
+  const LOGO_ASPECT = 911 / 155
+  const LOGO_W = 0.78
+  const LOGO_H = LOGO_W / LOGO_ASPECT
+
+  // Active screen surface is 9.4 wide x 3.5 tall, centered at y=2.5, z=-10.18.
+  // Top chrome strip: y from 4.05 to 4.22 (0.17 tall), inside the active surface (top=4.25).
+  // Bottom chrome strip: y from 0.78 to 0.95 (0.17 tall), inside the active surface (bottom=0.75).
   return (
-    <mesh position={pos}>
-      <planeGeometry args={[W, H]} />
-      <meshBasicMaterial map={tex} transparent toneMapped={false} />
-    </mesh>
+    <group position={[0, 0, -10.16]}>
+      {/* TOP BAR */}
+      <mesh position={[0, 4.135, 0]}>
+        <planeGeometry args={[9.30, 0.30]} />
+        <meshStandardMaterial color="#0e1422" emissive="#0e1422" emissiveIntensity={0.4} />
+      </mesh>
+      {/* REC pill — far left */}
+      <mesh position={[-4.20, 4.135, 0.005]}>
+        <planeGeometry args={[0.50, 0.18]} />
+        <meshStandardMaterial color="#1a0a0e" emissive="#aa0033" emissiveIntensity={0.5} />
+      </mesh>
+      <mesh position={[-4.36, 4.135, 0.008]}>
+        <circleGeometry args={[0.04, 14]} />
+        <meshStandardMaterial color="#ff3355" emissive="#ff3355" emissiveIntensity={1} />
+      </mesh>
+      <Text
+        position={[-4.18, 4.130, 0.008]}
+        fontSize={0.085}
+        color="#ffffff"
+        anchorX="center"
+        anchorY="middle"
+        letterSpacing={0.20}
+      >
+        REC
+      </Text>
+
+      {/* Meeting title — center */}
+      <Text
+        position={[0, 4.135, 0.005]}
+        fontSize={0.10}
+        color="#e8eef9"
+        anchorX="center"
+        anchorY="middle"
+        letterSpacing={0.16}
+      >
+        ACME BANK · POST-POC KICKOFF
+      </Text>
+
+      {/* Timer — far right */}
+      <Text
+        position={[4.10, 4.135, 0.005]}
+        fontSize={0.08}
+        color="#9fb4cc"
+        anchorX="right"
+        anchorY="middle"
+        letterSpacing={0.12}
+      >
+        01:23:47
+      </Text>
+
+      {/* BOTTOM BAR */}
+      <mesh position={[0, 0.865, 0]}>
+        <planeGeometry args={[9.30, 0.30]} />
+        <meshStandardMaterial color="#0e1422" emissive="#0e1422" emissiveIntensity={0.4} />
+      </mesh>
+
+      {/* Call control icons — left of center */}
+      <CallIcon x={-1.5} fill="#1a2030" glyph="mic" />
+      <CallIcon x={-1.0} fill="#1a2030" glyph="cam" />
+      <CallIcon x={-0.5} fill="#1a2030" glyph="share" />
+      {/* End-call red button */}
+      <mesh position={[0.05, 0.865, 0.005]}>
+        <planeGeometry args={[0.65, 0.20]} />
+        <meshStandardMaterial color="#7a1530" emissive="#cc1f3a" emissiveIntensity={0.55} />
+      </mesh>
+      <Text
+        position={[0.05, 0.865, 0.008]}
+        fontSize={0.070}
+        color="#ffffff"
+        anchorX="center"
+        anchorY="middle"
+        letterSpacing={0.18}
+      >
+        END
+      </Text>
+
+      {/* Participants count */}
+      <Text
+        position={[1.30, 0.865, 0.005]}
+        fontSize={0.075}
+        color="#9fb4cc"
+        anchorX="left"
+        anchorY="middle"
+        letterSpacing={0.12}
+      >
+        ◉ 5 PARTICIPANTS
+      </Text>
+
+      {/* Powered-by-Lovable wordmark — bottom-right of the chrome bar */}
+      <Text
+        position={[3.20, 0.865, 0.005]}
+        fontSize={0.060}
+        color="#7088a8"
+        anchorX="right"
+        anchorY="middle"
+        letterSpacing={0.18}
+      >
+        POWERED BY
+      </Text>
+      <mesh position={[3.95, 0.865, 0.006]}>
+        <planeGeometry args={[LOGO_W, LOGO_H]} />
+        <meshBasicMaterial map={tex} transparent toneMapped={false} />
+      </mesh>
+    </group>
   )
 }
 
-/* --------------------------- SCREEN CHART (right side of wall screen) --------------------------- */
+function CallIcon({ x, fill, glyph }: { x: number; fill: string; glyph: 'mic' | 'cam' | 'share' }) {
+  const symbol = glyph === 'mic' ? '🎤' : glyph === 'cam' ? '📹' : '⇪'
+  return (
+    <group position={[x, 0.865, 0.005]}>
+      <mesh>
+        <circleGeometry args={[0.10, 18]} />
+        <meshStandardMaterial color={fill} emissive={fill} emissiveIntensity={0.4} />
+      </mesh>
+      <Text fontSize={0.10} color="#dde6f0" anchorX="center" anchorY="middle" position={[0, 0, 0.003]}>
+        {symbol}
+      </Text>
+    </group>
+  )
+}
+
+/* --------------------------- SUCCESS CRITERIA PANEL (right side of wall screen) --------------------------- */
 
 /**
- * Animated dual-line chart with axes, gridlines, KPI strip, and a sparkline-style
- * area fill. Sized to occupy the right ~3.6 wide region of the 9.4-wide screen.
+ * Replaces the previous "12-week trend" line chart, which read as actuals climbing
+ * implausibly fast for a PoC. This panel instead frames the screen-share as the
+ * post-PoC SUCCESS CRITERIA — what we'll measure 90 days after go-live to call
+ * the engagement a win. Each row is a target threshold, not a measured value.
  */
-function ScreenChart({ pos }: { pos: [number, number, number] }) {
+function SuccessCriteria({ pos }: { pos: [number, number, number] }) {
   const W = 3.6
   const H = 2.40
-  // Pre-computed data points (0..1 normalised)
-  const series1 = [0.20, 0.28, 0.32, 0.30, 0.42, 0.55, 0.58, 0.62, 0.71, 0.78, 0.85, 0.92]
-  const series2 = [0.15, 0.18, 0.22, 0.28, 0.30, 0.36, 0.40, 0.45, 0.50, 0.55, 0.60, 0.66]
-  // (sweep animation removed per request)
 
-  // Chart drawing area
-  const padL = 0.4, padR = 0.2, padT = 0.55, padB = 0.45
-  const cw = W - padL - padR
-  const ch = H - padT - padB
-  const x0 = -W / 2 + padL
-  const y0 = -H / 2 + padB
-  const xAt = (i: number) => x0 + (i / (series1.length - 1)) * cw
-  const yAt = (v: number) => y0 + v * ch
+  // Each criterion: label · target · short rationale · accent
+  const rows: Array<{ label: string; target: string; sub: string; color: string }> = [
+    { label: 'MONTHLY ACTIVE USERS', target: '> 5,000', sub: 'across pilot teams', color: '#7aa1ff' },
+    { label: 'TIME-TO-DEPLOY', target: '< 2 weeks', sub: 'concept → production', color: '#34d399' },
+    { label: 'NET PROMOTER SCORE', target: '≥ 50', sub: 'from internal users', color: '#fbbf24' },
+    { label: 'COST PER WORKFLOW', target: '< $0.30', sub: 'fully loaded', color: '#ff7596' },
+    { label: 'ROI', target: '≥ 3×', sub: 'within 90 days', color: '#9b87f5' },
+    { label: 'HOURS RECLAIMED', target: '800+ /mo', sub: 'measured via opt-in survey', color: '#34d399' },
+  ]
 
   return (
     <group position={pos}>
-      {/* Panel background */}
+      {/* Panel background — matches Zoom-call screen-share styling */}
       <mesh position={[0, 0, -0.003]}>
         <planeGeometry args={[W + 0.06, H + 0.06]} />
-        <meshStandardMaterial color="#0a0d1a" emissive="#34d399" emissiveIntensity={0.18} />
+        <meshStandardMaterial color="#0a0d1a" emissive="#5a78a8" emissiveIntensity={0.10} />
       </mesh>
       <mesh>
         <planeGeometry args={[W, H]} />
-        <meshStandardMaterial color="#0e1a16" emissive="#0e2a22" emissiveIntensity={0.35} roughness={0.8} />
+        <meshStandardMaterial color="#0f1422" emissive="#0f1422" emissiveIntensity={0.35} roughness={0.8} />
       </mesh>
 
-      {/* Title strip */}
-      <Text position={[-W / 2 + 0.12, H / 2 - 0.18, 0.005]} fontSize={0.13} color="#9ae5c5" anchorX="left" letterSpacing={0.16}>
-        POC ADOPTION · 12 WK TREND
+      {/* Header */}
+      <Text position={[-W / 2 + 0.16, H / 2 - 0.20, 0.005]} fontSize={0.115} color="#dde6f0" anchorX="left" letterSpacing={0.16}>
+        POST-POC SUCCESS CRITERIA
       </Text>
-      <Text position={[W / 2 - 0.12, H / 2 - 0.18, 0.005]} fontSize={0.11} color="#34d399" anchorX="right" letterSpacing={0.10}>
-        ▲ +38%
+      <Text position={[-W / 2 + 0.16, H / 2 - 0.36, 0.005]} fontSize={0.062} color="#7088a8" anchorX="left" letterSpacing={0.20}>
+        WHAT WE'LL MEASURE · 90 DAYS POST GO-LIVE
       </Text>
 
-      {/* KPI strip */}
-      <group position={[0, H / 2 - 0.42, 0.005]}>
-        <ChartKPI x={-W / 2 + 0.50} label="USERS" value="2.4k" color="#7aa1ff" />
-        <ChartKPI x={-W / 2 + 1.30} label="WORKFLOWS" value="186" color="#34d399" />
-        <ChartKPI x={-W / 2 + 2.20} label="SAVED HRS" value="940" color="#fbbf24" />
-        <ChartKPI x={-W / 2 + 3.10} label="NPS" value="71" color="#ff7596" />
-      </group>
-
-      {/* Horizontal gridlines */}
-      {[0.25, 0.5, 0.75].map((g, i) => (
-        <mesh key={`g${i}`} position={[x0 + cw / 2, y0 + g * ch, 0.004]}>
-          <planeGeometry args={[cw, 0.005]} />
-          <meshBasicMaterial color="#2a3a32" transparent opacity={0.6} />
-        </mesh>
-      ))}
-      {/* Y axis labels */}
-      {[0, 0.5, 1].map((g, i) => (
-        <Text key={`yl${i}`} position={[x0 - 0.06, y0 + g * ch, 0.005]} fontSize={0.075} color="#5a8a7a" anchorX="right" anchorY="middle">
-          {Math.round(g * 100)}
-        </Text>
-      ))}
-      {/* X axis */}
-      <mesh position={[x0 + cw / 2, y0, 0.004]}>
-        <planeGeometry args={[cw, 0.008]} />
-        <meshBasicMaterial color="#34d399" transparent opacity={0.7} />
+      {/* Divider under header */}
+      <mesh position={[0, H / 2 - 0.46, 0.004]}>
+        <planeGeometry args={[W - 0.30, 0.005]} />
+        <meshBasicMaterial color="#2a3a52" transparent opacity={0.7} />
       </mesh>
-      {['W1', 'W3', 'W6', 'W9', 'W12'].map((lbl, i, arr) => (
-        <Text key={lbl} position={[x0 + (i / (arr.length - 1)) * cw, y0 - 0.13, 0.005]} fontSize={0.07} color="#5a8a7a" anchorX="center">
-          {lbl}
-        </Text>
-      ))}
 
-      {/* Series 1 — primary (green) line + dots */}
-      <ChartLine pts={series1.map((v, i) => [xAt(i), yAt(v)] as [number, number])} color="#34d399" thickness={0.022} />
-      {series1.map((v, i) => (
-        <mesh key={`d1${i}`} position={[xAt(i), yAt(v), 0.012]}>
-          <circleGeometry args={[0.035, 14]} />
-          <meshBasicMaterial color="#34d399" />
-        </mesh>
-      ))}
-      {/* Series 2 — secondary (blue) line */}
-      <ChartLine pts={series2.map((v, i) => [xAt(i), yAt(v)] as [number, number])} color="#7aa1ff" thickness={0.016} />
+      {/* Rows — vertical stack, each ~0.28 tall */}
+      {rows.map((row, i) => {
+        const rowY = H / 2 - 0.66 - i * 0.28
+        return (
+          <group key={row.label} position={[0, rowY, 0.005]}>
+            {/* Accent bullet (target reticle) */}
+            <mesh position={[-W / 2 + 0.22, 0, 0.003]}>
+              <ringGeometry args={[0.060, 0.075, 18]} />
+              <meshBasicMaterial color={row.color} />
+            </mesh>
+            <mesh position={[-W / 2 + 0.22, 0, 0.004]}>
+              <circleGeometry args={[0.030, 14]} />
+              <meshBasicMaterial color={row.color} />
+            </mesh>
 
-      {/* (animated sweep highlight removed) */}
+            {/* Label */}
+            <Text
+              position={[-W / 2 + 0.36, 0.045, 0.003]}
+              fontSize={0.075}
+              color="#dde6f0"
+              anchorX="left"
+              anchorY="middle"
+              letterSpacing={0.10}
+            >
+              {row.label}
+            </Text>
+            {/* Sub-text */}
+            <Text
+              position={[-W / 2 + 0.36, -0.060, 0.003]}
+              fontSize={0.054}
+              color="#7088a8"
+              anchorX="left"
+              anchorY="middle"
+              letterSpacing={0.06}
+            >
+              {row.sub}
+            </Text>
 
-      {/* Legend */}
-      <group position={[W / 2 - 0.95, -H / 2 + 0.14, 0.005]}>
-        <mesh position={[-0.36, 0, 0]}><planeGeometry args={[0.10, 0.02]} /><meshBasicMaterial color="#34d399" /></mesh>
-        <Text position={[-0.16, 0, 0]} fontSize={0.07} color="#9ae5c5" anchorX="left">ADOPTION</Text>
-        <mesh position={[0.34, 0, 0]}><planeGeometry args={[0.10, 0.02]} /><meshBasicMaterial color="#7aa1ff" /></mesh>
-        <Text position={[0.54, 0, 0]} fontSize={0.07} color="#9ae5c5" anchorX="left">TARGET</Text>
-      </group>
-    </group>
-  )
-}
-
-function ChartKPI({ x, label, value, color }: { x: number; label: string; value: string; color: string }) {
-  return (
-    <group position={[x, 0, 0]}>
-      <Text position={[0, 0.08, 0]} fontSize={0.16} color="#ffffff" anchorX="center" anchorY="middle">
-        {value}
-      </Text>
-      <Text position={[0, -0.08, 0]} fontSize={0.062} color={color} anchorX="center" anchorY="middle" letterSpacing={0.18}>
-        {label}
-      </Text>
-    </group>
-  )
-}
-
-/** Draws a polyline as a series of thin rotated planes between consecutive points. */
-function ChartLine({ pts, color, thickness = 0.02 }: { pts: [number, number][]; color: string; thickness?: number }) {
-  const segs: Array<{ x: number; y: number; len: number; angle: number }> = []
-  for (let i = 0; i < pts.length - 1; i++) {
-    const [ax, ay] = pts[i]
-    const [bx, by] = pts[i + 1]
-    const dx = bx - ax
-    const dy = by - ay
-    const len = Math.hypot(dx, dy)
-    const angle = Math.atan2(dy, dx)
-    segs.push({ x: (ax + bx) / 2, y: (ay + by) / 2, len, angle })
-  }
-  return (
-    <group>
-      {segs.map((s, i) => (
-        <mesh key={i} position={[s.x, s.y, 0.010]} rotation={[0, 0, s.angle]}>
-          <planeGeometry args={[s.len, thickness]} />
-          <meshBasicMaterial color={color} />
-        </mesh>
-      ))}
+            {/* Target value (right-aligned) */}
+            <Text
+              position={[W / 2 - 0.16, 0, 0.003]}
+              fontSize={0.110}
+              color={row.color}
+              anchorX="right"
+              anchorY="middle"
+              letterSpacing={0.04}
+            >
+              {row.target}
+            </Text>
+          </group>
+        )
+      })}
     </group>
   )
 }

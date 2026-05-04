@@ -8,7 +8,7 @@ import { LoadingSplash } from '@/ui/LoadingSplash'
 import { Hint } from '@/ui/Hint'
 import { Footer } from '@/ui/Footer'
 import { BrandLockup } from '@/ui/BrandLockup'
-import { ProgressTracker } from '@/ui/ProgressTracker'
+import { CameraAnglePicker } from '@/ui/CameraAnglePicker'
 import { BoothAudio } from '@/ui/BoothAudio'
 import { ThemeToggle } from '@/ui/ThemeToggle'
 import { RenderPauseToggle } from '@/ui/RenderPauseToggle'
@@ -59,7 +59,7 @@ function App() {
               <SoundToggle />
               <ThemeToggle />
               <Hint />
-              <ProgressTracker />
+              <CameraAnglePicker />
               <TimelineSlider />
               <Footer />
             </>

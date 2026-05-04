@@ -686,11 +686,7 @@ function ScreenChart({ pos }: { pos: [number, number, number] }) {
       {/* Series 2 — secondary (blue) line */}
       <ChartLine pts={series2.map((v, i) => [xAt(i), yAt(v)] as [number, number])} color="#7aa1ff" thickness={0.016} />
 
-      {/* Animated sweep highlight */}
-      <mesh ref={sweepRef} position={[x0, y0 + ch / 2, 0.011]}>
-        <planeGeometry args={[0.02, ch]} />
-        <meshBasicMaterial color="#9ae5c5" transparent opacity={0.35} />
-      </mesh>
+      {/* (animated sweep highlight removed) */}
 
       {/* Legend */}
       <group position={[W / 2 - 0.95, -H / 2 + 0.14, 0.005]}>

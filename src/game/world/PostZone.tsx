@@ -48,27 +48,15 @@ export function PostZone() {
         <planeGeometry args={[9.4, 3.5]} />
         <meshStandardMaterial ref={screenMatRef} color="#0a0d1a" emissive="#34d399" emissiveIntensity={0.55} />
       </mesh>
-      {/* Title — top-left of screen */}
-      <Text
-        position={[-3.2, 4.05, -10.16]}
-        fontSize={0.20}
-        color="#9ae5c5"
-        anchorX="left"
-        anchorY="middle"
-        letterSpacing={0.18}
-      >
-        ● LIVE · POC REVIEW · ACME BANK + LOVABLE
-      </Text>
-
       {/* Lovable logo — top-right of the green screen (real asset) */}
       <LovableLogo pos={[4.10, 4.05, -10.15]} />
 
-      {/* Two external (client) participants — left side of screen */}
-      <VideoCallTile pos={[-2.85, 2.20, -10.16]} name="MARK CHEN" role="ACME BANK · CTO" hue="#7aa1ff" skin="#e3b899" hair="#1a1410" speaking />
-      <VideoCallTile pos={[-0.55, 2.20, -10.16]} name="PRIYA RAO" role="ACME BANK · HEAD OF AI" hue="#fbbf24" skin="#c89472" hair="#0e0a08" />
+      {/* Centered: two external client participants + chart, all aligned at screen center */}
+      <VideoCallTile pos={[-2.95, 2.40, -10.16]} name="MARK CHEN" role="ACME BANK · CTO" hue="#7aa1ff" skin="#e3b899" hair="#1a1410" speaking />
+      <VideoCallTile pos={[-0.85, 2.40, -10.16]} name="PRIYA RAO" role="ACME BANK · HEAD OF AI" hue="#fbbf24" skin="#c89472" hair="#0e0a08" />
 
-      {/* Chart — right side of screen */}
-      <ScreenChart pos={[2.45, 2.20, -10.16]} />
+      {/* Chart — right of the two participants, centered as a group */}
+      <ScreenChart pos={[1.95, 2.40, -10.16]} />
 
       {/* ---------- CURVED CONSOLE ARRAY — restored. Each operator has a desk to work at. ---------- */}
       <ConsoleStation pos={[-3.5, 0, -5.5]} rotation={0.35} hue="#7aa1ff" />

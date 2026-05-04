@@ -142,6 +142,21 @@ interface GameState {
   /** Active visual palette. Cycle through PALETTE_ORDER. */
   palette: Palette
 
+  /**
+   * Live-tunable gameplay camera config. Driven by the Camera Explorer panel
+   * (mounted only in `?cinematic=1` mode). Avatar is the anchor — `offset` is added
+   * to the avatar position to get the camera position; `lookOffset` likewise for
+   * the look-at point. `followX` / `followZ` toggle whether each axis tracks the
+   * avatar (off = absolute world coord taken from offset, like the side-scroller).
+   */
+  cameraConfig: {
+    offset: Vec3
+    lookOffset: Vec3
+    zoom: number
+    followX: boolean
+    followZ: boolean
+  }
+
   /** When true, the R3F render loop is paused to save CPU/GPU while idle. */
   renderPaused: boolean
   toggleRenderPaused: () => void
@@ -165,6 +180,16 @@ interface GameState {
   setCinematicShotT: (t: number) => void
   setCinematicAutoAdvance: (auto: boolean) => void
   cyclePalette: () => void
+  setCameraConfig: (
+    partial: Partial<{
+      offset: Vec3
+      lookOffset: Vec3
+      zoom: number
+      followX: boolean
+      followZ: boolean
+    }>
+  ) => void
+  resetCameraConfig: () => void
 }
 
 export const useGameStore = create<GameState>((set, get) => ({
@@ -179,6 +204,13 @@ export const useGameStore = create<GameState>((set, get) => ({
   cinematicShotT: 0,
   cinematicAutoAdvance: true,
   palette: 'energetic',
+  cameraConfig: {
+    offset: [0, 5, 16],
+    lookOffset: [0, 1.6, 0],
+    zoom: 60,
+    followX: true,
+    followZ: false,
+  },
   renderPaused: false,
   toggleRenderPaused: () => set((s) => ({ renderPaused: !s.renderPaused })),
 
@@ -218,5 +250,17 @@ export const useGameStore = create<GameState>((set, get) => ({
       const idx = PALETTE_ORDER.indexOf(state.palette)
       const next = PALETTE_ORDER[(idx + 1) % PALETTE_ORDER.length]
       return { palette: next }
+    }),
+  setCameraConfig: (partial) =>
+    set((state) => ({ cameraConfig: { ...state.cameraConfig, ...partial } })),
+  resetCameraConfig: () =>
+    set({
+      cameraConfig: {
+        offset: [0, 5, 16],
+        lookOffset: [0, 1.6, 0],
+        zoom: 60,
+        followX: true,
+        followZ: false,
+      },
     }),
 }))

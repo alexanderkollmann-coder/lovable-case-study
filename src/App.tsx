@@ -15,6 +15,7 @@ import { RenderPauseToggle } from '@/ui/RenderPauseToggle'
 import { IntroVideo } from '@/ui/IntroVideo'
 import { Cinematic } from '@/cinematic/Cinematic'
 import { CinematicDebugHud } from '@/cinematic/CinematicDebugHud'
+import { CameraExplorer } from '@/cinematic/CameraExplorer'
 import { useGameStore } from '@/store/gameStore'
 
 function App() {
@@ -86,6 +87,9 @@ function App() {
 
       {/* Cinematic debug HUD — only when a shot is active */}
       {cinematicMode && <CinematicDebugHud />}
+
+      {/* Camera Explorer — live-tune the gameplay camera framing in cinematic mode (no shot playing) */}
+      {cinematicMode && !cinematicShotId && <CameraExplorer />}
 
       {/* Loading splash */}
       <LoadingSplash visible={loading} />

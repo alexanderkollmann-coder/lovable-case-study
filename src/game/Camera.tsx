@@ -6,59 +6,61 @@ import { avatarGroupRef } from './refs'
 import { useGameStore } from '@/store/gameStore'
 
 /**
- * Frontal / side-scroller camera.
- * - Camera sits in front of the action at fixed Y/Z, follows the avatar's X only.
- * - Looks toward the back of the world (z = 0) at a slight downward tilt.
- * - Avatar Z-movement reads as "depth into the stage", not as a camera-pan.
+ * Gameplay camera. Avatar is the anchor; camera position + lookAt are derived
+ * from the avatar's position plus an offset/lookOffset stored in `gameStore.cameraConfig`.
  *
- * Tuning knobs:
- *  CAMERA_HEIGHT — how high the camera sits above the floor.
- *  CAMERA_DISTANCE — how far in front of the world's z=0 line the camera stands.
- *  LOOK_HEIGHT — height the camera looks toward (slightly above avatar centre).
- *  ZOOM — orthographic zoom.
+ * The Camera Explorer panel (mounted in `?cinematic=1`) lets you live-tune that config
+ * to find the framing you want for the demo, then copy the values into the store
+ * default to ship them.
+ *
+ * `followX` / `followZ` toggle whether each axis tracks the avatar (off = use the
+ * offset's coord as an absolute world position — gives the side-scroller feel).
  */
-const CAMERA_HEIGHT = 5
-const CAMERA_DISTANCE = 16
-const LOOK_HEIGHT = 1.6
-const ZOOM = 60
-
 export function Camera() {
   const camRef = useRef<THREE.OrthographicCamera>(null)
-  const lookAtTarget = useRef(new THREE.Vector3(0, LOOK_HEIGHT, 0))
+  const lookAtTarget = useRef(new THREE.Vector3(0, 1.6, 0))
 
   useFrame((_, delta) => {
     if (!camRef.current) return
 
     // Yield to the cinematic shot player when a shot is playing
-    if (useGameStore.getState().cinematicShotId) return
+    const store = useGameStore.getState()
+    if (store.cinematicShotId) return
 
+    const cfg = store.cameraConfig
     const targetPos = avatarGroupRef.current?.position ?? new THREE.Vector3(0, 0, 0)
 
-    // Camera follows avatar X only; height + Z-distance stay fixed.
-    const desired = new THREE.Vector3(targetPos.x, CAMERA_HEIGHT, CAMERA_DISTANCE)
+    const desiredX = cfg.followX ? targetPos.x + cfg.offset[0] : cfg.offset[0]
+    const desiredY = cfg.offset[1]
+    const desiredZ = cfg.followZ ? targetPos.z + cfg.offset[2] : cfg.offset[2]
+    const desired = new THREE.Vector3(desiredX, desiredY, desiredZ)
+
     const lambda = 5
     camRef.current.position.lerp(desired, 1 - Math.exp(-lambda * delta))
 
-    // Snap zoom back to the gameplay default if it was changed by a cinematic shot
-    if (Math.abs(camRef.current.zoom - ZOOM) > 0.5) {
-      camRef.current.zoom = THREE.MathUtils.lerp(camRef.current.zoom, ZOOM, 1 - Math.exp(-3 * delta))
+    // Live-track zoom toward the configured value.
+    if (Math.abs(camRef.current.zoom - cfg.zoom) > 0.05) {
+      camRef.current.zoom = THREE.MathUtils.lerp(camRef.current.zoom, cfg.zoom, 1 - Math.exp(-4 * delta))
       camRef.current.updateProjectionMatrix()
     }
 
-    // Always look at "stage centre" — avatar's X line, fixed depth at z=0.
-    lookAtTarget.current.lerp(
-      new THREE.Vector3(targetPos.x, LOOK_HEIGHT, 0),
-      1 - Math.exp(-lambda * delta)
+    // LookAt = anchor + lookOffset. Anchor is the avatar (full follow on look target).
+    const lookDesired = new THREE.Vector3(
+      targetPos.x + cfg.lookOffset[0],
+      cfg.lookOffset[1],
+      targetPos.z + cfg.lookOffset[2]
     )
+    lookAtTarget.current.lerp(lookDesired, 1 - Math.exp(-lambda * delta))
     camRef.current.lookAt(lookAtTarget.current)
   })
 
+  const initial = useGameStore.getState().cameraConfig
   return (
     <OrthographicCamera
       ref={camRef}
       makeDefault
-      position={[0, CAMERA_HEIGHT, CAMERA_DISTANCE]}
-      zoom={ZOOM}
+      position={[initial.offset[0], initial.offset[1], initial.offset[2]]}
+      zoom={initial.zoom}
       near={-500}
       far={1000}
     />

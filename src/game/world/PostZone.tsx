@@ -474,56 +474,262 @@ function KPITile({
 
 // UptimeGauge removed — uptime now appears on the StatsStandup
 
-function ScreenChart({
+/* --------------------------- VIDEO CALL UI --------------------------- */
+
+/**
+ * One tile in the wall-screen video grid. Mocks a participant's webcam feed
+ * with a coloured backdrop, a silhouette head/shoulders, a name strip, and a
+ * pulsing border when speaking.
+ */
+function VideoCallTile({
   pos,
-  accent,
-  label,
-  value,
+  name,
+  role,
+  hue,
+  speaking = false,
 }: {
   pos: [number, number, number]
-  accent: string
-  label: string
-  value: string
+  name: string
+  role: string
+  hue: string
+  speaking?: boolean
 }) {
+  const borderRef = useRef<THREE.MeshStandardMaterial>(null)
+  useFrame((state) => {
+    if (!borderRef.current) return
+    const base = speaking ? 0.9 : 0.25
+    const pulse = speaking ? Math.sin(state.clock.elapsedTime * 3.4) * 0.4 + 0.5 : 0
+    borderRef.current.emissiveIntensity = base + pulse * 0.6
+  })
   return (
     <group position={pos}>
-      <mesh>
-        <planeGeometry args={[2.5, 1.2]} />
-        <meshStandardMaterial color="#0a0d1a" emissive={accent} emissiveIntensity={0.18} />
+      {/* Border */}
+      <mesh position={[0, 0, -0.002]}>
+        <planeGeometry args={[2.10, 1.30]} />
+        <meshStandardMaterial ref={borderRef} color="#0a0d1a" emissive={hue} emissiveIntensity={0.25} />
       </mesh>
-      <Text position={[0, 0.34, 0.01]} fontSize={0.16} color={accent} anchorX="center" letterSpacing={0.18}>
-        {label}
+      {/* Tile background (warm desk-light gradient feel) */}
+      <mesh>
+        <planeGeometry args={[2.0, 1.20]} />
+        <meshStandardMaterial color={hue} emissive={hue} emissiveIntensity={0.35} roughness={0.7} />
+      </mesh>
+      {/* Silhouette shoulders */}
+      <mesh position={[0, -0.5, 0.005]}>
+        <planeGeometry args={[1.6, 0.55]} />
+        <meshStandardMaterial color="#0a0d1a" opacity={0.72} transparent />
+      </mesh>
+      {/* Silhouette head */}
+      <mesh position={[0, 0.05, 0.006]}>
+        <circleGeometry args={[0.32, 24]} />
+        <meshStandardMaterial color="#0a0d1a" opacity={0.78} transparent />
+      </mesh>
+      {/* Name bar */}
+      <mesh position={[-0.55, -0.52, 0.01]}>
+        <planeGeometry args={[0.85, 0.16]} />
+        <meshStandardMaterial color="#000000" opacity={0.55} transparent />
+      </mesh>
+      <Text
+        position={[-0.55, -0.50, 0.012]}
+        fontSize={0.07}
+        color="#ffffff"
+        anchorX="center"
+        anchorY="middle"
+        letterSpacing={0.06}
+        maxWidth={0.82}
+      >
+        {name}
       </Text>
-      <Text position={[0, -0.1, 0.01]} fontSize={0.42} color="#ffffff" anchorX="center" letterSpacing={0.08}>
-        {value}
+      <Text
+        position={[-0.55, -0.58, 0.012]}
+        fontSize={0.045}
+        color={hue}
+        anchorX="center"
+        anchorY="middle"
+        letterSpacing={0.18}
+      >
+        {role}
       </Text>
-      {/* Mini bar chart */}
-      <group position={[0, -0.4, 0.005]}>
-        {[0.4, 0.7, 0.55, 0.85, 0.92, 0.78].map((h, i) => (
-          <mesh key={i} position={[-0.7 + i * 0.28, h * 0.18, 0]}>
-            <boxGeometry args={[0.18, h * 0.36, 0.005]} />
-            <meshStandardMaterial color={accent} emissive={accent} emissiveIntensity={0.6} />
-          </mesh>
-        ))}
+      {/* Mute / cam icons row */}
+      <mesh position={[0.78, -0.52, 0.01]}>
+        <circleGeometry args={[0.06, 12]} />
+        <meshStandardMaterial color={speaking ? '#34d399' : '#ffffff'} emissive={speaking ? '#34d399' : '#000000'} emissiveIntensity={speaking ? 0.8 : 0} opacity={0.85} transparent />
+      </mesh>
+    </group>
+  )
+}
+
+/**
+ * The "shared screen" strip below the video tiles — a mocked-up doc/code share.
+ * Uses two columns of pseudo "lines of text" + a small chart accent.
+ */
+function SharedScreenStrip({ pos }: { pos: [number, number, number] }) {
+  const lines = Array.from({ length: 6 })
+  return (
+    <group position={pos}>
+      {/* Frame */}
+      <mesh position={[0, 0, -0.002]}>
+        <planeGeometry args={[9.4, 1.10]} />
+        <meshStandardMaterial color="#0a0d1a" emissive="#9ae5c5" emissiveIntensity={0.18} />
+      </mesh>
+      {/* Header bar */}
+      <mesh position={[0, 0.46, 0.005]}>
+        <planeGeometry args={[9.2, 0.16]} />
+        <meshStandardMaterial color="#1a1f2e" />
+      </mesh>
+      <Text position={[-4.4, 0.46, 0.008]} fontSize={0.085} color="#9ae5c5" anchorX="left" anchorY="middle" letterSpacing={0.18}>
+        SHARED · poc-acme-bank / risk-scoring.tsx
+      </Text>
+      <Text position={[4.4, 0.46, 0.008]} fontSize={0.07} color="#7aa1ff" anchorX="right" anchorY="middle" letterSpacing={0.18}>
+        JESSICA IS SCREEN-SHARING
+      </Text>
+      {/* Left column — code lines */}
+      {lines.map((_, i) => (
+        <mesh key={`l${i}`} position={[-2.6, 0.26 - i * 0.13, 0.006]}>
+          <planeGeometry args={[3.6 - (i % 3) * 0.6, 0.05]} />
+          <meshStandardMaterial color="#7aa1ff" emissive="#7aa1ff" emissiveIntensity={0.4} />
+        </mesh>
+      ))}
+      {/* Right column — bar chart preview */}
+      {[0.5, 0.85, 0.65, 0.95, 0.78, 0.92, 0.70, 0.88].map((h, i) => (
+        <mesh key={`b${i}`} position={[1.4 + i * 0.32, -0.05 + h * 0.18, 0.006]}>
+          <planeGeometry args={[0.22, h * 0.42]} />
+          <meshStandardMaterial color="#34d399" emissive="#34d399" emissiveIntensity={0.65} />
+        </mesh>
+      ))}
+      <Text position={[2.5, 0.30, 0.008]} fontSize={0.07} color="#34d399" anchorX="center" anchorY="middle" letterSpacing={0.18}>
+        WEEK 3 · ACCURACY +42%
+      </Text>
+    </group>
+  )
+}
+
+/* --------------------------- IN-PERSON CLIENT MEETING --------------------------- */
+
+/**
+ * A small on-site working session: a Lovable solutions engineer sits across
+ * from a client stakeholder at a conference table with two laptops and a
+ * name placard. Reads as the in-person counterpart to the video-call wall.
+ */
+function ClientMeeting({ pos, rotation = 0 }: { pos: [number, number, number]; rotation?: number }) {
+  return (
+    <group position={pos} rotation={[0, rotation, 0]}>
+      {/* Floor pad — subtle rug to ground the area */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.011, 0]}>
+        <planeGeometry args={[4.4, 3.2]} />
+        <meshStandardMaterial color="#1a3a2e" roughness={0.9} />
+      </mesh>
+
+      {/* Conference table */}
+      <ConferenceTable pos={[0, 0, 0]} rotation={0} size={[2.6, 0.06, 1.2]} />
+
+      {/* Two laptops on the table */}
+      <Laptop pos={[-0.7, 0.81, -0.25]} rotation={Math.PI} screenColor="#7aa1ff" />
+      <Laptop pos={[0.7, 0.81, 0.25]} rotation={0} screenColor="#34d399" />
+
+      {/* Coffee cup + notebook for ambience */}
+      <mesh position={[-0.05, 0.84, -0.35]}>
+        <cylinderGeometry args={[0.07, 0.06, 0.13, 14]} />
+        <meshStandardMaterial color="#f4ede0" roughness={0.6} />
+      </mesh>
+      <RoundedBox args={[0.36, 0.02, 0.26]} radius={0.01} smoothness={1} position={[0.15, 0.82, 0.32]}>
+        <meshStandardMaterial color="#fbbf24" roughness={0.7} />
+      </RoundedBox>
+
+      {/* Name placard on client's side */}
+      <NamePlacard pos={[0.7, 0.82, 0.55]} rotation={Math.PI} name="Acme Bank" accent="#7aa1ff" />
+      {/* Lovable SE placard */}
+      <NamePlacard pos={[-0.7, 0.82, -0.55]} rotation={0} name="Lovable" accent="#ff4d7a" />
+
+      {/* Lovable SE — pink/red shirt to match brand */}
+      <SeatedNPC pos={[-0.7, 0, -1.05]} rotation={0} shirtColor="#ff4d7a" />
+      {/* Client — neutral suit grey */}
+      <SeatedNPC pos={[0.7, 0, 1.05]} rotation={Math.PI} shirtColor="#3a4d80" />
+
+      {/* Standing whiteboard easel beside the table — sketched flow */}
+      <MeetingEasel pos={[-2.0, 0, 0.4]} rotation={Math.PI / 2.4} />
+
+      {/* Soft warm key light over the meeting */}
+      <pointLight position={[0, 3.2, 0]} intensity={0.7} distance={6} color="#fbe1c4" />
+    </group>
+  )
+}
+
+function Laptop({
+  pos,
+  rotation = 0,
+  screenColor = '#7aa1ff',
+}: {
+  pos: [number, number, number]
+  rotation?: number
+  screenColor?: string
+}) {
+  return (
+    <group position={pos} rotation={[0, rotation, 0]}>
+      {/* Base / keyboard */}
+      <RoundedBox args={[0.55, 0.03, 0.38]} radius={0.02} smoothness={2} position={[0, 0, 0]} castShadow>
+        <meshStandardMaterial color="#1f2332" metalness={0.4} roughness={0.5} />
+      </RoundedBox>
+      {/* Screen — tilted open */}
+      <group position={[0, 0.02, -0.18]} rotation={[-Math.PI / 2.6, 0, 0]}>
+        <RoundedBox args={[0.55, 0.36, 0.02]} radius={0.02} smoothness={2} position={[0, 0.18, 0]} castShadow>
+          <meshStandardMaterial color="#1f2332" />
+        </RoundedBox>
+        <mesh position={[0, 0.18, 0.012]}>
+          <planeGeometry args={[0.50, 0.32]} />
+          <meshStandardMaterial color="#0a0d1a" emissive={screenColor} emissiveIntensity={0.55} />
+        </mesh>
       </group>
     </group>
   )
 }
 
-function Sparkline({ pos }: { pos: [number, number, number] }) {
-  const points = Array.from({ length: 18 }).map((_, i) => {
-    const x = (i / 17) * 8 - 4
-    const y = Math.sin(i * 0.55) * 0.18 + i * 0.04
-    return [x, y]
-  })
+function MeetingEasel({ pos, rotation = 0 }: { pos: [number, number, number]; rotation?: number }) {
   return (
-    <group position={pos}>
-      {points.map(([x, y], i) => (
-        <mesh key={i} position={[x, y, 0]}>
-          <sphereGeometry args={[0.04, 8, 6]} />
-          <meshStandardMaterial color="#34d399" emissive="#34d399" emissiveIntensity={0.9} />
+    <group position={pos} rotation={[0, rotation, 0]}>
+      {/* Board */}
+      <RoundedBox args={[1.4, 1.0, 0.05]} radius={0.03} smoothness={2} position={[0, 1.5, 0]} castShadow>
+        <meshStandardMaterial color="#f7f4ec" roughness={0.7} />
+      </RoundedBox>
+      {/* Sketched flow boxes on the board */}
+      {[
+        { x: -0.45, c: '#7aa1ff', label: 'IDEA' },
+        { x: 0, c: '#fbbf24', label: 'POC' },
+        { x: 0.45, c: '#34d399', label: 'PROD' },
+      ].map((b, i) => (
+        <group key={i} position={[b.x, 1.5, 0.03]}>
+          <mesh>
+            <planeGeometry args={[0.32, 0.22]} />
+            <meshStandardMaterial color={b.c} emissive={b.c} emissiveIntensity={0.25} />
+          </mesh>
+          <Text position={[0, 0, 0.01]} fontSize={0.07} color="#0a0d1a" anchorX="center" anchorY="middle" letterSpacing={0.12}>
+            {b.label}
+          </Text>
+        </group>
+      ))}
+      {/* Arrows between boxes */}
+      {[-0.225, 0.225].map((x, i) => (
+        <mesh key={i} position={[x, 1.5, 0.03]}>
+          <planeGeometry args={[0.12, 0.02]} />
+          <meshStandardMaterial color="#1f2332" />
         </mesh>
       ))}
+      {/* Title above */}
+      <Text position={[0, 1.92, 0.04]} fontSize={0.09} color="#34d399" anchorX="center" letterSpacing={0.18}>
+        DELIVERY PLAN — WK 3
+      </Text>
+      {/* Tripod legs */}
+      <mesh position={[-0.55, 0.7, 0.2]} rotation={[0.2, 0, 0.05]}>
+        <cylinderGeometry args={[0.025, 0.03, 1.4, 8]} />
+        <meshStandardMaterial color="#1f2332" />
+      </mesh>
+      <mesh position={[0.55, 0.7, 0.2]} rotation={[0.2, 0, -0.05]}>
+        <cylinderGeometry args={[0.025, 0.03, 1.4, 8]} />
+        <meshStandardMaterial color="#1f2332" />
+      </mesh>
+      <mesh position={[0, 0.7, -0.25]} rotation={[-0.25, 0, 0]}>
+        <cylinderGeometry args={[0.025, 0.03, 1.4, 8]} />
+        <meshStandardMaterial color="#1f2332" />
+      </mesh>
     </group>
   )
 }

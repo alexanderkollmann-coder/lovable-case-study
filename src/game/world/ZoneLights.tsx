@@ -34,8 +34,9 @@ function ZoneKeyLight({ zone }: { zone: Timeline }) {
 
   useFrame((_, delta) => {
     const store = useGameStore.getState()
-    const active = store.timeline === zone
     const inCinematic = store.cinematicShotId !== null
+    // In cinematic mode, every zone is fully lit so multi-zone shots don't fall into shadow.
+    const active = inCinematic ? true : store.timeline === zone
     const target = active ? 4.6 : 0.05
     // Snap to target instantly during cinematic shots so lights don't ramp on screen.
     intensityRef.current = inCinematic

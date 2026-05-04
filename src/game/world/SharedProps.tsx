@@ -16,9 +16,10 @@ export function useZoneActivity(zone: Timeline) {
   const ref = useRef(zone === useGameStore.getState().timeline ? 1 : 0)
   useFrame((_, delta) => {
     const store = useGameStore.getState()
-    const target = store.timeline === zone ? 1 : 0
-    if (store.cinematicShotId !== null) {
-      // Snap to target instantly during cinematic — no ramp visible in recording.
+    const inCinematic = store.cinematicShotId !== null
+    // In cinematic mode, treat every zone as active — pans across zones don't go dark.
+    const target = inCinematic ? 1 : store.timeline === zone ? 1 : 0
+    if (inCinematic) {
       ref.current = target
     } else {
       ref.current = THREE.MathUtils.lerp(ref.current, target, 1 - Math.exp(-3.5 * delta))

@@ -90,8 +90,10 @@ function ZoneFloor({ timeline, center, size }: ZoneSpec) {
 
   useFrame((_, delta) => {
     const store = useGameStore.getState()
-    const active = store.timeline === timeline
     const inCinematic = store.cinematicShotId !== null
+    // In cinematic mode every zone floor stays at its full base colour, so cross-zone pans
+    // never reveal a black floor under the inactive zones.
+    const active = inCinematic ? true : store.timeline === timeline
     if (!matRef.current) return
     targetColor.copy(active ? baseColor : dimmedColor)
     if (inCinematic) {

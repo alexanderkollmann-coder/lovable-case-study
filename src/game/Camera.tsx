@@ -44,12 +44,14 @@ export function Camera() {
       camRef.current.updateProjectionMatrix()
     }
 
-    // LookAt = anchor + lookOffset. Anchor is the avatar (full follow on look target).
-    const lookDesired = new THREE.Vector3(
-      targetPos.x + cfg.lookOffset[0],
-      cfg.lookOffset[1],
-      targetPos.z + cfg.lookOffset[2]
-    )
+    // LookAt MIRRORS the same follow-axis rules as the camera position. If `followZ` is off,
+    // walking the avatar forward/back must NOT pan the look target — otherwise the camera tilts
+    // every time you tap an arrow key. Keeping the rules in sync means the avatar stays pinned
+    // in the frame at the exact same screen position regardless of where they walk.
+    const lookX = cfg.followX ? targetPos.x + cfg.lookOffset[0] : cfg.lookOffset[0]
+    const lookY = cfg.lookOffset[1]
+    const lookZ = cfg.followZ ? targetPos.z + cfg.lookOffset[2] : cfg.lookOffset[2]
+    const lookDesired = new THREE.Vector3(lookX, lookY, lookZ)
     lookAtTarget.current.lerp(lookDesired, 1 - Math.exp(-lambda * delta))
     camRef.current.lookAt(lookAtTarget.current)
   })

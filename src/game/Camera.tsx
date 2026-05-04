@@ -59,7 +59,7 @@ export function Camera() {
       makeDefault
       position={[0, CAMERA_HEIGHT, CAMERA_DISTANCE]}
       zoom={ZOOM}
-      near={0.1}
+      near={-500}
       far={1000}
     />
   )

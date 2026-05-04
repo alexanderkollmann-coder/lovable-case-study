@@ -404,19 +404,16 @@ function StatsStandup({ pos, rotation = 0 }: { pos: [number, number, number]; ro
       <KPITile pos={[-0.72, 1.0, 0.07]} label="LATENCY" value="142" sub="ms" color="#ff7596" />
       <KPITile pos={[0.72, 1.0, 0.07]} label="UPTIME" value="99.97" sub="%" color="#fbbf24" />
 
-      {/* Stand legs */}
-      <mesh position={[-1.3, 0.25, 0]}>
-        <boxGeometry args={[0.1, 0.5, 0.1]} />
-        <meshStandardMaterial color="#1f2332" />
+      {/* Single central leg */}
+      <mesh position={[0, 0.30, 0]} castShadow>
+        <cylinderGeometry args={[0.06, 0.08, 0.55, 16]} />
+        <meshStandardMaterial color="#0a0d1a" roughness={0.55} metalness={0.4} />
       </mesh>
-      <mesh position={[1.3, 0.25, 0]}>
-        <boxGeometry args={[0.1, 0.5, 0.1]} />
-        <meshStandardMaterial color="#1f2332" />
+      {/* Round base disc */}
+      <mesh position={[0, 0.025, 0]} castShadow>
+        <cylinderGeometry args={[0.55, 0.62, 0.05, 32]} />
+        <meshStandardMaterial color="#0a0d1a" roughness={0.5} metalness={0.4} />
       </mesh>
-      {/* Base bar */}
-      <RoundedBox args={[2.6, 0.06, 0.2]} radius={0.02} smoothness={1} position={[0, 0.06, 0]}>
-        <meshStandardMaterial color="#1f2332" />
-      </RoundedBox>
     </group>
   )
 }

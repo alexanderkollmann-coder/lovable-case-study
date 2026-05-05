@@ -1,7 +1,6 @@
 import {
   SlideShell,
   Eyebrow,
-  BigTitle,
   Card,
   GridBg,
   CornerNum,

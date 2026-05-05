@@ -2,12 +2,10 @@ import {
   SlideShell,
   Eyebrow,
   BigTitle,
-  Card,
   GridBg,
   CornerNum,
 } from './_layouts'
 import type { Deck } from './types'
-import { Target } from 'lucide-react'
 
 const ACCENT = '#7aa1ff'
 const BG = 'radial-gradient(ellipse at 80% 0%, #1c2c54 0%, #0a0d1a 65%)'

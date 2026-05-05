@@ -3,15 +3,27 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useGameStore } from '@/store/gameStore'
 import { getBooth } from '@/content/booths.config'
 import { DECKS } from '@/content/decks'
+import { DECKS as DECKS_OLD } from '@/content/decks-old'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+
+/**
+ * `?slides=old` URL param swaps in the snapshotted fallback decks instead of
+ * the live ones — used to compare old vs new slides side-by-side in two tabs.
+ * Read once at module load so both tabs are independently pinned to a version.
+ */
+const USE_FALLBACK_DECKS =
+  typeof window !== 'undefined' &&
+  new URLSearchParams(window.location.search).get('slides') === 'old'
+
+const ACTIVE_DECKS = USE_FALLBACK_DECKS ? DECKS_OLD : DECKS
 
 export function BoothPanel() {
   const activeId = useGameStore((s) => s.activeBoothId)
   const closeBooth = useGameStore((s) => s.closeBooth)
   const meta = getBooth(activeId)
   const isOpen = activeId !== null
-  const deck = activeId ? DECKS[activeId] : null
+  const deck = activeId ? ACTIVE_DECKS[activeId] : null
 
   const [index, setIndex] = useState(0)
   const [direction, setDirection] = useState<1 | -1>(1)

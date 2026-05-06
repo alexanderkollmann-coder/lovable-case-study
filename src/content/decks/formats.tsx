@@ -45,7 +45,7 @@ export const deck: Deck = [
     render: () => (
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
-        <CornerNum n={1} total={2} accent={ACCENT} />
+        <CornerNum n={1} total={1} accent={ACCENT} />
         <Eyebrow color={ACCENT}>Booth 03 · Stakeholders · Cross-functional engagement</Eyebrow>
         <div className="mt-3 mb-6">
           <BigTitle>Who is involved, when.</BigTitle>

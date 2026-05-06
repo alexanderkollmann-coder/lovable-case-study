@@ -9,7 +9,7 @@ import { Hint } from '@/ui/Hint'
 import { Footer } from '@/ui/Footer'
 import { BrandLockup } from '@/ui/BrandLockup'
 import { CameraAnglePicker } from '@/ui/CameraAnglePicker'
-import { SlideVersionBadge } from '@/ui/SlideVersionBadge'
+
 import { BoothAudio } from '@/ui/BoothAudio'
 import { ThemeToggle } from '@/ui/ThemeToggle'
 import { RenderPauseToggle } from '@/ui/RenderPauseToggle'
@@ -61,7 +61,7 @@ function App() {
               <ThemeToggle />
               <Hint />
               <CameraAnglePicker />
-              <SlideVersionBadge />
+              
               <TimelineSlider />
               <Footer />
             </>

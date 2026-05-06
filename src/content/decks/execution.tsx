@@ -2,183 +2,177 @@ import {
   SlideShell,
   Eyebrow,
   BigTitle,
-  Card,
   GridBg,
   CornerNum,
 } from './_layouts'
 import type { Deck } from './types'
 
+// NB: file id is "execution" (kept for routing) but content = Format booth.
 const ACCENT = '#ff4d7a'
 const BG = 'radial-gradient(ellipse at 100% 0%, #4a1530 0%, #0a0d18 60%)'
 
-interface Block {
-  start: number // hours from day start (0 = 9am)
-  dur: number
-  label: string
-  kind: 'open' | 'build' | 'meal' | 'demo' | 'milestone'
+interface MatrixCell {
+  title?: string
+  sub?: string
+  highlight?: boolean
 }
 
-const DAY1: Block[] = [
-  { start: 0, dur: 0.75, label: 'CDO opening', kind: 'open' },
-  { start: 0.75, dur: 0.5, label: 'FDE-led tooling intro', kind: 'open' },
-  { start: 1.25, dur: 0.5, label: 'Team formation', kind: 'open' },
-  { start: 1.75, dur: 3, label: 'Build block 1', kind: 'build' },
-  { start: 4.75, dur: 0.75, label: 'Lunch + cross-team feedback', kind: 'meal' },
-  { start: 5.5, dur: 3, label: 'Build block 2', kind: 'build' },
-  { start: 8.5, dur: 0.5, label: 'Stand-up demos', kind: 'demo' },
-  { start: 9, dur: 1.5, label: 'Working dinner with execs', kind: 'meal' },
+const X_LABELS = ['1:1', '1:Few', '1:Many']
+const Y_LABELS = ['Origination', 'Upsell', 'Awareness']
+
+const MATRIX: MatrixCell[][] = [
+  // Origination
+  [
+    { title: 'Anchor Studios', sub: '2 days · 1 prospect · full FDE pair' },
+    { title: 'Peer Studios', sub: '2 days · 5 prospects · mixed industries', highlight: true },
+    { title: 'Open Studios', sub: '1 day · ecosystem' },
+  ],
+  // Upsell
+  [
+    { title: 'Expansion Studios', sub: '1–2 days · multi-BU within existing customer' },
+    {},
+    { title: 'Customer Forum', sub: 'Half-day · existing customers · shared agenda' },
+  ],
+  // Awareness
+  [
+    {},
+    {},
+    { title: 'Community Hackathon', sub: 'Cognizant model · 1+ weeks · brand & ecosystem' },
+  ],
 ]
 
-const DAY2: Block[] = [
-  { start: 0, dur: 0.5, label: 'Sprint plan', kind: 'open' },
-  { start: 0.5, dur: 4, label: 'Build block 3', kind: 'build' },
-  { start: 4.5, dur: 0.75, label: 'Demo prep', kind: 'open' },
-  { start: 5.25, dur: 1.5, label: 'Final demos · judging panel', kind: 'demo' },
-  { start: 6.75, dur: 0.75, label: 'Award + executive readout', kind: 'milestone' },
-  { start: 7.5, dur: 2.5, label: 'Demo dinner · MOU signing', kind: 'milestone' },
+const TABLE = [
+  { f: 'Anchor Studios',     a: '1:1', d: '2 days', p: '30 (5×6)',     c: '€30K',   b: 'Tier 1 logos · named champion', an: 'Palantir bootcamp' },
+  { f: 'Peer Studios',       a: '1:Few', d: '2 days', p: '30 (5 prosp.)', c: '€22K', b: 'Sector cohort (banks, telcos)', an: 'AWS APN Immersion', highlight: true },
+  { f: 'Open Studios',       a: '1:Many', d: '1 day', p: '100+',         c: '€40K',  b: 'Geo / sector ecosystem', an: 'Salesforce TrailblazerDX' },
+  { f: 'Expansion Studios',  a: '1:1', d: '1–2 days', p: '30 (multi-BU)', c: '€25K', b: 'Customer NDR uplift', an: 'AWS GameDay' },
+  { f: 'Customer Forum',     a: '1:Many existing', d: 'Half-day', p: '50–100', c: '€15K', b: 'Reference creation, advocacy', an: 'HubSpot INBOUND' },
+  { f: 'Community Hackathon',a: '1:Many', d: '1+ weeks', p: '1,000+', c: '€100K+', b: 'Brand & ecosystem', an: 'Cognizant Vibe Coding Week' },
 ]
-
-const TOTAL_HOURS = 10.5
-
-const KIND_COLOR: Record<Block['kind'], string> = {
-  open: '#a78bfa',
-  build: ACCENT,
-  meal: '#fbbf24',
-  demo: '#22d3ee',
-  milestone: '#34d399',
-}
 
 export const deck: Deck = [
   {
-    id: 'timeline',
+    id: 'matrix',
     render: () => (
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
-        <CornerNum n={1} total={2} accent={ACCENT} />
-        <Eyebrow color={ACCENT}>Booth 04 · Execution · The 2-day timeline</Eyebrow>
+        <CornerNum n={1} total={3} accent={ACCENT} />
+        <Eyebrow color={ACCENT}>Booth 04 · Format · 2-dimensional choice</Eyebrow>
         <div className="mt-3 mb-6">
-          <BigTitle>Choreographed for an MOU at dinner.</BigTitle>
+          <BigTitle>Format follows from <span style={{ color: ACCENT }}>goal</span> and <span style={{ color: ACCENT }}>audience</span>.</BigTitle>
         </div>
-        <div className="space-y-4 flex-1">
-          <DayRow label="Day 1" blocks={DAY1} />
-          <DayRow label="Day 2" blocks={DAY2} />
-          <Legend />
+
+        <div className="flex-1 grid gap-2 min-h-0" style={{ gridTemplateColumns: '110px repeat(3, 1fr)', gridTemplateRows: 'auto repeat(3, 1fr)' }}>
+          <div />
+          {X_LABELS.map((x) => (
+            <div key={x} className="text-center text-[10px] font-mono uppercase tracking-[0.28em] text-white/55 pb-1">{x}</div>
+          ))}
+          {MATRIX.map((row, ri) => (
+            <div key={ri} className="contents">
+              <div className="flex items-center justify-end pr-2 text-[10px] font-mono uppercase tracking-[0.28em] text-white/55">{Y_LABELS[ri]}</div>
+              {row.map((cell, ci) => (
+                <div
+                  key={ci}
+                  className="rounded-lg p-3 border"
+                  style={{
+                    background: cell.highlight ? `${ACCENT}1f` : cell.title ? 'rgba(255,255,255,0.02)' : 'rgba(255,255,255,0.01)',
+                    borderColor: cell.highlight ? `${ACCENT}66` : cell.title ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.04)',
+                  }}
+                >
+                  {cell.title ? (
+                    <>
+                      <div className={`font-display text-base font-semibold ${cell.highlight ? '' : 'text-white'}`} style={cell.highlight ? { color: ACCENT } : undefined}>
+                        {cell.title}
+                      </div>
+                      <div className="text-[11px] text-white/55 mt-1 leading-relaxed">{cell.sub}</div>
+                    </>
+                  ) : (
+                    <div className="text-white/15 text-center text-xs h-full flex items-center justify-center">—</div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ))}
         </div>
-        <div className="mt-6 pt-4 border-t border-white/10 text-xs text-white/55 leading-relaxed">
-          Two FDEs float across teams. Outputs:{' '}
-          <span className="text-white">4 working prototypes</span> ·{' '}
-          <span className="text-white">signed MOU</span> ·{' '}
-          <span className="text-white">named champions</span> ·{' '}
-          <span className="text-white">30/60/90 MAP</span>.
+
+        <div className="mt-5 pt-3 border-t border-white/10 text-xs text-white/55">
+          Six formats. One choice tree. Audience and goal determine duration, participants, and execution.
         </div>
       </SlideShell>
     ),
   },
   {
-    id: 'fde',
+    id: 'table',
     render: () => (
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
-        <CornerNum n={2} total={2} accent={ACCENT} />
-        <Eyebrow color={ACCENT}>FDE-pairing model · Judging rubric</Eyebrow>
+        <CornerNum n={2} total={3} accent={ACCENT} />
+        <Eyebrow color={ACCENT}>Format trade-space</Eyebrow>
         <div className="mt-3 mb-8">
-          <BigTitle>Pair with the customer. Don't build for them.</BigTitle>
+          <BigTitle>Six formats. One picked.</BigTitle>
         </div>
-        <div className="grid grid-cols-2 gap-6 flex-1">
-          <Card accent={ACCENT}>
-            <div className="text-[10px] font-mono uppercase tracking-[0.25em]" style={{ color: ACCENT }}>The FDE model</div>
-            <div className="text-lg font-semibold text-white mt-3">2 FDEs per Studios event</div>
-            <ul className="mt-4 space-y-3 text-sm text-white/75">
-              <li className="flex gap-2"><span style={{ color: ACCENT }}>·</span> 1 fullstack + 1 AI/integration specialist</li>
-              <li className="flex gap-2"><span style={{ color: ACCENT }}>·</span> Pair with the customer's people — they ship the code</li>
-              <li className="flex gap-2"><span style={{ color: ACCENT }}>·</span> Lineage: Palantir bootcamps + Anthropic's Forward Deployed Engineer practice</li>
-              <li className="flex gap-2"><span style={{ color: ACCENT }}>·</span> The inversion: <span className="text-white">customer's staff become the builders</span></li>
-            </ul>
-          </Card>
-          <Card accent={ACCENT}>
-            <div className="text-[10px] font-mono uppercase tracking-[0.25em]" style={{ color: ACCENT }}>Judging rubric</div>
-            <div className="text-lg font-semibold text-white mt-3">Weighted, public, defended live</div>
-            <div className="mt-4 space-y-3">
-              {[
-                { l: 'Business Impact', w: 35 },
-                { l: 'Build Velocity', w: 25 },
-                { l: 'Demo Polish', w: 20 },
-                { l: 'Adoption Plan', w: 20 },
-              ].map((r) => (
-                <div key={r.l}>
-                  <div className="flex justify-between items-baseline mb-1.5">
-                    <span className="text-sm text-white/80">{r.l}</span>
-                    <span className="font-mono text-sm font-bold" style={{ color: ACCENT }}>{r.w}%</span>
-                  </div>
-                  <div className="h-1.5 rounded-full bg-white/5 overflow-hidden">
-                    <div className="h-full rounded-full" style={{ width: `${r.w * 2.5}%`, background: ACCENT }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-5 pt-4 border-t border-white/10 text-xs text-white/55">
-              Panel · <span className="text-white/85">Customer exec</span> · <span className="text-white/85">Foundation-model partner</span> · <span className="text-white/85">Lovable founder</span>
-            </div>
-          </Card>
+        <div className="rounded-xl border border-white/10 overflow-hidden bg-white/[0.02]">
+          <div className="grid" style={{ gridTemplateColumns: '1.6fr 1fr 0.9fr 1.1fr 0.7fr 1.6fr 1.4fr' }}>
+            {['Format', 'Audience', 'Duration', 'Participants', 'Cost', 'Best for', 'Analogue'].map((h) => (
+              <div key={h} className="p-3 text-[10px] font-mono uppercase tracking-[0.22em] text-white/40 border-b border-white/10">{h}</div>
+            ))}
+            {TABLE.map((r) => (
+              <div key={r.f} className="contents">
+                <Cell h={r.highlight} bold>{r.f}{r.highlight && <span className="ml-2 text-[9px] font-mono px-2 py-0.5 rounded" style={{ background: ACCENT, color: '#0a0d18' }}>PICKED</span>}</Cell>
+                <Cell h={r.highlight}>{r.a}</Cell>
+                <Cell h={r.highlight}>{r.d}</Cell>
+                <Cell h={r.highlight}>{r.p}</Cell>
+                <Cell h={r.highlight} mono>{r.c}</Cell>
+                <Cell h={r.highlight}>{r.b}</Cell>
+                <Cell h={r.highlight}>{r.an}</Cell>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="mt-6 pt-4 border-t border-white/10 text-sm text-white/65">
-          <span className="text-white font-semibold">80%</span> of teams sign MOU at the demo dinner. The other 20% within 7 days.
+        <div className="mt-6 text-xs text-white/55 italic">
+          Peer Studios as the European default — best ratio of pipeline conversion to per-account CAC.
+        </div>
+      </SlideShell>
+    ),
+  },
+  {
+    id: 'why-peer',
+    render: () => (
+      <SlideShell bg={BG}>
+        <GridBg accent={ACCENT} />
+        <CornerNum n={3} total={3} accent={ACCENT} />
+        <Eyebrow color={ACCENT}>Why Peer Studios as the default</Eyebrow>
+        <div className="mt-3 mb-10">
+          <BigTitle>Three reasons.</BigTitle>
+        </div>
+        <div className="grid grid-cols-3 gap-5 flex-1">
+          {[
+            { t: 'Peer competition is the conversion accelerant', d: 'CDOs from non-competing accounts in the same room creates productive FOMO. AWS APN model — proven at scale.' },
+            { t: 'Two days maps to the buyer journey', d: 'Day 1: problem + champion. Day 2: build + MOU at demo dinner. One day too thin; three breaks executive availability.' },
+            { t: 'Per-event economics are extraordinary', d: '€22K all-in. 1-in-10 conversion = 2.3× ROI. 3-in-10 (DT-class) = 6.8× ROI.' },
+          ].map((s, i) => (
+            <div key={s.t} className="rounded-xl p-6 border bg-white/[0.03]" style={{ borderColor: `${ACCENT}33` }}>
+              <div className="font-mono text-xs" style={{ color: ACCENT }}>0{i + 1}</div>
+              <div className="text-base font-semibold text-white mt-3 leading-snug">{s.t}</div>
+              <div className="text-sm text-white/65 mt-3 leading-relaxed">{s.d}</div>
+            </div>
+          ))}
+        </div>
+        <div className="mt-6 pt-4 border-t border-white/10 text-xs text-white/55">
+          Anchor Studios for Tier 1 (DT, Spotify, Klarna, ING, Allianz). Peer Studios for sector cohorts after the anchor lands.
         </div>
       </SlideShell>
     ),
   },
 ]
 
-function DayRow({ label, blocks }: { label: string; blocks: Block[] }) {
+function Cell({ children, h, bold, mono }: { children: React.ReactNode; h?: boolean; bold?: boolean; mono?: boolean }) {
   return (
-    <div>
-      <div className="flex items-baseline gap-3 mb-2">
-        <div className="font-display text-xl font-semibold text-white">{label}</div>
-        <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-white/40">9:00 → 19:30</div>
-      </div>
-      <div className="relative h-14 rounded-lg bg-white/[0.03] border border-white/10 overflow-hidden">
-        {blocks.map((b, i) => {
-          const left = (b.start / TOTAL_HOURS) * 100
-          const width = (b.dur / TOTAL_HOURS) * 100
-          const c = KIND_COLOR[b.kind]
-          return (
-            <div
-              key={i}
-              className="absolute top-1 bottom-1 rounded px-2 flex items-center text-[10px] font-medium overflow-hidden"
-              style={{
-                left: `${left}%`,
-                width: `calc(${width}% - 2px)`,
-                background: `linear-gradient(180deg, ${c}33, ${c}1a)`,
-                borderLeft: `2px solid ${c}`,
-                color: '#fff',
-              }}
-              title={b.label}
-            >
-              <span className="truncate">{b.label}</span>
-            </div>
-          )
-        })}
-      </div>
-    </div>
-  )
-}
-
-function Legend() {
-  const items: { k: Block['kind']; l: string }[] = [
-    { k: 'open', l: 'Open / setup' },
-    { k: 'build', l: 'Build block' },
-    { k: 'meal', l: 'Meal / social' },
-    { k: 'demo', l: 'Demo' },
-    { k: 'milestone', l: 'Milestone' },
-  ]
-  return (
-    <div className="flex items-center gap-5 mt-2">
-      {items.map((i) => (
-        <div key={i.k} className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-sm" style={{ background: KIND_COLOR[i.k] }} />
-          <span className="text-[10px] font-mono uppercase tracking-[0.22em] text-white/55">{i.l}</span>
-        </div>
-      ))}
+    <div
+      className={`p-3 border-b border-white/5 text-sm ${h ? 'bg-white/[0.06] text-white' : 'text-white/70'} ${mono ? 'font-mono' : ''} ${bold ? 'font-semibold' : ''}`}
+      style={h ? { borderLeft: `2px solid ${ACCENT}` } : undefined}
+    >
+      {children}
     </div>
   )
 }

@@ -51,10 +51,10 @@ const KIND_COLOR: Record<Block['kind'], string> = {
 }
 
 const STAGES = [
-  { d: 'Day 0', n: 'Studios', p: '€25–30K', o: 'MOU at demo dinner', conv: '80% MOU' },
-  { d: 'Day 30', n: 'Paid PoC', p: '€50–100K', o: 'Production-grade prototype', conv: '70%' },
-  { d: 'Day 90', n: 'SoW', p: '€250K', o: 'Scoped deployment', conv: '60–90%' },
-  { d: 'Day 180', n: 'Contract', p: '€500K – €2M ARR', o: 'Multi-year · NDR plan', conv: '—' },
+  { d: 'T-30', n: 'Scoping', p: '—', o: 'Pre-cleared MOU, DPA, security pack', conv: '—' },
+  { d: 'Day 0–2', n: 'Hackathon', p: '€25–30K', o: 'MOU at demo dinner', conv: '80% MOU' },
+  { d: 'Day 15', n: 'Paid PoC', p: '€50–100K', o: 'Production-grade prototype', conv: '70%' },
+  { d: 'Day 30', n: 'Contract', p: '€500K – €2M ARR', o: 'Multi-year · NDR plan', conv: '60–90%' },
 ]
 
 const GATES = [

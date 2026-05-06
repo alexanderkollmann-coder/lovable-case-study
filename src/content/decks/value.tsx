@@ -45,9 +45,6 @@ export const deck: Deck = [
             </ul>
           </Card>
         </div>
-        <div className="mt-6 pt-4 border-t border-white/10 text-xs text-white/55 italic">
-          The defensive case justifies the contract. The offensive case justifies the expansion.
-        </div>
       </SlideShell>
     ),
   },
@@ -91,17 +88,6 @@ export const deck: Deck = [
               <p className="text-sm text-white/70 mt-4 leading-relaxed">{c.d}</p>
             </Card>
           ))}
-        </div>
-        <div
-          className="mt-6 rounded-xl px-6 py-5 border"
-          style={{
-            background: `linear-gradient(135deg, ${ACCENT}18, ${ACCENT}05)`,
-            borderColor: `${ACCENT}55`,
-          }}
-        >
-          <p className="text-base text-white/90 leading-relaxed">
-            Studios aren't events. They're a <span className="font-semibold" style={{ color: ACCENT }}>GTM wedge</span> that creates urgency, surfaces real use cases, activates internal champions, and generates the proof Lovable needs to win enterprise — at a fraction of the CAC of traditional outbound.
-          </p>
         </div>
       </SlideShell>
     ),

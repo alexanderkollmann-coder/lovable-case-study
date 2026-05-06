@@ -41,14 +41,6 @@ const MATRIX: MatrixCell[][] = [
   ],
 ]
 
-const TABLE = [
-  { f: 'Anchor Studios',     a: '1:1', d: '2 days', p: '30 (5×6)',     c: '€30K',   b: 'Tier 1 logos · named champion', an: 'Palantir bootcamp' },
-  { f: 'Peer Studios',       a: '1:Few', d: '2 days', p: '30 (5 prosp.)', c: '€22K', b: 'Sector cohort (banks, telcos)', an: 'AWS APN Immersion', highlight: true },
-  { f: 'Open Studios',       a: '1:Many', d: '1 day', p: '100+',         c: '€40K',  b: 'Geo / sector ecosystem', an: 'Salesforce TrailblazerDX' },
-  { f: 'Expansion Studios',  a: '1:1', d: '1–2 days', p: '30 (multi-BU)', c: '€25K', b: 'Customer NDR uplift', an: 'AWS GameDay' },
-  { f: 'Customer Forum',     a: '1:Many existing', d: 'Half-day', p: '50–100', c: '€15K', b: 'Reference creation, advocacy', an: 'HubSpot INBOUND' },
-  { f: 'Community Hackathon',a: '1:Many', d: '1+ weeks', p: '1,000+', c: '€100K+', b: 'Brand & ecosystem', an: 'Cognizant Vibe Coding Week' },
-]
 
 const CATEGORIES: { name: string; tagline: string; blurb: string }[] = [
   {

@@ -66,7 +66,7 @@ export const deck: Deck = [
     render: () => (
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
-        <CornerNum n={1} total={3} accent={ACCENT} />
+        <CornerNum n={1} total={4} accent={ACCENT} />
         <Eyebrow color={ACCENT}>Booth 04 · Format · Three hackathon types</Eyebrow>
         <div className="mt-3 mb-10">
           <BigTitle>Anchor. Peer. Community.</BigTitle>
@@ -101,7 +101,7 @@ export const deck: Deck = [
     render: () => (
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
-        <CornerNum n={2} total={3} accent={ACCENT} />
+        <CornerNum n={2} total={4} accent={ACCENT} />
         <Eyebrow color={ACCENT}>Booth 04 · Format · Goal × Audience</Eyebrow>
         <div className="mt-3 mb-6">
           <BigTitle>Goal × Audience.</BigTitle>

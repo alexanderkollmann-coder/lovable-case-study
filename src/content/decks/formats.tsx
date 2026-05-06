@@ -25,13 +25,12 @@ interface Participation {
 }
 
 const ROWS: Participation[] = [
-  { team: 'Producer',          range: [0, 3], note: 'Owns the program end-to-end' },
-  { team: 'Marketing',         range: [0, 1], note: 'Owns the experience' },
-  { team: 'AE',                range: [0, 3], note: 'Owns the commercial' },
-  { team: 'Solutions Engineer',range: [0, 3], note: 'Owns the technical' },
-  { team: 'FDE',               range: [3, 4], note: 'Owns production' },
-  { team: 'Product',           range: [0, 1], note: 'Feeds learnings back' },
-  { team: 'CEO',               stages: [1, 3, 4], note: 'Anchors the moments that matter' },
+  { team: 'Producer',   range: [0, 3], note: '' },
+  { team: 'Marketing',  range: [0, 1], note: '' },
+  { team: 'AE / SE',    range: [0, 3], note: '' },
+  { team: 'DS / FDE',   range: [3, 4], note: '' },
+  { team: 'Product',    range: [0, 1], note: '' },
+  { team: 'CEO',        stages: [1, 3, 4], note: '' },
 ]
 
 function isActive(p: Participation, i: number): boolean {

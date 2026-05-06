@@ -2,6 +2,7 @@ import {
   SlideShell,
   Eyebrow,
   BigTitle,
+  Card,
   GridBg,
   CornerNum,
 } from './_layouts'
@@ -10,84 +11,106 @@ import type { Deck } from './types'
 const ACCENT = '#7aa1ff'
 const BG = 'radial-gradient(ellipse at 80% 0%, #1c2c54 0%, #0a0d1a 65%)'
 
-const SIGNALS = [
-  { n: '01', label: 'Named AI executive', sub: 'Public title, accountable budget' },
-  { n: '02', label: 'Public AI build-tool adoption', sub: 'Already buying Copilot, Cursor, etc.' },
-  { n: '03', label: 'Procurement velocity', sub: 'Track record of <90d enterprise deals' },
-  { n: '04', label: 'Eng/Product org > 1,000', sub: 'Critical mass of internal builders' },
-  { n: '05', label: 'Hackathon signal', sub: 'Has run or sponsored builder events' },
-]
-
-const TOP5 = [
-  { name: 'Deutsche Telekom', score: [5, 5, 5, 5, 5], anchor: true },
-  { name: 'Spotify', score: [5, 5, 4, 5, 5] },
-  { name: 'Klarna', score: [5, 5, 5, 4, 4] },
-  { name: 'ING', score: [4, 4, 5, 5, 4] },
-  { name: 'Allianz', score: [5, 4, 4, 5, 4] },
-]
-
 export const deck: Deck = [
   {
-    id: 'rubric',
+    id: 'signals',
     render: () => (
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
-        <CornerNum n={1} total={2} accent={ACCENT} />
-        <Eyebrow color={ACCENT}>Booth 02 · Targeting · The 5-signal rubric</Eyebrow>
-        <div className="mt-3 mb-8">
-          <BigTitle>Five signals. Scored 1–5. Ranked.</BigTitle>
+        <CornerNum n={1} total={4} accent={ACCENT} />
+        <Eyebrow color={ACCENT}>Booth 02 · Targeting · The 3-signal rubric</Eyebrow>
+        <div className="mt-3 mb-10">
+          <BigTitle>Three signals predict whether a hackathon converts.</BigTitle>
         </div>
-        <div className="rounded-xl border border-white/10 overflow-hidden bg-white/[0.02]">
-          <div className="grid" style={{ gridTemplateColumns: '2fr repeat(5, 1fr) 0.8fr' }}>
-            <div className="p-4 text-[10px] font-mono uppercase tracking-[0.22em] text-white/40 border-b border-white/10">Signal</div>
-            {TOP5.map((c) => (
-              <div
-                key={c.name}
-                className={`p-4 text-center text-[10px] font-mono uppercase tracking-[0.18em] border-b border-white/10 ${c.anchor ? 'bg-white/[0.05]' : ''}`}
-                style={c.anchor ? { color: ACCENT } : { color: 'rgba(255,255,255,0.55)' }}
-              >
-                {c.name}
-              </div>
-            ))}
-            <div className="p-4 text-[10px] font-mono uppercase tracking-[0.22em] text-white/40 border-b border-white/10 text-right">Max</div>
-
-            {SIGNALS.map((s, rowIdx) => (
-              <div key={s.n} className="contents">
-                <div className="p-4 border-b border-white/5">
-                  <div className="font-mono text-[10px]" style={{ color: ACCENT }}>{s.n}</div>
-                  <div className="text-sm text-white font-medium mt-1">{s.label}</div>
-                  <div className="text-xs text-white/50 mt-0.5">{s.sub}</div>
-                </div>
-                {TOP5.map((c) => (
-                  <ScoreCell
-                    key={c.name + rowIdx}
-                    score={c.score[rowIdx]}
-                    anchor={c.anchor}
-                  />
-                ))}
-                <div className="p-4 border-b border-white/5 text-right text-white/40 text-sm font-mono">5</div>
-              </div>
-            ))}
-
-            <div className="p-4 text-[10px] font-mono uppercase tracking-[0.22em] text-white/55">Total</div>
-            {TOP5.map((c) => {
-              const sum = c.score.reduce((a, b) => a + b, 0)
-              return (
-                <div
-                  key={'tot-' + c.name}
-                  className={`p-4 text-center font-display text-2xl font-semibold ${c.anchor ? 'bg-white/[0.05]' : ''}`}
-                  style={{ color: c.anchor ? ACCENT : 'rgba(255,255,255,0.7)' }}
-                >
-                  {sum}<span className="text-xs text-white/30">/25</span>
-                </div>
-              )
-            })}
-            <div className="p-4 text-right font-mono text-sm text-white/40">25</div>
-          </div>
+        <div className="grid grid-cols-3 gap-5 flex-1">
+          {[
+            {
+              t: 'Named AI executive',
+              d: 'A specific person with a public AI mandate who can authorize €500K–€2M innovation spend without CFO escalation.',
+              k: 'No champion, no Studios.',
+            },
+            {
+              t: 'Public AI build-tool adoption',
+              d: 'Cursor, Copilot or Lovable already inside the org. Procurement has pre-cleared the category.',
+              k: 'Security review compresses 60d → 14d.',
+            },
+            {
+              t: 'Engineering / product org of 1,000+',
+              d: 'Enough internal demand for the ROI math to work.',
+              k: 'Contract has to scale to €500K+.',
+            },
+          ].map((s, i) => (
+            <Card key={s.t} accent={ACCENT}>
+              <div className="font-mono text-xs" style={{ color: ACCENT }}>0{i + 1}</div>
+              <div className="text-lg font-semibold text-white mt-2">{s.t}</div>
+              <p className="text-sm text-white/65 mt-3 leading-relaxed">{s.d}</p>
+              <div className="mt-4 pt-3 border-t border-white/10 text-xs italic" style={{ color: ACCENT }}>{s.k}</div>
+            </Card>
+          ))}
         </div>
-        <div className="mt-6 text-xs text-white/55">
+        <div className="mt-6 pt-4 border-t border-white/10 text-xs text-white/55">
           Same rubric scored across 20 European enterprises. Top 5:{' '}
           <span className="text-white">Deutsche Telekom, Spotify, Klarna, ING, Allianz.</span>
+        </div>
+      </SlideShell>
+    ),
+  },
+  {
+    id: 'matrix',
+    render: () => (
+      <SlideShell bg={BG}>
+        <GridBg accent={ACCENT} />
+        <CornerNum n={2} total={4} accent={ACCENT} />
+        <Eyebrow color={ACCENT}>How we get into the room</Eyebrow>
+        <div className="mt-3 mb-6">
+          <BigTitle>Direct × Partner-led. Origination × Upsell.</BigTitle>
+        </div>
+        <Matrix />
+        <div className="mt-5 pt-3 border-t border-white/10 text-xs text-white/55">
+          Deutsche Telekom sits in three of four quadrants — the only European account that does. That's why DT first.
+        </div>
+      </SlideShell>
+    ),
+  },
+  {
+    id: 'dt-anchor',
+    render: () => (
+      <SlideShell bg={BG}>
+        <GridBg accent={ACCENT} />
+        <CornerNum n={3} total={4} accent={ACCENT} />
+        <Eyebrow color={ACCENT}>Anchor account</Eyebrow>
+        <div className="mt-3 mb-2 flex items-end gap-4">
+          <BigTitle>Deutsche Telekom.</BigTitle>
+          <div className="font-mono text-sm pb-2" style={{ color: ACCENT }}>25/25</div>
+        </div>
+        <div className="grid grid-cols-3 gap-5 flex-1 mt-6">
+          <Card accent={ACCENT}>
+            <div className="text-[10px] font-mono uppercase tracking-[0.28em]" style={{ color: ACCENT }}>Why it qualifies</div>
+            <ul className="mt-4 space-y-3 text-sm text-white/80">
+              <Check>Named AI exec: <span className="text-white">Jonathan Abrahamson, CPDO</span></Check>
+              <Check>Already a Lovable customer · public proof point</Check>
+              <Check>2,000+ product/engineering org</Check>
+            </ul>
+          </Card>
+          <Card accent={ACCENT}>
+            <div className="text-[10px] font-mono uppercase tracking-[0.28em]" style={{ color: ACCENT }}>Why it's strategic</div>
+            <ul className="mt-4 space-y-3 text-sm text-white/80">
+              <Bullet>T.Capital is a Series B investor — executive distribution into DAX 40</Bullet>
+              <Bullet>Abrahamson on the record about Lovable's vision</Bullet>
+              <Bullet>DT serves as customer + partner introducing us to its enterprise base</Bullet>
+            </ul>
+          </Card>
+          <Card accent={ACCENT}>
+            <div className="text-[10px] font-mono uppercase tracking-[0.28em]" style={{ color: ACCENT }}>Why it's actionable</div>
+            <ul className="mt-4 space-y-3 text-sm text-white/80">
+              <Bullet>Met Abrahamson at ElevenLabs conf · warm intro in place</Bullet>
+              <Bullet>First Studios: pre-scoped use cases from his team</Bullet>
+              <Bullet>Two days · new London office · FDE pair · MOU at demo dinner</Bullet>
+            </ul>
+          </Card>
+        </div>
+        <div className="mt-6 pt-4 border-t border-white/10 text-xs text-white/55 italic">
+          The only European enterprise where every box is already ticked.
         </div>
       </SlideShell>
     ),
@@ -97,81 +120,123 @@ export const deck: Deck = [
     render: () => (
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
-        <CornerNum n={2} total={2} accent={ACCENT} />
+        <CornerNum n={4} total={4} accent={ACCENT} />
         <Eyebrow color={ACCENT}>The reference flywheel</Eyebrow>
-        <div className="mt-3 mb-6">
-          <BigTitle>One landed anchor unlocks a sector.</BigTitle>
+        <div className="mt-3 mb-4">
+          <BigTitle>One anchor unlocks the European ecosystem.</BigTitle>
         </div>
         <Flywheel />
-        <div className="mt-6 text-sm text-white/65 max-w-4xl">
-          T.Capital opens doors at every DAX 40. One landed anchor unlocks a sector beachhead.
+        <div className="mt-4 text-sm text-white/65 max-w-4xl">
+          T.Capital opens doors at every DAX 40. One landed anchor unlocks an executive distribution coalition no competitor has.
         </div>
       </SlideShell>
     ),
   },
 ]
 
-function ScoreCell({ score, anchor }: { score: number; anchor?: boolean }) {
+function Check({ children }: { children: React.ReactNode }) {
   return (
-    <div className={`p-4 border-b border-white/5 flex items-center justify-center gap-1 ${anchor ? 'bg-white/[0.05]' : ''}`}>
-      {[1, 2, 3, 4, 5].map((i) => (
-        <div
-          key={i}
-          className="w-2 h-2 rounded-full"
-          style={{
-            background: i <= score ? ACCENT : 'rgba(255,255,255,0.08)',
-            boxShadow: i <= score && anchor ? `0 0 8px ${ACCENT}` : undefined,
-          }}
-        />
-      ))}
+    <li className="flex gap-2 leading-relaxed">
+      <span style={{ color: ACCENT }}>✓</span>
+      <span>{children}</span>
+    </li>
+  )
+}
+
+function Bullet({ children }: { children: React.ReactNode }) {
+  return (
+    <li className="flex gap-2 leading-relaxed">
+      <span style={{ color: ACCENT }}>·</span>
+      <span>{children}</span>
+    </li>
+  )
+}
+
+function Matrix() {
+  const cells = [
+    {
+      title: 'Cold-warm anchor',
+      sub: 'Spotify, ING — named-champion outbound',
+      x: 'Direct', y: 'Origination',
+    },
+    {
+      title: 'Co-sell',
+      sub: 'Deutsche Telekom × T.Capital portfolio · KPMG / Cognizant alliance',
+      x: 'Partner-led', y: 'Origination', highlight: true,
+    },
+    {
+      title: 'Land-and-expand',
+      sub: 'PLG accounts (Klarna, Uber, Zendesk) → multi-BU contract',
+      x: 'Direct', y: 'Upsell',
+    },
+    {
+      title: 'Channel-expand',
+      sub: 'DT introducing peer industrials · Cognizant cross-selling',
+      x: 'Partner-led', y: 'Upsell', highlight: true,
+    },
+  ]
+  return (
+    <div className="flex-1 grid grid-cols-[80px_1fr_1fr] grid-rows-[auto_1fr_1fr] gap-2 min-h-0">
+      <div />
+      <div className="text-center text-[10px] font-mono uppercase tracking-[0.28em] text-white/55 pb-2">Direct</div>
+      <div className="text-center text-[10px] font-mono uppercase tracking-[0.28em] text-white/55 pb-2">Partner-led</div>
+
+      <div className="flex items-center justify-end pr-2 text-[10px] font-mono uppercase tracking-[0.28em] text-white/55">Origination</div>
+      {cells.slice(0, 2).map((c) => <Cell key={c.title} {...c} />)}
+
+      <div className="flex items-center justify-end pr-2 text-[10px] font-mono uppercase tracking-[0.28em] text-white/55">Upsell</div>
+      {cells.slice(2).map((c) => <Cell key={c.title} {...c} />)}
+    </div>
+  )
+}
+
+function Cell({ title, sub, highlight }: { title: string; sub: string; highlight?: boolean; x?: string; y?: string }) {
+  return (
+    <div
+      className="rounded-xl p-5 border"
+      style={{
+        background: highlight ? `${ACCENT}10` : 'rgba(255,255,255,0.02)',
+        borderColor: highlight ? `${ACCENT}55` : 'rgba(255,255,255,0.08)',
+      }}
+    >
+      <div className="font-display text-lg font-semibold text-white">{title}</div>
+      <div className="text-xs text-white/60 mt-2 leading-relaxed">{sub}</div>
     </div>
   )
 }
 
 function Flywheel() {
-  const ringR = 230
-  const tiers: { angle: number; label: string; group: string }[] = [
-    { angle: -90, label: 'Vodafone', group: 'Telco peers' },
-    { angle: -55, label: 'Orange', group: 'Telco peers' },
-    { angle: -20, label: 'Telefónica', group: 'Telco peers' },
-    { angle: 20, label: 'Siemens', group: 'DAX 40 industrials' },
-    { angle: 55, label: 'BMW', group: 'DAX 40 industrials' },
-    { angle: 110, label: 'Allianz', group: 'DACH executive net.' },
-    { angle: 160, label: 'SAP', group: 'DACH executive net.' },
-    { angle: 210, label: 'Lufthansa', group: 'DACH executive net.' },
+  const ringR = 220
+  const branches = [
+    { angle: -90, label: 'Internal upsells', sub: 'T-Systems · T-Mobile US · BUs' },
+    { angle: 0, label: 'DT customer base', sub: 'Enterprises DT serves' },
+    { angle: 90, label: 'T.Capital portfolio', sub: 'Series B & strategic co-investments' },
+    { angle: 180, label: 'Sector peers', sub: 'Vodafone · Orange · Telefónica · BT' },
   ]
   return (
     <div className="relative w-full flex-1 flex items-center justify-center">
-      <svg viewBox="-300 -260 600 520" className="w-full max-w-3xl h-full max-h-[460px]">
-        {tiers.map((t, i) => {
+      <svg viewBox="-300 -240 600 480" className="w-full max-w-3xl h-full max-h-[420px]">
+        {branches.map((t, i) => {
           const rad = (t.angle * Math.PI) / 180
           const x = Math.cos(rad) * ringR
           const y = Math.sin(rad) * ringR
           return (
             <g key={i}>
-              <line
-                x1={0}
-                y1={0}
-                x2={x}
-                y2={y}
-                stroke={ACCENT}
-                strokeOpacity="0.25"
-                strokeWidth="1"
-              />
-              <circle cx={x} cy={y} r="4" fill={ACCENT} />
-              <foreignObject x={x - 70} y={y + 8} width="140" height="40">
+              <line x1={0} y1={0} x2={x} y2={y} stroke={ACCENT} strokeOpacity="0.3" strokeWidth="1" />
+              <circle cx={x} cy={y} r="5" fill={ACCENT} />
+              <foreignObject x={x - 90} y={y + 10} width="180" height="50">
                 <div className="text-center">
-                  <div className="text-sm text-white font-medium">{t.label}</div>
-                  <div className="text-[9px] font-mono uppercase tracking-[0.2em] text-white/40">{t.group}</div>
+                  <div className="text-sm text-white font-semibold">{t.label}</div>
+                  <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-white/45 mt-0.5">{t.sub}</div>
                 </div>
               </foreignObject>
             </g>
           )
         })}
-        <circle cx="0" cy="0" r="62" fill="rgba(255,255,255,0.04)" stroke={ACCENT} strokeWidth="1.5" />
+        <circle cx="0" cy="0" r="68" fill="rgba(255,255,255,0.04)" stroke={ACCENT} strokeWidth="1.5" />
         <foreignObject x="-80" y="-30" width="160" height="60">
           <div className="text-center">
-            <div className="font-display text-lg font-semibold text-white leading-tight">Deutsche Telekom</div>
+            <div className="font-display text-base font-semibold text-white leading-tight">Deutsche Telekom</div>
             <div className="text-[10px] font-mono uppercase tracking-[0.22em] mt-0.5" style={{ color: ACCENT }}>Anchor</div>
           </div>
         </foreignObject>

@@ -37,14 +37,32 @@ const QUARTERS = [
   },
 ]
 
+const SCALES = [
+  {
+    t: 'Enterprise',
+    a: '1:1 / 1:Few',
+    items: ['Anchor Studios + Peer Studios', '€500K–€2M contracts', 'FDE pair per event', 'White-glove pre-scoping'],
+  },
+  {
+    t: 'Mid-market',
+    a: '1:Few / 1:Many',
+    items: ['Peer Studios + Customer Forum', '€100K–€500K contracts', '1 FDE per event', 'Templated pre-scoping'],
+  },
+  {
+    t: 'SMB',
+    a: '1:Many',
+    items: ['Open Studios + Community Hackathon', '€25K–€100K contracts', 'Self-serve format', 'Applications Library entry point'],
+  },
+]
+
 export const deck: Deck = [
   {
     id: 'roadmap',
     render: () => (
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
-        <CornerNum n={1} total={2} accent={ACCENT} />
-        <Eyebrow color={ACCENT}>Booth 07 · Scale · The six-quarter roadmap</Eyebrow>
+        <CornerNum n={1} total={3} accent={ACCENT} />
+        <Eyebrow color={ACCENT}>Booth 07 · Scale · The 18-month roadmap</Eyebrow>
         <div className="mt-3 mb-10">
           <BigTitle>From one logo to <span style={{ color: ACCENT }}>twenty</span>.</BigTitle>
         </div>
@@ -61,7 +79,7 @@ export const deck: Deck = [
                 {s.logos.map((x) => <li key={x} className="flex gap-2"><span style={{ color: ACCENT }}>·</span>{x}</li>)}
               </ul>
               <div className="mt-5 pt-4 border-t border-white/10 flex justify-between items-baseline">
-                <span className="text-[10px] uppercase tracking-[0.22em] text-white/40">ARR target</span>
+                <span className="text-[10px] uppercase tracking-[0.22em] text-white/40">Cumulative ARR</span>
                 <span className="font-display text-2xl font-bold" style={{ color: ACCENT }}>{s.arr}</span>
               </div>
             </Card>
@@ -79,20 +97,48 @@ export const deck: Deck = [
     ),
   },
   {
+    id: 'one-many',
+    render: () => (
+      <SlideShell bg={BG}>
+        <GridBg accent={ACCENT} />
+        <CornerNum n={2} total={3} accent={ACCENT} />
+        <Eyebrow color={ACCENT}>Scaling the playbook · 1:Many motion</Eyebrow>
+        <div className="mt-3 mb-10">
+          <BigTitle>From Anchor Studios to Open Studios.</BigTitle>
+        </div>
+        <div className="grid grid-cols-3 gap-5 flex-1">
+          {SCALES.map((s, i) => (
+            <Card key={s.t} accent={ACCENT}>
+              <div className="font-mono text-xs" style={{ color: ACCENT }}>0{i + 1}</div>
+              <div className="text-xl font-semibold text-white mt-2">{s.t}</div>
+              <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-white/45 mt-1">{s.a}</div>
+              <ul className="mt-5 space-y-2.5 text-sm text-white/75">
+                {s.items.map((it) => <li key={it} className="flex gap-2"><span style={{ color: ACCENT }}>▸</span>{it}</li>)}
+              </ul>
+            </Card>
+          ))}
+        </div>
+        <div className="mt-6 pt-4 border-t border-white/10 text-xs text-white/55 italic">
+          Same motion, different gauge. The Applications Library compounds across all three.
+        </div>
+      </SlideShell>
+    ),
+  },
+  {
     id: 'library',
     render: () => (
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
-        <CornerNum n={2} total={2} accent={ACCENT} />
+        <CornerNum n={3} total={3} accent={ACCENT} />
         <Eyebrow color={ACCENT}>The Applications Library flywheel · close</Eyebrow>
         <div className="mt-3 mb-8">
-          <BigTitle>Each event makes the next one cheaper.</BigTitle>
+          <BigTitle>The blueprint compounds.</BigTitle>
         </div>
         <div className="grid grid-cols-5 gap-3 items-stretch">
           {[
             { n: '01', t: 'Studios produces', d: 'Working prototypes anchored on real customer problems.' },
             { n: '02', t: 'Templatize', d: 'Best prototypes harvested into the Lovable Applications Library.' },
-            { n: '03', t: 'Reuse', d: 'Future Studios attendees start from templates · 8h → 2h to first prototype.' },
+            { n: '03', t: 'Reuse', d: 'Future attendees start from templates · 8h → 2h to first prototype.' },
             { n: '04', t: 'Co-market', d: "Templates carry the original customer's logo." },
             { n: '05', t: 'Compound', d: 'The 21st account inherits 20 references built in.' },
           ].map((s, i) => (
@@ -124,7 +170,7 @@ export const deck: Deck = [
             In one day, your PMs ship the internal tool that's been sitting in
             your engineering backlog for six months.{' '}
             <span style={{ color: ACCENT }}>
-              After that — you will never approve that backlog the same way again.
+              After that, you'll never approve that backlog the same way again.
             </span>{' '}
             And after that — neither will the next 20 European enterprises in line.
           </p>

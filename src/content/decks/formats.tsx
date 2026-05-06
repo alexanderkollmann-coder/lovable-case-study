@@ -8,8 +8,8 @@ import {
 import type { Deck } from './types'
 
 // NB: file id is "formats" (kept for routing) but content = Stakeholders booth.
-const ACCENT = '#ff7596'
-const BG = 'radial-gradient(ellipse at 0% 100%, #4a1830 0%, #0a0d1a 65%)'
+const ACCENT = '#5e88ff'
+const BG = 'radial-gradient(ellipse at 50% 0%, #1a2546 0%, #0a0d1a 65%)'
 
 const STAGES = ['T-30 Scoping', 'Day 0–2 Hackathon', 'Day 15 PoC', 'Day 30 Contract', 'Day 90+ Expansion'] as const
 

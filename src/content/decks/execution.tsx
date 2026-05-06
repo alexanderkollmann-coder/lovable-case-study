@@ -284,3 +284,30 @@ function Cell({ children, h, bold, mono }: { children: React.ReactNode; h?: bool
     </div>
   )
 }
+
+function AgendaRow({ t, a, d, highlight, hinge }: { t: string; a: string; d?: string; highlight?: boolean; hinge?: boolean; panel?: boolean }) {
+  return (
+    <div
+      className="flex items-baseline gap-4 py-2 px-3 rounded-md relative"
+      style={{
+        background: highlight ? `${ACCENT}1a` : hinge ? 'rgba(255,255,255,0.04)' : 'transparent',
+        borderLeft: highlight ? `3px solid ${ACCENT}` : hinge ? '3px solid rgba(255,255,255,0.2)' : '3px solid transparent',
+      }}
+    >
+      <div
+        className="font-mono text-sm tabular-nums w-14 shrink-0"
+        style={{ color: highlight ? ACCENT : 'rgba(255,255,255,0.55)' }}
+      >
+        {t}
+      </div>
+      <div
+        className={`flex-1 text-sm leading-snug ${highlight ? 'font-semibold text-white' : 'text-white/85'}`}
+      >
+        {a}
+      </div>
+      {d && (
+        <div className="text-[11px] font-mono text-white/40 shrink-0">{d}</div>
+      )}
+    </div>
+  )
+}

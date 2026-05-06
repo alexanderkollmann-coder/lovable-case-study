@@ -1,6 +1,7 @@
 import type { Timeline, Vec3 } from '@/store/gameStore'
 
 export type BoothId =
+  | 'vision'
   | 'value'
   | 'targeting'
   | 'formats'
@@ -31,13 +32,23 @@ export interface BoothMeta {
 const booths: BoothMeta[] = [
   // ========== PRE-HACKATHON ==========
   {
+    id: 'vision',
+    timeline: 'pre',
+    position: [-22, 0, -2],
+    rotation: Math.PI / 2,
+    label: 'Vision',
+    subtitle: 'Seeing is believing.',
+    accent: '#ff4d7a',
+    iconName: 'sparkles',
+    load: () => import('./booths/01-value-proposition.md?raw'),
+  },
+  {
     id: 'value',
     timeline: 'pre',
-    // Just to the left of the parked double-decker bus, facing the camera
     position: [-17, 0, -9.5],
     rotation: 0,
     label: 'Value Prop',
-    subtitle: 'Why hackathons. Seeing is believing.',
+    subtitle: 'What an enterprise gets. What Lovable gets.',
     accent: '#5e88ff',
     iconName: 'sparkles',
     load: () => import('./booths/01-value-proposition.md?raw'),
@@ -48,7 +59,7 @@ const booths: BoothMeta[] = [
     position: [-13, 0, 7],
     rotation: -0.4,
     label: 'Targeting',
-    subtitle: 'How we got to Allianz Partners.',
+    subtitle: 'How we choose. And the anchor.',
     accent: '#7aa1ff',
     iconName: 'target',
     load: () => import('./booths/02-targeting.md?raw'),

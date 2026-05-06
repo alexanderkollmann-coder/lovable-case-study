@@ -61,9 +61,8 @@ export const deck: Deck = [
             ))}
             {ROWS.map((row) => (
               <div key={row.team} className="contents">
-                <div className="p-3 border-b border-white/5 text-sm text-white/85 flex flex-col justify-center">
-                  <span>{row.team}</span>
-                  <span className="text-[10px] text-white/40 mt-0.5">{row.note}</span>
+                <div className="p-3 border-b border-white/5 text-sm text-white/85 flex items-center">
+                  {row.team}
                 </div>
                 {STAGES.map((_, i) => {
                   const active = isActive(row, i)

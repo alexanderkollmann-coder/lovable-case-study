@@ -48,7 +48,7 @@ export const deck: Deck = [
         <CornerNum n={1} total={2} accent={ACCENT} />
         <Eyebrow color={ACCENT}>Booth 03 · Stakeholders · Cross-functional engagement</Eyebrow>
         <div className="mt-3 mb-6">
-          <BigTitle>Who shows up, and when.</BigTitle>
+          <BigTitle>Who is involved, when.</BigTitle>
         </div>
 
         <div className="rounded-xl border border-white/10 overflow-hidden bg-white/[0.02]">

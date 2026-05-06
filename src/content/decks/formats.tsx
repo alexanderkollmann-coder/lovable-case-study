@@ -11,38 +11,33 @@ import type { Deck } from './types'
 const ACCENT = '#ff7596'
 const BG = 'radial-gradient(ellipse at 0% 100%, #4a1830 0%, #0a0d1a 65%)'
 
-const TEAMS = [
-  'Producer (me)',
-  'Marketing',
-  'AE',
-  'Solutions Engineer',
-  'Forward Deployed Engineer',
-  'Data Scientist',
-  'Product',
-  'Founder (Anton)',
-] as const
+const STAGES = ['T-30 Scoping', 'Day 0–2 Hackathon', 'Day 15 PoC', 'Day 30 Contract', 'Day 30+ Expansion'] as const
 
-const STAGE_LABELS = ['T-30 Scoping', 'Day 0–2 Studios', 'Day 30 PoC', 'Day 90 Contract', 'Day 90+ Expansion']
+type StageIdx = 0 | 1 | 2 | 3 | 4
 
-// R / A / C / I encoded
-type Rci = 'R' | 'A' | 'C' | 'I' | ''
-const MATRIX: Record<typeof TEAMS[number], Rci[]> = {
-  'Producer (me)':              ['A', 'A', 'C', 'C', 'I'],
-  'Marketing':                  ['C', 'R', 'I', 'I', 'I'],
-  'AE':                         ['R', 'C', 'A', 'A', 'A'],
-  'Solutions Engineer':         ['C', 'R', 'A', 'C', 'C'],
-  'Forward Deployed Engineer':  ['I', 'C', 'R', 'C', 'A'],
-  'Data Scientist':             ['I', 'I', 'C', 'C', 'R'],
-  'Product':                    ['C', 'C', 'I', 'I', 'C'],
-  'Founder (Anton)':            ['I', 'C', 'I', 'I', 'I'],
+interface Participation {
+  team: string
+  // contiguous range [start, end] inclusive
+  range?: [StageIdx, StageIdx]
+  // or a discrete set of stages
+  stages?: StageIdx[]
+  note: string
 }
 
-const RCI_STYLE: Record<string, { bg: string; fg: string }> = {
-  R: { bg: ACCENT,                        fg: '#0a0d1a' },
-  A: { bg: `${ACCENT}80`,                 fg: '#fff' },
-  C: { bg: `${ACCENT}33`,                 fg: '#fff' },
-  I: { bg: 'rgba(255,255,255,0.06)',      fg: 'rgba(255,255,255,0.55)' },
-  '': { bg: 'transparent',                fg: 'transparent' },
+const ROWS: Participation[] = [
+  { team: 'Producer',          range: [0, 3], note: 'Owns the program end-to-end' },
+  { team: 'Marketing',         range: [0, 1], note: 'Owns the experience' },
+  { team: 'AE',                range: [0, 3], note: 'Owns the commercial' },
+  { team: 'Solutions Engineer',range: [0, 3], note: 'Owns the technical' },
+  { team: 'FDE',               range: [3, 4], note: 'Owns production' },
+  { team: 'Product',           range: [0, 1], note: 'Feeds learnings back' },
+  { team: 'CEO',               stages: [1, 3, 4], note: 'Anchors the moments that matter' },
+]
+
+function isActive(p: Participation, i: number): boolean {
+  if (p.range) return i >= p.range[0] && i <= p.range[1]
+  if (p.stages) return p.stages.includes(i as StageIdx)
+  return false
 }
 
 export const deck: Deck = [
@@ -54,42 +49,47 @@ export const deck: Deck = [
         <CornerNum n={1} total={2} accent={ACCENT} />
         <Eyebrow color={ACCENT}>Booth 03 · Stakeholders · Cross-functional engagement</Eyebrow>
         <div className="mt-3 mb-6">
-          <BigTitle>Who runs what, and when.</BigTitle>
+          <BigTitle>Who shows up, and when.</BigTitle>
         </div>
 
         <div className="rounded-xl border border-white/10 overflow-hidden bg-white/[0.02]">
-          <div className="grid" style={{ gridTemplateColumns: '1.5fr repeat(5, 1fr)' }}>
+          <div className="grid" style={{ gridTemplateColumns: '1.4fr repeat(5, 1fr)' }}>
             <div className="p-3 text-[10px] font-mono uppercase tracking-[0.22em] text-white/40 border-b border-white/10">Team</div>
-            {STAGE_LABELS.map((s) => (
+            {STAGES.map((s) => (
               <div key={s} className="p-3 text-center text-[10px] font-mono uppercase tracking-[0.18em] text-white/40 border-b border-white/10">
                 {s}
               </div>
             ))}
-            {TEAMS.map((team) => (
-              <div key={team} className="contents">
-                <div className="p-3 border-b border-white/5 text-sm text-white/85">{team}</div>
-                {MATRIX[team].map((r, i) => (
-                  <div key={i} className="p-2 border-b border-white/5 flex items-center justify-center">
-                    <div
-                      className="w-9 h-7 rounded flex items-center justify-center font-mono text-[11px] font-bold"
-                      style={{ background: RCI_STYLE[r].bg, color: RCI_STYLE[r].fg }}
-                    >
-                      {r}
+            {ROWS.map((row) => (
+              <div key={row.team} className="contents">
+                <div className="p-3 border-b border-white/5 text-sm text-white/85 flex flex-col justify-center">
+                  <span>{row.team}</span>
+                  <span className="text-[10px] text-white/40 mt-0.5">{row.note}</span>
+                </div>
+                {STAGES.map((_, i) => {
+                  const active = isActive(row, i)
+                  const prev = i > 0 && isActive(row, i - 1)
+                  const next = i < STAGES.length - 1 && isActive(row, i + 1)
+                  const isContiguous = !!row.range
+                  return (
+                    <div key={i} className="px-1 py-3 border-b border-white/5 flex items-center justify-center">
+                      <div
+                        className="h-3 w-full"
+                        style={{
+                          background: active ? ACCENT : 'rgba(255,255,255,0.04)',
+                          borderTopLeftRadius: active && (!prev || !isContiguous) ? 999 : 0,
+                          borderBottomLeftRadius: active && (!prev || !isContiguous) ? 999 : 0,
+                          borderTopRightRadius: active && (!next || !isContiguous) ? 999 : 0,
+                          borderBottomRightRadius: active && (!next || !isContiguous) ? 999 : 0,
+                          boxShadow: active ? `0 0 12px ${ACCENT}66` : undefined,
+                        }}
+                      />
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             ))}
           </div>
-        </div>
-
-        <div className="mt-5 flex items-center gap-4 text-[10px] font-mono uppercase tracking-[0.22em] text-white/55">
-          {(['R', 'A', 'C', 'I'] as const).map((k) => (
-            <div key={k} className="flex items-center gap-2">
-              <div className="w-5 h-5 rounded flex items-center justify-center font-bold" style={{ background: RCI_STYLE[k].bg, color: RCI_STYLE[k].fg }}>{k}</div>
-              <span>{ {R: 'Responsible', A: 'Accountable', C: 'Consulted', I: 'Informed'}[k] }</span>
-            </div>
-          ))}
         </div>
 
         <div className="mt-5 pt-4 border-t border-white/10 text-xs text-white/55 leading-relaxed">

@@ -137,11 +137,17 @@ function fmtEur(n: number) {
   return `€${Math.round(n)}`
 }
 
+type PresetKey = 'conservative' | 'mid' | 'aggressive'
+
 function RoiCalculator() {
   const [inp, setInp] = useState<Inputs>(PRESETS.mid)
+  const [preset, setPreset] = useState<PresetKey | null>('mid')
 
   const out = compute(inp)
-  const set = <K extends keyof Inputs>(k: K) => (v: number[]) => setInp((p) => ({ ...p, [k]: v[0] }))
+  const set = <K extends keyof Inputs>(k: K) => (v: number[]) => {
+    setInp((p) => ({ ...p, [k]: v[0] }))
+    setPreset(null)
+  }
 
   return (
     <SlideShell bg={BG}>
@@ -154,15 +160,23 @@ function RoiCalculator() {
             ['conservative', 'Conservative'],
             ['mid', 'Mid'],
             ['aggressive', 'Aggressive'],
-          ] as const).map(([k, l]) => (
-            <button
-              key={k}
-              onClick={() => setInp(PRESETS[k])}
-              className="px-3 py-1.5 rounded-md text-[10px] font-mono uppercase tracking-[0.22em] border border-white/10 text-white/70 hover:bg-white/10 transition-colors"
-            >
-              {l}
-            </button>
-          ))}
+          ] as const).map(([k, l]) => {
+            const active = preset === k
+            return (
+              <button
+                key={k}
+                onClick={() => { setInp(PRESETS[k]); setPreset(k) }}
+                className="px-3 py-1.5 rounded-md text-[10px] font-mono uppercase tracking-[0.22em] border transition-colors"
+                style={{
+                  borderColor: active ? ACCENT : 'rgba(255,255,255,0.1)',
+                  background: active ? `${ACCENT}22` : 'transparent',
+                  color: active ? ACCENT : 'rgba(255,255,255,0.7)',
+                }}
+              >
+                {l}
+              </button>
+            )
+          })}
         </div>
       </div>
 

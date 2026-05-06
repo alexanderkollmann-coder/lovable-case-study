@@ -185,7 +185,7 @@ export const deck: Deck = [
     render: () => (
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
-        <CornerNum n={3} total={3} accent={ACCENT} />
+        <CornerNum n={4} total={4} accent={ACCENT} />
         <Eyebrow color={ACCENT}>Why Peer Studios as the default</Eyebrow>
         <div className="mt-3 mb-10">
           <BigTitle>Three reasons.</BigTitle>

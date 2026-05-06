@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import {
   SlideShell,
   Eyebrow,
@@ -139,21 +139,8 @@ function fmtEur(n: number) {
 
 function RoiCalculator() {
   const [inp, setInp] = useState<Inputs>(PRESETS.mid)
-  const [stress, setStress] = useState(false)
 
-  const effective = useMemo<Inputs>(() => {
-    if (!stress) return inp
-    return {
-      ...inp,
-      builders: inp.builders / 2,
-      daysSaved: inp.daysSaved / 2,
-      attribution: inp.attribution / 2,
-      newToolsPerBuilder: inp.newToolsPerBuilder / 2,
-      valuePerTool: inp.valuePerTool / 2,
-    }
-  }, [inp, stress])
-
-  const out = compute(effective)
+  const out = compute(inp)
   const set = <K extends keyof Inputs>(k: K) => (v: number[]) => setInp((p) => ({ ...p, [k]: v[0] }))
 
   return (
@@ -161,32 +148,21 @@ function RoiCalculator() {
       <GridBg accent={ACCENT} />
       <CornerNum n={2} total={3} accent={ACCENT} />
       <div className="flex items-baseline justify-between">
-        <Eyebrow color={ACCENT}>What an enterprise gets back, in numbers · live</Eyebrow>
+        <Eyebrow color={ACCENT}>Booth 02 · Value Prop · What an enterprise gets</Eyebrow>
         <div className="flex items-center gap-2">
           {([
-            ['conservative', 'Conservative · CFO stress'],
-            ['mid', 'Mid · DT-class'],
-            ['aggressive', 'Aggressive · Cognizant-class'],
+            ['conservative', 'Conservative'],
+            ['mid', 'Mid'],
+            ['aggressive', 'Aggressive'],
           ] as const).map(([k, l]) => (
             <button
               key={k}
-              onClick={() => { setInp(PRESETS[k]); setStress(false) }}
+              onClick={() => setInp(PRESETS[k])}
               className="px-3 py-1.5 rounded-md text-[10px] font-mono uppercase tracking-[0.22em] border border-white/10 text-white/70 hover:bg-white/10 transition-colors"
             >
               {l}
             </button>
           ))}
-          <button
-            onClick={() => setStress((s) => !s)}
-            className="px-3 py-1.5 rounded-md text-[10px] font-mono uppercase tracking-[0.22em] border transition-colors"
-            style={{
-              borderColor: stress ? ACCENT : 'rgba(255,255,255,0.15)',
-              background: stress ? `${ACCENT}22` : 'transparent',
-              color: stress ? ACCENT : 'rgba(255,255,255,0.7)',
-            }}
-          >
-            {stress ? 'Stress · ON' : 'Stress test · ÷2'}
-          </button>
         </div>
       </div>
 

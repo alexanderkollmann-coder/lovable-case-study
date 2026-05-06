@@ -96,47 +96,4 @@ export const deck: Deck = [
       </SlideShell>
     ),
   },
-  {
-    id: 'memory-environment',
-    render: () => (
-      <SlideShell bg={BG}>
-        <GridBg accent={ACCENT} />
-        <CornerNum n={2} total={2} accent={ACCENT} />
-        <Eyebrow color={ACCENT}>Why the experience matters · Marketing's role</Eyebrow>
-        <div className="mt-3 mb-10">
-          <BigTitle>Memory is a function of <span style={{ color: ACCENT }}>environment</span>.</BigTitle>
-        </div>
-
-        <div className="flex-1 flex flex-col justify-center max-w-5xl">
-          <blockquote
-            className="font-display leading-[1.15] text-balance text-white/95"
-            style={{ fontSize: 'clamp(1.4rem, 2.4vw, 2.4rem)' }}
-          >
-            <span style={{ color: ACCENT }}>"</span>
-            A core memory is built not just from what you do, but where you do it. A
-            basketball game is memorable because of the music, the crowd, the venue —
-            the environment amplifies the event.
-            <span style={{ color: ACCENT }}>"</span>
-          </blockquote>
-
-          <div className="grid grid-cols-3 gap-6 mt-12">
-            {[
-              { t: 'Venue', d: 'London office as the flagship; bespoke spaces for Tier 1 anchors.' },
-              { t: 'Atmosphere', d: 'Curated music, lighting, energy — a moment, not a meeting.' },
-              { t: 'Ritual', d: 'Demo dinner with execs, judging ceremony, MOU signed as the culminating gesture.' },
-            ].map((c) => (
-              <div key={c.t}>
-                <div className="text-xs font-mono uppercase tracking-[0.28em]" style={{ color: ACCENT }}>{c.t}</div>
-                <div className="text-sm text-white/75 mt-3 leading-relaxed">{c.d}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-6 pt-4 border-t border-white/10 text-xs text-white/55 italic">
-          Customers don't sign contracts because of features. They sign them because of conviction. Conviction is built in environments people remember.
-        </div>
-      </SlideShell>
-    ),
-  },
 ]

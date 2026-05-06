@@ -50,10 +50,22 @@ const TABLE = [
   { f: 'Community Hackathon',a: '1:Many', d: '1+ weeks', p: '1,000+', c: '€100K+', b: 'Brand & ecosystem', an: 'Cognizant Vibe Coding Week' },
 ]
 
-const CATEGORIES: { name: string; boxes: string[] }[] = [
-  { name: 'Anchor',    boxes: ['Origination × 1:1', 'Upsell × 1:1'] },
-  { name: 'Peer',      boxes: ['Origination × 1:Few'] },
-  { name: 'Community', boxes: ['Awareness × 1:Many'] },
+const CATEGORIES: { name: string; tagline: string; blurb: string }[] = [
+  {
+    name: 'Anchor',
+    tagline: 'Land & expand a single account.',
+    blurb: 'One named customer in the room. Origination or upsell, always 1:1.',
+  },
+  {
+    name: 'Peer',
+    tagline: 'A sector cohort, side by side.',
+    blurb: 'A handful of non-competing prospects. Productive FOMO drives conversion.',
+  },
+  {
+    name: 'Community',
+    tagline: 'Brand & ecosystem at scale.',
+    blurb: 'Open to the market. Awareness, developer love, top-of-funnel.',
+  },
 ]
 
 export const deck: Deck = [
@@ -80,15 +92,11 @@ export const deck: Deck = [
               >
                 {cat.name}
               </div>
-              <div className="mt-6 flex flex-col gap-3">
-                {cat.boxes.map((b) => (
-                  <div
-                    key={b}
-                    className="rounded-lg px-4 py-3 border border-white/10 bg-white/[0.04] text-sm text-white/85 font-mono tracking-wide"
-                  >
-                    {b}
-                  </div>
-                ))}
+              <div className="text-base text-white/85 mt-3 leading-snug">
+                {cat.tagline}
+              </div>
+              <div className="text-sm text-white/55 mt-3 leading-relaxed">
+                {cat.blurb}
               </div>
             </div>
           ))}

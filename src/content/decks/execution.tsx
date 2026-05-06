@@ -23,13 +23,13 @@ const Y_LABELS = ['Origination', 'Upsell', 'Awareness']
 const MATRIX: MatrixCell[][] = [
   // Origination
   [
-    { title: 'Anchor' },
-    { title: 'Peer' },
+    { title: 'Anchor', sub: 'Lovable × Allianz' },
+    { title: 'Peer', sub: 'Financial Institution bootcamp' },
     {},
   ],
   // Upsell
   [
-    { title: 'Anchor' },
+    { title: 'Anchor', sub: 'Lovable × DT' },
     {},
     {},
   ],
@@ -37,7 +37,7 @@ const MATRIX: MatrixCell[][] = [
   [
     {},
     {},
-    { title: 'Community' },
+    { title: 'Community', sub: 'Free-for-all enterprise hackathon' },
   ],
 ]
 

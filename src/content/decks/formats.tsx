@@ -25,13 +25,12 @@ interface Participation {
 }
 
 const ROWS: Participation[] = [
-  { team: 'Producer',          range: [0, 3], note: 'Owns the program end-to-end' },
-  { team: 'Marketing',         range: [0, 1], note: 'Owns the experience' },
-  { team: 'AE',                range: [0, 3], note: 'Owns the commercial' },
-  { team: 'Solutions Engineer',range: [0, 3], note: 'Owns the technical' },
-  { team: 'FDE',               range: [3, 4], note: 'Owns production' },
-  { team: 'Product',           range: [0, 1], note: 'Feeds learnings back' },
-  { team: 'CEO',               stages: [1, 3, 4], note: 'Anchors the moments that matter' },
+  { team: 'Producer',   range: [0, 3], note: '' },
+  { team: 'Marketing',  range: [0, 1], note: '' },
+  { team: 'AE / SE',    range: [0, 3], note: '' },
+  { team: 'DS / FDE',   range: [3, 4], note: '' },
+  { team: 'Product',    range: [0, 1], note: '' },
+  { team: 'CEO',        stages: [1, 3, 4], note: '' },
 ]
 
 function isActive(p: Participation, i: number): boolean {
@@ -49,7 +48,7 @@ export const deck: Deck = [
         <CornerNum n={1} total={2} accent={ACCENT} />
         <Eyebrow color={ACCENT}>Booth 03 · Stakeholders · Cross-functional engagement</Eyebrow>
         <div className="mt-3 mb-6">
-          <BigTitle>Who shows up, and when.</BigTitle>
+          <BigTitle>Who is involved, when.</BigTitle>
         </div>
 
         <div className="rounded-xl border border-white/10 overflow-hidden bg-white/[0.02]">
@@ -62,9 +61,8 @@ export const deck: Deck = [
             ))}
             {ROWS.map((row) => (
               <div key={row.team} className="contents">
-                <div className="p-3 border-b border-white/5 text-sm text-white/85 flex flex-col justify-center">
-                  <span>{row.team}</span>
-                  <span className="text-[10px] text-white/40 mt-0.5">{row.note}</span>
+                <div className="p-3 border-b border-white/5 text-sm text-white/85 flex items-center">
+                  {row.team}
                 </div>
                 {STAGES.map((_, i) => {
                   const active = isActive(row, i)

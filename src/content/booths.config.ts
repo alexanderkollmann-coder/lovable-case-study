@@ -45,7 +45,7 @@ const booths: BoothMeta[] = [
   {
     id: 'value',
     timeline: 'pre',
-    position: [-14.5, 0, -9.5],
+    position: [-17, 0, -9.5],
     rotation: 0,
     label: 'Value Prop',
     subtitle: 'What an enterprise gets. What Lovable gets.',
@@ -64,20 +64,19 @@ const booths: BoothMeta[] = [
     iconName: 'target',
     load: () => import('./booths/02-targeting.md?raw'),
   },
-
-  // ========== HACKATHON ==========
   {
     id: 'formats',
-    timeline: 'hack',
-    // Tucked into the back-left corner where the red banner used to hang
-    position: [-7, 0, -8.5],
-    rotation: 0.3,
+    timeline: 'pre',
+    position: [-11, 0, -3],
+    rotation: -1.1,
     label: 'Stakeholders',
-    subtitle: 'Who runs what, and when. Memory is environment.',
-    accent: '#ff7596',
+    subtitle: 'Who is involved, when. Memory is environment.',
+    accent: '#5e88ff',
     iconName: 'layout',
     load: () => import('./booths/03-formats.md?raw'),
   },
+
+  // ========== HACKATHON ==========
   {
     id: 'execution',
     timeline: 'hack',

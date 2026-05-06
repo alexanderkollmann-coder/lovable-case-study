@@ -3,6 +3,8 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useGameStore } from '@/store/gameStore'
 import { getBooth } from '@/content/booths.config'
 import { DECKS } from '@/content/decks'
+import { ChevronLeft, ChevronRight, X } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 const ACTIVE_DECKS = DECKS
 

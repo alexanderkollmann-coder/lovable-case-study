@@ -126,6 +126,17 @@ export function IntroVideo() {
             </button>
           )}
 
+          {/* Subtle skip button — bottom-right */}
+          {!ended && (
+            <button
+              type="button"
+              onClick={handleEnter}
+              className="absolute bottom-5 right-6 text-[10px] uppercase tracking-[0.32em] text-white/40 hover:text-white/90 transition-colors"
+            >
+              Skip <span className="ml-1">→</span>
+            </button>
+          )}
+
           {/* "Do you believe?" CTA — appears when video ends */}
           {ended && (
             <div

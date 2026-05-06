@@ -14,9 +14,9 @@ const PHASES: {
   phase: 'Pre-hackathon' | 'Hackathon' | 'Post-hackathon'
   stages: { label: string; highlight?: boolean }[]
 }[] = [
-  { phase: 'Pre-hackathon', stages: [{ label: 'Pre-scoping' }] },
-  { phase: 'Hackathon', stages: [{ label: 'Hackathon', highlight: true }] },
-  { phase: 'Post-hackathon', stages: [{ label: 'Paid PoC' }, { label: 'Contract' }] },
+  { phase: 'Pre-hackathon', stages: [{ label: 'T-30 · Scoping' }] },
+  { phase: 'Hackathon', stages: [{ label: 'Day 0–2 · Hackathon', highlight: true }] },
+  { phase: 'Post-hackathon', stages: [{ label: 'Day 15 · Paid PoC' }, { label: 'Day 30 · Contract' }] },
 ]
 
 export const deck: Deck = [

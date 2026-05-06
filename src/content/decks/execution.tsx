@@ -155,11 +155,55 @@ export const deck: Deck = [
     ),
   },
   {
+    id: 'comparison',
+    render: () => {
+      const ROWS = [
+        { label: 'Defining variable', a: 'Which problem', p: 'Which sector', c: 'Which pull mechanic' },
+        { label: 'Duration',          a: '2 days',        p: '2 days',       c: '1 day or async' },
+        { label: 'Builders',          a: '30, one customer', p: '30, across 5 prospects', c: '100–1,000+' },
+        { label: 'FDE model',         a: '2 dedicated',   p: '1–2 floating', c: 'Judges only' },
+        { label: 'Data',              a: 'Real customer data', p: 'Real cohort data', c: 'Mock or open data' },
+        { label: 'Reward',            a: 'Internal recognition', p: 'Internal recognition', c: 'Prize money' },
+      ]
+      return (
+        <SlideShell bg={BG}>
+          <GridBg accent={ACCENT} />
+          <CornerNum n={3} total={5} accent={ACCENT} />
+          <Eyebrow color={ACCENT}>Booth 04 · Format · Side-by-side</Eyebrow>
+          <div className="mt-3 mb-8">
+            <BigTitle>Anchor vs Peer vs Community.</BigTitle>
+          </div>
+          <div className="rounded-xl border border-white/10 overflow-hidden bg-white/[0.02]">
+            <div className="grid" style={{ gridTemplateColumns: '1.2fr 1fr 1fr 1fr' }}>
+              {['', 'Anchor', 'Peer', 'Community'].map((h, i) => (
+                <div
+                  key={i}
+                  className="p-3 text-[11px] font-mono uppercase tracking-[0.22em] border-b border-white/10"
+                  style={{ color: i === 0 ? 'rgba(255,255,255,0.4)' : ACCENT }}
+                >
+                  {h}
+                </div>
+              ))}
+              {ROWS.map((r) => (
+                <div key={r.label} className="contents">
+                  <Cell bold>{r.label}</Cell>
+                  <Cell>{r.a}</Cell>
+                  <Cell>{r.p}</Cell>
+                  <Cell>{r.c}</Cell>
+                </div>
+              ))}
+            </div>
+          </div>
+        </SlideShell>
+      )
+    },
+  },
+  {
     id: 'table',
     render: () => (
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
-        <CornerNum n={3} total={4} accent={ACCENT} />
+        <CornerNum n={4} total={5} accent={ACCENT} />
         <Eyebrow color={ACCENT}>Format trade-space</Eyebrow>
         <div className="mt-3 mb-8">
           <BigTitle>Six formats. One picked.</BigTitle>

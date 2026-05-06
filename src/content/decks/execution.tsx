@@ -151,7 +151,7 @@ export const deck: Deck = [
     render: () => (
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
-        <CornerNum n={2} total={3} accent={ACCENT} />
+        <CornerNum n={3} total={4} accent={ACCENT} />
         <Eyebrow color={ACCENT}>Format trade-space</Eyebrow>
         <div className="mt-3 mb-8">
           <BigTitle>Six formats. One picked.</BigTitle>

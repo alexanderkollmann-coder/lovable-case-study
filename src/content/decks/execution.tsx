@@ -190,6 +190,88 @@ export const deck: Deck = [
       )
     },
   },
+  {
+    id: 'agenda',
+    render: () => {
+      const day1 = [
+        { t: '09:30', a: 'Fireside chat: customer CDO + Lovable founder', d: '45 min' },
+        { t: '10:15', a: 'Lovable tooling intro, SE-led', d: '45 min' },
+        { t: '11:00', a: 'Build block 1', d: '1.5 hrs' },
+        { t: '12:30', a: 'Lunch', d: '1 hr' },
+        { t: '13:30', a: 'Build block 2', d: '3.5 hrs' },
+        { t: '17:00', a: 'Stand-up demos', d: '1 hr' },
+        { t: '19:00', a: 'Executive working dinner — prototype review and selection', d: '', hinge: true },
+      ]
+      const day2 = [
+        { t: '09:30', a: 'Standup + sprint plan', d: '30 min' },
+        { t: '10:00', a: 'Build block 3', d: '2 hrs' },
+        { t: '12:00', a: 'Lunch', d: '1 hr' },
+        { t: '13:00', a: 'Build block 4', d: '2.5 hrs' },
+        { t: '15:30', a: 'Final demos to judging panel', d: '1 hr', panel: true },
+        { t: '16:30', a: 'Awards + executive readout', d: '30 min' },
+        { t: '17:00', a: 'Demo dinner — LOI signing, MAP initialized', d: '', highlight: true },
+      ]
+      return (
+        <SlideShell bg={BG}>
+          <GridBg accent={ACCENT} />
+          <CornerNum n={4} total={4} accent={ACCENT} />
+          <Eyebrow color={ACCENT}>Booth 04 · Format · Two-day agenda</Eyebrow>
+          <div className="mt-3 mb-6">
+            <BigTitle>Two days. One outcome.</BigTitle>
+          </div>
+
+          <div className="flex-1 grid grid-cols-2 gap-0 min-h-0 relative" style={{ tabularNums: 'tabular-nums' } as React.CSSProperties}>
+            {/* divider */}
+            <div className="absolute top-0 bottom-0 left-1/2 w-px bg-white/10" />
+
+            {/* Day 1 */}
+            <div className="pr-6 flex flex-col">
+              <div className="mb-1">
+                <div className="font-display text-2xl font-semibold text-white">Day 1 — Prototyping</div>
+                <div className="text-sm italic text-white/55 mt-1">Build broad. Three to four prototypes per team.</div>
+              </div>
+              <div className="mt-4 flex flex-col gap-2">
+                {day1.map((it) => <AgendaRow key={it.t} {...it} />)}
+              </div>
+            </div>
+
+            {/* Day 2 */}
+            <div className="pl-6 flex flex-col">
+              <div className="mb-1">
+                <div className="font-display text-2xl font-semibold text-white">Day 2 — Production</div>
+                <div className="text-sm italic text-white/55 mt-1">Pick one. Ship it.</div>
+              </div>
+              <div className="mt-4 flex flex-col gap-2">
+                {day2.map((it) => (
+                  <div key={it.t}>
+                    <AgendaRow {...it} />
+                    {it.panel && (
+                      <div className="text-[11px] italic text-white/45 pl-[88px] mt-1">
+                        Customer exec · Foundation-model partner · Lovable founder
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* hinge annotation between columns */}
+            <div
+              className="absolute left-1/2 -translate-x-1/2 px-2 py-1 rounded text-[10px] font-mono uppercase tracking-[0.22em]"
+              style={{
+                top: '78%',
+                background: '#0a0d18',
+                color: ACCENT,
+                border: `1px solid ${ACCENT}55`,
+              }}
+            >
+              Prototype selection
+            </div>
+          </div>
+        </SlideShell>
+      )
+    },
+  },
 ]
 
 function Cell({ children, h, bold, mono }: { children: React.ReactNode; h?: boolean; bold?: boolean; mono?: boolean }) {

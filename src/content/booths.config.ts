@@ -38,7 +38,7 @@ const booths: BoothMeta[] = [
     rotation: Math.PI / 2,
     label: 'Vision',
     subtitle: 'Seeing is believing.',
-    accent: '#ff4d7a',
+    accent: '#5e88ff',
     iconName: 'sparkles',
     load: () => import('./booths/01-value-proposition.md?raw'),
   },

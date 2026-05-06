@@ -23,21 +23,21 @@ const Y_LABELS = ['Origination', 'Upsell', 'Awareness']
 const MATRIX: MatrixCell[][] = [
   // Origination
   [
-    { title: 'Anchor Studios', sub: '2 days · 1 prospect · full FDE pair' },
-    { title: 'Peer Studios', sub: '2 days · 5 prospects · mixed industries', highlight: true },
-    { title: 'Open Studios', sub: '1 day · ecosystem' },
+    { title: 'Anchor' },
+    { title: 'Peer' },
+    {},
   ],
   // Upsell
   [
-    { title: 'Expansion Studios', sub: '1–2 days · multi-BU within existing customer' },
+    { title: 'Anchor' },
     {},
-    { title: 'Customer Forum', sub: 'Half-day · existing customers · shared agenda' },
+    {},
   ],
   // Awareness
   [
     {},
     {},
-    { title: 'Community Hackathon', sub: 'Cognizant model · 1+ weeks · brand & ecosystem' },
+    { title: 'Community' },
   ],
 ]
 

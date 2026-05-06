@@ -199,7 +199,6 @@ export const deck: Deck = [
     },
   },
 ]
-]
 
 function Cell({ children, h, bold, mono }: { children: React.ReactNode; h?: boolean; bold?: boolean; mono?: boolean }) {
   return (

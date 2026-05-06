@@ -34,8 +34,8 @@ const booths: BoothMeta[] = [
   {
     id: 'vision',
     timeline: 'pre',
-    position: [-22, 0, -2],
-    rotation: Math.PI / 2,
+    position: [-19.5, 0, -9.5],
+    rotation: 0,
     label: 'Vision',
     subtitle: 'Seeing is believing.',
     accent: '#5e88ff',
@@ -45,7 +45,7 @@ const booths: BoothMeta[] = [
   {
     id: 'value',
     timeline: 'pre',
-    position: [-17, 0, -9.5],
+    position: [-14.5, 0, -9.5],
     rotation: 0,
     label: 'Value Prop',
     subtitle: 'What an enterprise gets. What Lovable gets.',

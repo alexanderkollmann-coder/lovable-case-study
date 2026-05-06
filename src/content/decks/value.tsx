@@ -6,7 +6,6 @@ import {
   GridBg,
   CornerNum,
   BigTitle,
-  Stat,
 } from './_layouts'
 import type { Deck } from './types'
 import { Slider } from '@/components/ui/slider'
@@ -14,138 +13,95 @@ import { Slider } from '@/components/ui/slider'
 const ACCENT = '#5e88ff'
 const BG = 'radial-gradient(ellipse at 20% 0%, #1a2546 0%, #0a0d1a 65%)'
 
-const STAGES = [
-  { t: 'T-30', l: 'Pre-scoping' },
-  { t: 'Day 0–2', l: 'Studios', highlight: true },
-  { t: 'Day 30', l: 'Paid PoC' },
-  { t: 'Day 90', l: 'Contract' },
-]
-
 export const deck: Deck = [
+  /* ---------------- Slide 2.1 — Two dimensions of value ---------------- */
   {
-    id: 'cover',
-    kicker: 'Value Proposition',
+    id: 'two-dimensions',
     render: () => (
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
-        <CornerNum n={1} total={4} accent={ACCENT} />
-        <div className="flex-1 flex flex-col justify-center items-center text-center max-w-6xl mx-auto">
-          <Eyebrow color={ACCENT}>Booth 01 · Value Proposition</Eyebrow>
-          <h1
-            className="font-display font-semibold leading-[0.95] tracking-tight mt-8"
-            style={{ fontSize: 'clamp(3rem, 8vw, 8rem)' }}
-          >
-            Seeing is <span style={{ color: ACCENT }}>believing</span>
-          </h1>
-          <p className="mt-10 text-white/65 text-2xl max-w-3xl leading-relaxed">
-            Hackathons are the antidote to information ubiquity.
-          </p>
+        <CornerNum n={1} total={3} accent={ACCENT} />
+        <Eyebrow color={ACCENT}>Booth 02 · Value Prop · What an enterprise gets</Eyebrow>
+        <div className="mt-3 mb-8">
+          <BigTitle>What an enterprise gets back.</BigTitle>
         </div>
-        <div className="pt-6 border-t border-white/10 flex items-center justify-between text-[10px] font-mono uppercase tracking-[0.25em] text-white/45">
-          <span>Internal · <span className="text-white/70">Embedded Build Motion</span></span>
-          <span>External · <span style={{ color: ACCENT }}>Lovable Studios</span></span>
+        <div className="grid grid-cols-2 gap-6 flex-1">
+          <Card accent={ACCENT}>
+            <div className="text-[10px] font-mono uppercase tracking-[0.28em]" style={{ color: ACCENT }}>Cost savings</div>
+            <div className="mt-2 text-xl font-semibold text-white">Builds the same thing, faster.</div>
+            <ul className="mt-6 space-y-4 text-sm text-white/80">
+              <Bullet>Engineering hours recovered on work that would have been built anyway</Bullet>
+              <Bullet><span className="text-white font-semibold">60–90%</span> time savings on AI-assisted builds <span className="text-white/45">(Spotify Honk, Nov 2025)</span></Bullet>
+              <Bullet><span className="text-white font-semibold">16–30%</span> productivity / <span className="text-white font-semibold">31–45%</span> quality gains in top-quintile orgs <span className="text-white/45">(McKinsey 2025)</span></Bullet>
+            </ul>
+          </Card>
+          <Card accent={ACCENT}>
+            <div className="text-[10px] font-mono uppercase tracking-[0.28em]" style={{ color: ACCENT }}>Value creation</div>
+            <div className="mt-2 text-xl font-semibold text-white">Builds things that wouldn't exist otherwise.</div>
+            <ul className="mt-6 space-y-4 text-sm text-white/80">
+              <Bullet>Net-new internal tools shipped that would never have made the engineering backlog</Bullet>
+              <Bullet><span className="text-white font-semibold">4×</span> project throughput <span className="text-white/45">(Lovable ERP customer, Series B blog)</span></Bullet>
+              <Bullet>McKinsey engineers built in hours what they'd been waiting 4–6 months for <span className="text-white/45">(Anton Osika, Fortune Dec 2025)</span></Bullet>
+            </ul>
+          </Card>
+        </div>
+        <div className="mt-6 pt-4 border-t border-white/10 text-xs text-white/55 italic">
+          The defensive case justifies the contract. The offensive case justifies the expansion.
         </div>
       </SlideShell>
     ),
   },
-  {
-    id: 'motion',
-    render: () => (
-      <SlideShell bg={BG}>
-        <GridBg accent={ACCENT} />
-        <CornerNum n={2} total={4} accent={ACCENT} />
-        <Eyebrow color={ACCENT}>The motion · 12-month goals</Eyebrow>
-        <div className="grid grid-cols-2 gap-10 mt-6 flex-1">
-          {/* Left */}
-          <div className="flex flex-col">
-            <BigTitle>A forward-deployed pre-sales pipeline.</BigTitle>
-            <p className="mt-5 text-white/60 text-base leading-relaxed max-w-md">
-              The hackathon is one stage of the motion — not the beginning, not the end.
-            </p>
-            <div className="mt-10">
-              <div className="relative h-px bg-white/15 my-6" />
-              <div className="flex justify-between -mt-12">
-                {STAGES.map((s) => (
-                  <div key={s.t} className="flex flex-col items-center w-32">
-                    <div
-                      className="rounded-full"
-                      style={{
-                        width: s.highlight ? 18 : 10,
-                        height: s.highlight ? 18 : 10,
-                        background: s.highlight ? ACCENT : 'rgba(255,255,255,0.4)',
-                        boxShadow: s.highlight ? `0 0 18px ${ACCENT}` : undefined,
-                        marginTop: s.highlight ? -4 : 0,
-                      }}
-                    />
-                    <div
-                      className="mt-3 font-mono text-[10px] uppercase tracking-[0.22em]"
-                      style={{ color: s.highlight ? ACCENT : 'rgba(255,255,255,0.45)' }}
-                    >
-                      {s.t}
-                    </div>
-                    <div
-                      className={`text-sm mt-1 text-center ${s.highlight ? 'text-white font-semibold' : 'text-white/65'}`}
-                    >
-                      {s.l}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-          {/* Right */}
-          <div className="flex flex-col">
-            <div className="text-[11px] font-mono uppercase tracking-[0.3em]" style={{ color: ACCENT }}>
-              Where this lands in 12 months
-            </div>
-            <div className="mt-6 grid grid-cols-2 gap-6 flex-1">
-              <Stat value="20" label="Anchor accounts in Europe" accent={ACCENT} />
-              <Stat value="€40M" label="New ARR" accent={ACCENT} />
-              <Stat value="60%" label="PoC-to-contract conversion" accent={ACCENT} />
-              <Stat value="130%+" label="NDR on touched accounts" accent={ACCENT} />
-            </div>
-          </div>
-        </div>
-      </SlideShell>
-    ),
-  },
+
+  /* ---------------- Slide 2.2 — Live ROI calculator ---------------- */
   {
     id: 'roi',
     kicker: 'Live ROI calculator',
     render: () => <RoiCalculator />,
   },
+
+  /* ---------------- Slide 2.3 — What Lovable gets ---------------- */
   {
     id: 'lovable-gets',
     render: () => (
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
-        <CornerNum n={4} total={4} accent={ACCENT} />
-        <Eyebrow color={ACCENT}>What Lovable gets back</Eyebrow>
+        <CornerNum n={3} total={3} accent={ACCENT} />
+        <Eyebrow color={ACCENT}>What Lovable gets</Eyebrow>
         <div className="mt-3 mb-8">
-          <BigTitle>Lowest-CAC, highest-conviction channel into European enterprise.</BigTitle>
+          <BigTitle>Studios turn Lovable from a tool into a strategic GTM motion.</BigTitle>
         </div>
-        <div className="grid grid-cols-2 gap-6 flex-1">
-          <Card accent={ACCENT}>
-            <div className="text-[10px] font-mono uppercase tracking-[0.28em]" style={{ color: ACCENT }}>Direct commercial outcomes</div>
-            <ul className="mt-5 space-y-4 text-sm text-white/80">
-              <Bullet><span className="text-white font-semibold">€500K–€2M</span> anchor contract per Studios</Bullet>
-              <Bullet><span className="text-white font-semibold">60%</span> PoC-to-contract conversion <span className="text-white/45">(Lemkin enterprise SaaS)</span></Bullet>
-              <Bullet><span className="text-white font-semibold">90-day</span> median time-to-contract <span className="text-white/45">(vs. 6+ months typical)</span></Bullet>
-              <Bullet><span className="text-white font-semibold">130%+</span> Year 1 NDR on touched accounts</Bullet>
-            </ul>
-          </Card>
-          <Card accent={ACCENT}>
-            <div className="text-[10px] font-mono uppercase tracking-[0.28em]" style={{ color: ACCENT }}>Strategic outcomes</div>
-            <ul className="mt-5 space-y-4 text-sm text-white/80">
-              <Bullet>Reusable Applications Library — every Studios produces templates that compound</Bullet>
-              <Bullet>Public executive proof points <span className="text-white/45">(Abrahamson / Luthe model)</span></Bullet>
-              <Bullet>Sector beachheads — one anchor unlocks 5 in-sector prospects</Bullet>
-              <Bullet>T.Capital + Series B coalition warm intros — no competitor has this distribution</Bullet>
-            </ul>
-          </Card>
+        <div className="grid grid-cols-3 gap-5 flex-1">
+          {[
+            {
+              t: 'Pipeline',
+              d: 'Opens enterprise doors and converts seat-based accounts into €500K+ contracts.',
+            },
+            {
+              t: 'Product Adoption',
+              d: 'Gets teams building real internal apps in Lovable.',
+            },
+            {
+              t: 'Market Proof',
+              d: 'Creates case studies, champions, and repeatable enterprise narratives.',
+            },
+          ].map((c, i) => (
+            <Card key={c.t} accent={ACCENT}>
+              <div className="font-mono text-xs" style={{ color: ACCENT }}>0{i + 1}</div>
+              <div className="text-2xl font-display font-semibold text-white mt-3">{c.t}</div>
+              <p className="text-sm text-white/70 mt-4 leading-relaxed">{c.d}</p>
+            </Card>
+          ))}
         </div>
-        <div className="mt-6 pt-4 border-t border-white/10 text-xs text-white/50 italic">
-          Studios is the lowest-CAC, highest-conviction channel into European enterprise.
+        <div
+          className="mt-6 rounded-xl px-6 py-5 border"
+          style={{
+            background: `linear-gradient(135deg, ${ACCENT}18, ${ACCENT}05)`,
+            borderColor: `${ACCENT}55`,
+          }}
+        >
+          <p className="text-base text-white/90 leading-relaxed">
+            Studios aren't events. They're a <span className="font-semibold" style={{ color: ACCENT }}>GTM wedge</span> that creates urgency, surfaces real use cases, activates internal champions, and generates the proof Lovable needs to win enterprise — at a fraction of the CAC of traditional outbound.
+          </p>
         </div>
       </SlideShell>
     ),
@@ -176,7 +132,7 @@ interface Inputs {
 const PRESETS: Record<string, Inputs> = {
   conservative: { builders: 500, daysSaved: 5, dayCost: 1200, attribution: 0.40, newToolsPerBuilder: 0.5, valuePerTool: 5000, contractSize: 250000 },
   mid:          { builders: 1500, daysSaved: 15, dayCost: 1400, attribution: 0.60, newToolsPerBuilder: 2, valuePerTool: 25000, contractSize: 750000 },
-  aggressive:   { builders: 5000, daysSaved: 40, dayCost: 1600, attribution: 0.75, newToolsPerBuilder: 4, valuePerTool: 60000, contractSize: 2000000 },
+  aggressive:   { builders: 5000, daysSaved: 40, dayCost: 1600, attribution: 0.75, newToolsPerBuilder: 6, valuePerTool: 100000, contractSize: 2500000 },
 }
 
 function compute(i: Inputs) {
@@ -217,12 +173,12 @@ function RoiCalculator() {
   return (
     <SlideShell bg={BG}>
       <GridBg accent={ACCENT} />
-      <CornerNum n={3} total={4} accent={ACCENT} />
+      <CornerNum n={2} total={3} accent={ACCENT} />
       <div className="flex items-baseline justify-between">
-        <Eyebrow color={ACCENT}>What an enterprise gets back · live</Eyebrow>
+        <Eyebrow color={ACCENT}>What an enterprise gets back, in numbers · live</Eyebrow>
         <div className="flex items-center gap-2">
           {([
-            ['conservative', 'Conservative'],
+            ['conservative', 'Conservative · CFO stress'],
             ['mid', 'Mid · DT-class'],
             ['aggressive', 'Aggressive · Cognizant-class'],
           ] as const).map(([k, l]) => (
@@ -249,19 +205,19 @@ function RoiCalculator() {
       </div>
 
       <h2 className="font-display text-3xl font-semibold mt-3 text-white">
-        What an enterprise gets back
+        What an enterprise gets back, in numbers
       </h2>
 
       <div className="grid mt-4 flex-1 min-h-0 gap-5" style={{ gridTemplateColumns: '2fr 1fr' }}>
         <Card accent={ACCENT}>
           <div className="text-[10px] font-mono uppercase tracking-[0.28em]" style={{ color: ACCENT }}>Inputs</div>
           <div className="mt-3 grid grid-cols-2 gap-x-6 gap-y-3">
-            <SliderRow label="Active builders" value={inp.builders} min={250} max={5000} step={50} fmt={(v) => v.toLocaleString()} on={set('builders')} />
+            <SliderRow label="Active builders post-rollout" value={inp.builders} min={250} max={5000} step={50} fmt={(v) => v.toLocaleString()} on={set('builders')} />
             <SliderRow label="Days saved / builder / yr" value={inp.daysSaved} min={5} max={40} step={1} fmt={(v) => `${v}d`} on={set('daysSaved')} />
-            <SliderRow label="Day cost (€)" value={inp.dayCost} min={1200} max={1800} step={50} fmt={fmtEur} on={set('dayCost')} />
-            <SliderRow label="Lovable attribution" value={inp.attribution} min={0.30} max={0.80} step={0.05} fmt={(v) => `${Math.round(v * 100)}%`} on={set('attribution')} />
+            <SliderRow label="Engineer day cost (€)" value={inp.dayCost} min={1200} max={1800} step={50} fmt={fmtEur} on={set('dayCost')} />
+            <SliderRow label="Lovable attribution vs. baseline" value={inp.attribution} min={0.30} max={0.80} step={0.05} fmt={(v) => `${Math.round(v * 100)}%`} on={set('attribution')} />
             <SliderRow label="Net-new tools / builder / yr" value={inp.newToolsPerBuilder} min={0.5} max={6} step={0.5} fmt={(v) => v.toFixed(1)} on={set('newToolsPerBuilder')} />
-            <SliderRow label="Value / tool" value={inp.valuePerTool} min={5000} max={100000} step={1000} fmt={fmtEur} on={set('valuePerTool')} />
+            <SliderRow label="Net-new value / tool" value={inp.valuePerTool} min={5000} max={100000} step={1000} fmt={fmtEur} on={set('valuePerTool')} />
             <div className="col-span-2">
               <SliderRow label="Annual contract size" value={inp.contractSize} min={250000} max={2500000} step={50000} fmt={fmtEur} on={set('contractSize')} />
             </div>
@@ -298,7 +254,7 @@ function RoiCalculator() {
       </div>
 
       <div className="mt-3 pt-3 border-t border-white/10 text-[10px] font-mono uppercase tracking-[0.22em] text-white/45">
-        McKinsey 2025 · Spotify Honk (60–90%) · Lovable ERP customer (95% effort reduction, 4× throughput)
+        Anchored on McKinsey 2025 · Spotify Honk · Lovable's published ERP customer data
       </div>
     </SlideShell>
   )

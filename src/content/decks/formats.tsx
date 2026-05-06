@@ -11,7 +11,7 @@ import type { Deck } from './types'
 const ACCENT = '#ff7596'
 const BG = 'radial-gradient(ellipse at 0% 100%, #4a1830 0%, #0a0d1a 65%)'
 
-const STAGES = ['T-30 Scoping', 'Day 0–2 Hackathon', 'Day 15 PoC', 'Day 30 Contract', 'Day 30+ Expansion'] as const
+const STAGES = ['T-30 Scoping', 'Day 0–2 Hackathon', 'Day 15 PoC', 'Day 30 Contract', 'Day 90+ Expansion'] as const
 
 type StageIdx = 0 | 1 | 2 | 3 | 4
 

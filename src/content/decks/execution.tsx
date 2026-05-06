@@ -50,16 +50,61 @@ const TABLE = [
   { f: 'Community Hackathon',a: '1:Many', d: '1+ weeks', p: '1,000+', c: '€100K+', b: 'Brand & ecosystem', an: 'Cognizant Vibe Coding Week' },
 ]
 
+const CATEGORIES: { name: string; boxes: string[] }[] = [
+  { name: 'Anchor',    boxes: ['Origination × 1:1', 'Upsell × 1:1'] },
+  { name: 'Peer',      boxes: ['Origination × 1:Few'] },
+  { name: 'Community', boxes: ['Awareness × 1:Many'] },
+]
+
 export const deck: Deck = [
+  {
+    id: 'categories',
+    render: () => (
+      <SlideShell bg={BG}>
+        <GridBg accent={ACCENT} />
+        <CornerNum n={1} total={4} accent={ACCENT} />
+        <Eyebrow color={ACCENT}>Booth 04 · Format · Three hackathon types</Eyebrow>
+        <div className="mt-3 mb-10">
+          <BigTitle>Anchor. Peer. Community.</BigTitle>
+        </div>
+        <div className="grid grid-cols-3 gap-5 flex-1">
+          {CATEGORIES.map((cat) => (
+            <div
+              key={cat.name}
+              className="rounded-xl p-6 border bg-white/[0.03] flex flex-col"
+              style={{ borderColor: `${ACCENT}44` }}
+            >
+              <div
+                className="font-display text-3xl font-semibold"
+                style={{ color: ACCENT }}
+              >
+                {cat.name}
+              </div>
+              <div className="mt-6 flex flex-col gap-3">
+                {cat.boxes.map((b) => (
+                  <div
+                    key={b}
+                    className="rounded-lg px-4 py-3 border border-white/10 bg-white/[0.04] text-sm text-white/85 font-mono tracking-wide"
+                  >
+                    {b}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </SlideShell>
+    ),
+  },
   {
     id: 'matrix',
     render: () => (
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
-        <CornerNum n={1} total={3} accent={ACCENT} />
-        <Eyebrow color={ACCENT}>Booth 04 · Format · 2-dimensional choice</Eyebrow>
+        <CornerNum n={2} total={4} accent={ACCENT} />
+        <Eyebrow color={ACCENT}>Booth 04 · Format · Goal × Audience</Eyebrow>
         <div className="mt-3 mb-6">
-          <BigTitle>Format follows from <span style={{ color: ACCENT }}>goal</span> and <span style={{ color: ACCENT }}>audience</span>.</BigTitle>
+          <BigTitle>Goal × Audience.</BigTitle>
         </div>
 
         <div className="flex-1 grid gap-2 min-h-0" style={{ gridTemplateColumns: '110px repeat(3, 1fr)', gridTemplateRows: 'auto repeat(3, 1fr)' }}>

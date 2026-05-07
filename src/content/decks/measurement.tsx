@@ -117,9 +117,7 @@ export const deck: Deck = [
             How do we <span style={{ color: ACCENT_BRIGHT }}>measure success</span>?
           </BigTitle>
         </div>
-        <div className="mt-4 mb-10 text-lg text-white/65">
-          Two layers of indicators — one for the room, one for the board.
-        </div>
+        <div className="mt-10" />
 
         <div className="flex-1 grid grid-cols-2 gap-6 min-h-0">
           {SECTIONS.map((s) => (

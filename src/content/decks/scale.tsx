@@ -19,7 +19,7 @@ type Section = {
 
 const SECTIONS: Section[] = [
   {
-    kicker: 'Format',
+    kicker: 'Validation',
     question: 'How do we know the format works?',
     backTitle: 'Validate before we scale.',
     points: [
@@ -35,7 +35,7 @@ const SECTIONS: Section[] = [
     points: [
       { title: 'Applications Library', body: 'Reusable templates: 8-hour build \u2192 2-hour build.' },
       { title: 'Champion network', body: 'Graduates return as references and judges.' },
-      { title: 'Procurement assets', body: 'DPA, SOC 2 Type II, ISO 27001, EU AI Act assessment, pen-test reports \u2014 first telco contract: 75 days, fifth: 30.' },
+      { title: 'Procurement assets', body: 'DPA, SOC 2 Type II, ISO 27001, EU AI Act assessment, pen-test reports clear faster each time.' },
     ],
   },
   {

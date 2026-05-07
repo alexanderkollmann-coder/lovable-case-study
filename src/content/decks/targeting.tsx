@@ -166,9 +166,6 @@ export const deck: Deck = [
             </Card>
           ))}
         </div>
-        <div className="mt-6 pt-4 border-t border-white/10 text-xs text-white/55 italic">
-          I met Jonathan Abrahamson at the ElevenLabs conference earlier this year. The warm intro is in place.
-        </div>
       </SlideShell>
     ),
   },

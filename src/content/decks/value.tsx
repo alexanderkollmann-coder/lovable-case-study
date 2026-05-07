@@ -27,18 +27,22 @@ export const deck: Deck = [
         </div>
         <div className="grid grid-cols-2 gap-6 flex-1">
           <Card accent={ACCENT}>
-            <div className="text-[10px] font-mono uppercase tracking-[0.28em]" style={{ color: ACCENT }}>Cost savings</div>
-            <div className="mt-2 text-xl font-semibold text-white">Builds the same thing, faster.</div>
-            <ul className="mt-6 space-y-4 text-sm text-white/80">
+            <div className="font-display font-bold text-white leading-[0.95]" style={{ fontSize: 'clamp(2.6rem, 4.4vw, 4rem)' }}>
+              Cost <span style={{ color: ACCENT }}>Savings</span>
+            </div>
+            <div className="mt-5 text-base text-white/85 font-medium">Builds the same thing, faster.</div>
+            <ul className="mt-5 space-y-3 text-sm text-white/75">
               <Bullet>Engineering hours recovered on work that would have been built anyway</Bullet>
               <Bullet><span className="text-white font-semibold">60–90%</span> time savings on AI-assisted builds <span className="text-white/45">(Spotify Honk, Nov 2025)</span></Bullet>
               <Bullet><span className="text-white font-semibold">16–30%</span> productivity / <span className="text-white font-semibold">31–45%</span> quality gains in top-quintile orgs <span className="text-white/45">(McKinsey 2025)</span></Bullet>
             </ul>
           </Card>
           <Card accent={ACCENT}>
-            <div className="text-[10px] font-mono uppercase tracking-[0.28em]" style={{ color: ACCENT }}>Value creation</div>
-            <div className="mt-2 text-xl font-semibold text-white">Builds things that wouldn't exist otherwise.</div>
-            <ul className="mt-6 space-y-4 text-sm text-white/80">
+            <div className="font-display font-bold text-white leading-[0.95]" style={{ fontSize: 'clamp(2.6rem, 4.4vw, 4rem)' }}>
+              Value <span style={{ color: ACCENT }}>Creation</span>
+            </div>
+            <div className="mt-5 text-base text-white/85 font-medium">Builds things that wouldn't exist otherwise.</div>
+            <ul className="mt-5 space-y-3 text-sm text-white/75">
               <Bullet>Net-new internal tools shipped that would never have made the engineering backlog</Bullet>
               <Bullet><span className="text-white font-semibold">4×</span> project throughput <span className="text-white/45">(Lovable ERP customer, Series B blog)</span></Bullet>
               <Bullet>McKinsey engineers built in hours what they'd been waiting 4–6 months for <span className="text-white/45">(Anton Osika, Fortune Dec 2025)</span></Bullet>

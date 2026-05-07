@@ -26,7 +26,7 @@ export const deck: Deck = [
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
         <CornerNum n={1} total={2} accent={ACCENT} />
-        <Eyebrow color={ACCENT}>Booth 06 · Measurement · Five north-star metrics</Eyebrow>
+        <Eyebrow color={ACCENT}>Five north-star metrics</Eyebrow>
         <div className="mt-3 mb-10">
           <BigTitle>What we measure, and when.</BigTitle>
         </div>

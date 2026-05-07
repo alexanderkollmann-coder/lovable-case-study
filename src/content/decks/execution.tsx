@@ -67,7 +67,7 @@ export const deck: Deck = [
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
         <CornerNum n={1} total={4} accent={ACCENT} />
-        <Eyebrow color={ACCENT}>Booth 04 · Format · Three hackathon types</Eyebrow>
+        <Eyebrow color={ACCENT}>Three hackathon types</Eyebrow>
         <div className="mt-3 mb-10">
           <BigTitle>Anchor. Peer. Community.</BigTitle>
         </div>
@@ -102,7 +102,7 @@ export const deck: Deck = [
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
         <CornerNum n={2} total={4} accent={ACCENT} />
-        <Eyebrow color={ACCENT}>Booth 04 · Format · Goal × Audience</Eyebrow>
+        <Eyebrow color={ACCENT}>Goal × Audience</Eyebrow>
         <div className="mt-3 mb-6">
           <BigTitle>Goal × Audience.</BigTitle>
         </div>
@@ -161,7 +161,7 @@ export const deck: Deck = [
         <SlideShell bg={BG}>
           <GridBg accent={ACCENT} />
           <CornerNum n={3} total={4} accent={ACCENT} />
-          <Eyebrow color={ACCENT}>Booth 04 · Format · Side-by-side</Eyebrow>
+          <Eyebrow color={ACCENT}>Side-by-side</Eyebrow>
           <div className="mt-3 mb-8">
             <BigTitle>Anchor vs Peer vs Community.</BigTitle>
           </div>
@@ -215,7 +215,7 @@ export const deck: Deck = [
         <SlideShell bg={BG}>
           <GridBg accent={ACCENT} />
           <CornerNum n={4} total={4} accent={ACCENT} />
-          <Eyebrow color={ACCENT}>Booth 04 · Format · Two-day agenda</Eyebrow>
+          <Eyebrow color={ACCENT}>Two-day agenda</Eyebrow>
           <div className="mt-3 mb-6">
             <BigTitle>Two days. One outcome.</BigTitle>
           </div>

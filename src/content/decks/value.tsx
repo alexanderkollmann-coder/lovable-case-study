@@ -21,7 +21,7 @@ export const deck: Deck = [
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
         <CornerNum n={1} total={3} accent={ACCENT} />
-        <Eyebrow color={ACCENT}>Booth 02 · Value Prop · What an enterprise gets</Eyebrow>
+        <Eyebrow color={ACCENT}>What an enterprise gets</Eyebrow>
         <div className="mt-3 mb-8">
           <BigTitle>What an enterprise gets back.</BigTitle>
         </div>
@@ -154,7 +154,7 @@ function RoiCalculator() {
       <GridBg accent={ACCENT} />
       <CornerNum n={2} total={3} accent={ACCENT} />
       <div className="flex items-baseline justify-between">
-        <Eyebrow color={ACCENT}>Booth 02 · Value Prop · What an enterprise gets</Eyebrow>
+        <Eyebrow color={ACCENT}>What an enterprise gets</Eyebrow>
         <div className="flex items-center gap-2">
           {([
             ['conservative', 'Conservative'],

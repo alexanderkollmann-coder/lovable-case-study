@@ -118,21 +118,17 @@ export const deck: Deck = [
               {row.map((cell, ci) => (
                 <div
                   key={ci}
-                  className="rounded-lg p-3 border"
+                  className="rounded-lg p-3 border flex items-center justify-center text-center"
                   style={{
-                    background: cell.highlight ? `${ACCENT}1f` : cell.title ? 'rgba(255,255,255,0.02)' : 'rgba(255,255,255,0.01)',
-                    borderColor: cell.highlight ? `${ACCENT}66` : cell.title ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.04)',
+                    background: cell.highlight ? `${ACCENT}33` : 'rgba(255,255,255,0.01)',
+                    borderColor: cell.highlight ? ACCENT : 'rgba(255,255,255,0.04)',
+                    boxShadow: cell.highlight ? `0 0 18px ${ACCENT}44` : undefined,
                   }}
                 >
                   {cell.title ? (
-                    <>
-                      <div className={`font-display text-base font-semibold ${cell.highlight ? '' : 'text-white'}`} style={cell.highlight ? { color: ACCENT } : undefined}>
-                        {cell.title}
-                      </div>
-                      <div className="text-[11px] text-white/55 mt-1 leading-relaxed">{cell.sub}</div>
-                    </>
+                    <div className="text-sm text-white/55 leading-snug">{cell.title}</div>
                   ) : (
-                    <div className="text-white/15 text-center text-xs h-full flex items-center justify-center">—</div>
+                    <div className="text-white/15 text-xs">—</div>
                   )}
                 </div>
               ))}

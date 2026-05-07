@@ -72,7 +72,7 @@ export const deck: Deck = [
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
         <CornerNum n={1} total={3} accent={ACCENT} />
-        <Eyebrow color={ACCENT}>Booth 05 · Execution · The 2-day timeline</Eyebrow>
+        <Eyebrow color={ACCENT}>The 2-day timeline</Eyebrow>
         <div className="mt-3 mb-6">
           <BigTitle>The day, beat by beat.</BigTitle>
         </div>

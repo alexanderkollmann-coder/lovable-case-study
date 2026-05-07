@@ -17,19 +17,19 @@ interface MatrixCell {
   highlight?: boolean
 }
 
-const X_LABELS = ['1:1', '1:Few', '1:Many']
+const X_LABELS = ['Anchor', 'Peer', 'Community']
 const Y_LABELS = ['Origination', 'Upsell', 'Awareness']
 
 const MATRIX: MatrixCell[][] = [
   // Origination
   [
-    { title: 'Anchor', sub: 'Lovable × Allianz' },
-    { title: 'Peer', sub: 'Financial Institution bootcamp' },
+    { title: 'Lovable × Allianz', highlight: true },
+    { title: 'Financial Institution bootcamp', highlight: true },
     {},
   ],
   // Upsell
   [
-    { title: 'Anchor', sub: 'Lovable × DT' },
+    { title: 'Lovable × DT', highlight: true },
     {},
     {},
   ],
@@ -37,7 +37,7 @@ const MATRIX: MatrixCell[][] = [
   [
     {},
     {},
-    { title: 'Community', sub: 'Free-for-all enterprise hackathon' },
+    { title: 'Free-for-all enterprise hackathon', highlight: true },
   ],
 ]
 
@@ -67,7 +67,7 @@ export const deck: Deck = [
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
         <CornerNum n={1} total={4} accent={ACCENT} />
-        <Eyebrow color={ACCENT}>Booth 04 · Format · Three hackathon types</Eyebrow>
+        <Eyebrow color={ACCENT}>Three hackathon types</Eyebrow>
         <div className="mt-3 mb-10">
           <BigTitle>Anchor. Peer. Community.</BigTitle>
         </div>
@@ -102,7 +102,7 @@ export const deck: Deck = [
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
         <CornerNum n={2} total={4} accent={ACCENT} />
-        <Eyebrow color={ACCENT}>Booth 04 · Format · Goal × Audience</Eyebrow>
+        <Eyebrow color={ACCENT}>Goal × Audience</Eyebrow>
         <div className="mt-3 mb-6">
           <BigTitle>Goal × Audience.</BigTitle>
         </div>
@@ -118,21 +118,17 @@ export const deck: Deck = [
               {row.map((cell, ci) => (
                 <div
                   key={ci}
-                  className="rounded-lg p-3 border"
+                  className="rounded-lg p-3 border flex items-center justify-center text-center"
                   style={{
-                    background: cell.highlight ? `${ACCENT}1f` : cell.title ? 'rgba(255,255,255,0.02)' : 'rgba(255,255,255,0.01)',
-                    borderColor: cell.highlight ? `${ACCENT}66` : cell.title ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.04)',
+                    background: cell.highlight ? `${ACCENT}33` : 'rgba(255,255,255,0.01)',
+                    borderColor: cell.highlight ? ACCENT : 'rgba(255,255,255,0.04)',
+                    boxShadow: cell.highlight ? `0 0 18px ${ACCENT}44` : undefined,
                   }}
                 >
                   {cell.title ? (
-                    <>
-                      <div className={`font-display text-base font-semibold ${cell.highlight ? '' : 'text-white'}`} style={cell.highlight ? { color: ACCENT } : undefined}>
-                        {cell.title}
-                      </div>
-                      <div className="text-[11px] text-white/55 mt-1 leading-relaxed">{cell.sub}</div>
-                    </>
+                    <div className="text-sm text-white/55 leading-snug">{cell.title}</div>
                   ) : (
-                    <div className="text-white/15 text-center text-xs h-full flex items-center justify-center">—</div>
+                    <div className="text-white/15 text-xs">—</div>
                   )}
                 </div>
               ))}
@@ -147,75 +143,31 @@ export const deck: Deck = [
     ),
   },
   {
-    id: 'comparison',
-    render: () => {
-      const ROWS = [
-        { label: 'Defining variable', a: 'Which problem', p: 'Which sector', c: 'Which pull mechanic' },
-        { label: 'Duration',          a: '2 days',        p: '2 days',       c: '1 day or async' },
-        { label: 'Builders',          a: '30, one customer', p: '30, across 5 prospects', c: '100–1,000+' },
-        { label: 'FDE model',         a: '2 dedicated',   p: '1–2 floating', c: 'Judges only' },
-        { label: 'Data',              a: 'Real customer data', p: 'Real cohort data', c: 'Mock or open data' },
-        { label: 'Reward',            a: 'Internal recognition', p: 'Internal recognition', c: 'Prize money' },
-      ]
-      return (
-        <SlideShell bg={BG}>
-          <GridBg accent={ACCENT} />
-          <CornerNum n={3} total={4} accent={ACCENT} />
-          <Eyebrow color={ACCENT}>Booth 04 · Format · Side-by-side</Eyebrow>
-          <div className="mt-3 mb-8">
-            <BigTitle>Anchor vs Peer vs Community.</BigTitle>
-          </div>
-          <div className="rounded-xl border border-white/10 overflow-hidden bg-white/[0.02]">
-            <div className="grid" style={{ gridTemplateColumns: '1.2fr 1fr 1fr 1fr' }}>
-              {['', 'Anchor', 'Peer', 'Community'].map((h, i) => (
-                <div
-                  key={i}
-                  className="p-3 text-[11px] font-mono uppercase tracking-[0.22em] border-b border-white/10"
-                  style={{ color: i === 0 ? 'rgba(255,255,255,0.4)' : ACCENT }}
-                >
-                  {h}
-                </div>
-              ))}
-              {ROWS.map((r) => (
-                <div key={r.label} className="contents">
-                  <Cell bold>{r.label}</Cell>
-                  <Cell>{r.a}</Cell>
-                  <Cell>{r.p}</Cell>
-                  <Cell>{r.c}</Cell>
-                </div>
-              ))}
-            </div>
-          </div>
-        </SlideShell>
-      )
-    },
-  },
-  {
     id: 'agenda',
     render: () => {
       const day1 = [
-        { t: '09:30', a: 'Fireside chat: customer CDO + Lovable founder', d: '45 min' },
-        { t: '10:15', a: 'Lovable tooling intro, SE-led', d: '45 min' },
+        { t: '09:30', a: 'Fireside chat: customer CDO + Lovable founder', d: '30 min' },
+        { t: '10:00', a: 'Lovable tooling intro, SE-led', d: '30 min' },
+        { t: '10:30', a: 'Instructions + team formation', d: '15 min' },
         { t: '11:00', a: 'Build block 1', d: '1.5 hrs' },
         { t: '12:30', a: 'Lunch', d: '1 hr' },
         { t: '13:30', a: 'Build block 2', d: '3.5 hrs' },
-        { t: '17:00', a: 'Stand-up demos', d: '1 hr' },
-        { t: '19:00', a: 'Executive working dinner — prototype review and selection', d: '', hinge: true },
+        { t: '19:00', a: 'Working dinner', d: '', hinge: true },
       ]
       const day2 = [
-        { t: '09:30', a: 'Standup + sprint plan', d: '30 min' },
+        { t: '09:30', a: 'Standup', d: '30 min' },
         { t: '10:00', a: 'Build block 3', d: '2 hrs' },
         { t: '12:00', a: 'Lunch', d: '1 hr' },
         { t: '13:00', a: 'Build block 4', d: '2.5 hrs' },
         { t: '15:30', a: 'Final demos to judging panel', d: '1 hr', panel: true },
         { t: '16:30', a: 'Awards + executive readout', d: '30 min' },
-        { t: '17:00', a: 'Demo dinner — LOI signing, MAP initialized', d: '', highlight: true },
+        { t: 'Next day', a: 'Prototype selection and LOI signing', d: '', highlight: true },
       ]
       return (
         <SlideShell bg={BG}>
           <GridBg accent={ACCENT} />
-          <CornerNum n={4} total={4} accent={ACCENT} />
-          <Eyebrow color={ACCENT}>Booth 04 · Format · Two-day agenda</Eyebrow>
+          <CornerNum n={3} total={4} accent={ACCENT} />
+          <Eyebrow color={ACCENT}>Two-day agenda</Eyebrow>
           <div className="mt-3 mb-6">
             <BigTitle>Two days. One outcome.</BigTitle>
           </div>
@@ -254,18 +206,49 @@ export const deck: Deck = [
                 ))}
               </div>
             </div>
-
-            {/* hinge annotation between columns */}
-            <div
-              className="absolute left-1/2 -translate-x-1/2 px-2 py-1 rounded text-[10px] font-mono uppercase tracking-[0.22em]"
-              style={{
-                top: '78%',
-                background: '#0a0d18',
-                color: ACCENT,
-                border: `1px solid ${ACCENT}55`,
-              }}
-            >
-              Prototype selection
+          </div>
+        </SlideShell>
+      )
+    },
+  },
+  {
+    id: 'comparison',
+    render: () => {
+      const ROWS = [
+        { label: 'Defining variable', a: 'Which problem', p: 'Which sector', c: 'Which pull mechanic' },
+        { label: 'Duration',          a: '2 days',        p: '2 days',       c: '1 day or async' },
+        { label: 'Builders',          a: '30, one customer', p: '30, across 5 prospects', c: '100–1,000+' },
+        { label: 'FDE model',         a: '2 dedicated',   p: '1–2 floating', c: 'Judges only' },
+        { label: 'Data',              a: 'Real customer data', p: 'Real cohort data', c: 'Mock or open data' },
+        { label: 'Reward',            a: 'Internal recognition', p: 'Internal recognition', c: 'Prize money' },
+      ]
+      return (
+        <SlideShell bg={BG}>
+          <GridBg accent={ACCENT} />
+          <CornerNum n={4} total={4} accent={ACCENT} />
+          <Eyebrow color={ACCENT}>Optional · for Q&A</Eyebrow>
+          <div className="mt-3 mb-8">
+            <BigTitle>Anchor vs Peer vs Community.</BigTitle>
+          </div>
+          <div className="rounded-xl border border-white/10 overflow-hidden bg-white/[0.02]">
+            <div className="grid" style={{ gridTemplateColumns: '1.2fr 1fr 1fr 1fr' }}>
+              {['', 'Anchor', 'Peer', 'Community'].map((h, i) => (
+                <div
+                  key={i}
+                  className="p-3 text-[11px] font-mono uppercase tracking-[0.22em] border-b border-white/10"
+                  style={{ color: i === 0 ? 'rgba(255,255,255,0.4)' : ACCENT }}
+                >
+                  {h}
+                </div>
+              ))}
+              {ROWS.map((r) => (
+                <div key={r.label} className="contents">
+                  <Cell bold>{r.label}</Cell>
+                  <Cell>{r.a}</Cell>
+                  <Cell>{r.p}</Cell>
+                  <Cell>{r.c}</Cell>
+                </div>
+              ))}
             </div>
           </div>
         </SlideShell>

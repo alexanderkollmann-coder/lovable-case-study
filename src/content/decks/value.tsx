@@ -11,7 +11,99 @@ import type { Deck } from './types'
 import { Slider } from '@/components/ui/slider'
 
 const ACCENT = '#5e88ff'
+const ACCENT_BRIGHT = '#8aa9ff'
 const BG = 'radial-gradient(ellipse at 20% 0%, #1a2546 0%, #0a0d1a 65%)'
+
+type ValueSection = {
+  kicker: string
+  frontTitle: React.ReactNode
+  tagline: string
+  bullets: React.ReactNode[]
+}
+
+const VALUE_SECTIONS: ValueSection[] = [
+  {
+    kicker: 'Cost Savings',
+    frontTitle: (
+      <>Cost <span style={{ color: ACCENT_BRIGHT }}>Savings</span></>
+    ),
+    tagline: 'Builds the same thing, faster.',
+    bullets: [
+      <>Engineering hours recovered on work that would have been built anyway</>,
+      <><span className="text-white font-semibold">60–90%</span> time savings on AI-assisted builds <span className="text-white/45">(Spotify Honk, Nov 2025)</span></>,
+      <><span className="text-white font-semibold">16–30%</span> productivity / <span className="text-white font-semibold">31–45%</span> quality gains in top-quintile orgs <span className="text-white/45">(McKinsey 2025)</span></>,
+    ],
+  },
+  {
+    kicker: 'Value Creation',
+    frontTitle: (
+      <>Value <span style={{ color: ACCENT_BRIGHT }}>Creation</span></>
+    ),
+    tagline: "Builds things that wouldn't exist otherwise.",
+    bullets: [
+      <>Net-new internal tools shipped that would never have made the engineering backlog</>,
+      <><span className="text-white font-semibold">4×</span> project throughput <span className="text-white/45">(Lovable ERP customer, Series B blog)</span></>,
+      <>McKinsey engineers built in hours what they'd been waiting 4–6 months for <span className="text-white/45">(Anton Osika, Fortune Dec 2025)</span></>,
+    ],
+  },
+]
+
+function ValueFlipCard({ section }: { section: ValueSection }) {
+  const [flipped, setFlipped] = useState(false)
+  return (
+    <button
+      onClick={() => setFlipped((f) => !f)}
+      className="group relative h-full w-full text-left"
+      style={{ perspective: '1200px' }}
+    >
+      <div
+        className="relative h-full w-full transition-transform duration-700"
+        style={{
+          transformStyle: 'preserve-3d',
+          transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+        }}
+      >
+        {/* Front */}
+        <div
+          className="absolute inset-0 rounded-2xl border bg-white/[0.03] backdrop-blur-sm p-8 flex flex-col items-center justify-center text-center hover:bg-white/[0.05] transition-colors"
+          style={{ backfaceVisibility: 'hidden', borderColor: `${ACCENT}33` }}
+        >
+          <div className="font-display font-bold text-white leading-[0.95]" style={{ fontSize: 'clamp(2rem, 3.4vw, 3rem)' }}>
+            {section.frontTitle}
+          </div>
+          <div className="mt-6 text-base text-white/75">{section.tagline}</div>
+          <div className="absolute bottom-4 right-5 text-[10px] font-mono uppercase tracking-[0.22em] text-white/40">
+            Tap to reveal →
+          </div>
+        </div>
+
+        {/* Back */}
+        <div
+          className="absolute inset-0 rounded-2xl border p-8 flex flex-col"
+          style={{
+            backfaceVisibility: 'hidden',
+            transform: 'rotateY(180deg)',
+            borderColor: `${ACCENT}55`,
+            background: `linear-gradient(160deg, ${ACCENT}14, rgba(255,255,255,0.02))`,
+          }}
+        >
+          <div className="text-sm font-mono uppercase tracking-[0.28em]" style={{ color: ACCENT_BRIGHT }}>
+            {section.kicker}
+          </div>
+          <div className="font-display text-xl font-semibold text-white mt-2">{section.tagline}</div>
+          <ul className="mt-6 space-y-4 text-sm text-white/80 flex-1">
+            {section.bullets.map((b, i) => (
+              <li key={i} className="flex gap-3 leading-relaxed">
+                <span style={{ color: ACCENT_BRIGHT }}>▸</span>
+                <span>{b}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </button>
+  )
+}
 
 export const deck: Deck = [
   /* ---------------- Slide 2.1 — Two dimensions of value ---------------- */
@@ -21,29 +113,14 @@ export const deck: Deck = [
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
         <CornerNum n={1} total={3} accent={ACCENT} />
-        <Eyebrow color={ACCENT}>Booth 02 · Value Prop · What an enterprise gets</Eyebrow>
+        <Eyebrow color={ACCENT}>What an enterprise gets</Eyebrow>
         <div className="mt-3 mb-8">
           <BigTitle>What an enterprise gets back.</BigTitle>
         </div>
-        <div className="grid grid-cols-2 gap-6 flex-1">
-          <Card accent={ACCENT}>
-            <div className="text-[10px] font-mono uppercase tracking-[0.28em]" style={{ color: ACCENT }}>Cost savings</div>
-            <div className="mt-2 text-xl font-semibold text-white">Builds the same thing, faster.</div>
-            <ul className="mt-6 space-y-4 text-sm text-white/80">
-              <Bullet>Engineering hours recovered on work that would have been built anyway</Bullet>
-              <Bullet><span className="text-white font-semibold">60–90%</span> time savings on AI-assisted builds <span className="text-white/45">(Spotify Honk, Nov 2025)</span></Bullet>
-              <Bullet><span className="text-white font-semibold">16–30%</span> productivity / <span className="text-white font-semibold">31–45%</span> quality gains in top-quintile orgs <span className="text-white/45">(McKinsey 2025)</span></Bullet>
-            </ul>
-          </Card>
-          <Card accent={ACCENT}>
-            <div className="text-[10px] font-mono uppercase tracking-[0.28em]" style={{ color: ACCENT }}>Value creation</div>
-            <div className="mt-2 text-xl font-semibold text-white">Builds things that wouldn't exist otherwise.</div>
-            <ul className="mt-6 space-y-4 text-sm text-white/80">
-              <Bullet>Net-new internal tools shipped that would never have made the engineering backlog</Bullet>
-              <Bullet><span className="text-white font-semibold">4×</span> project throughput <span className="text-white/45">(Lovable ERP customer, Series B blog)</span></Bullet>
-              <Bullet>McKinsey engineers built in hours what they'd been waiting 4–6 months for <span className="text-white/45">(Anton Osika, Fortune Dec 2025)</span></Bullet>
-            </ul>
-          </Card>
+        <div className="flex-1 grid grid-cols-2 gap-6 min-h-0">
+          {VALUE_SECTIONS.map((s) => (
+            <ValueFlipCard key={s.kicker} section={s} />
+          ))}
         </div>
       </SlideShell>
     ),
@@ -94,14 +171,6 @@ export const deck: Deck = [
   },
 ]
 
-function Bullet({ children }: { children: React.ReactNode }) {
-  return (
-    <li className="flex gap-3 leading-relaxed">
-      <span style={{ color: ACCENT }}>▸</span>
-      <span>{children}</span>
-    </li>
-  )
-}
 
 /* ----------------------- ROI Calculator ----------------------- */
 
@@ -154,7 +223,7 @@ function RoiCalculator() {
       <GridBg accent={ACCENT} />
       <CornerNum n={2} total={3} accent={ACCENT} />
       <div className="flex items-baseline justify-between">
-        <Eyebrow color={ACCENT}>Booth 02 · Value Prop · What an enterprise gets</Eyebrow>
+        <Eyebrow color={ACCENT}>What an enterprise gets</Eyebrow>
         <div className="flex items-center gap-2">
           {([
             ['conservative', 'Conservative'],

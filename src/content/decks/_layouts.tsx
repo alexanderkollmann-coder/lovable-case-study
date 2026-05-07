@@ -137,10 +137,7 @@ export function GridBg({ accent }: { accent: string }) {
   )
 }
 
-export function CornerNum({ n, total, accent }: { n: number; total: number; accent: string }) {
-  return (
-    <div className="absolute top-6 right-8 font-mono text-xs tracking-[0.3em] text-white/40">
-      <span style={{ color: accent }}>{String(n).padStart(2, '0')}</span> / {String(total).padStart(2, '0')}
-    </div>
-  )
+export function CornerNum(_: { n: number; total: number; accent: string }) {
+  // Page count is rendered by BoothPanel chrome; suppress duplicate in-slide indicator.
+  return null
 }

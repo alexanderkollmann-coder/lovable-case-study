@@ -138,16 +138,24 @@ export function IntroVideo() {
             </button>
           )}
 
-          {/* Subtle skip button — bottom-right, persists after the video ends */}
-          <button
-            type="button"
-            onClick={handleEnter}
-            className="absolute bottom-5 right-6 text-[10px] uppercase tracking-[0.32em] text-white/40 hover:text-white/90 transition-colors z-10"
-          >
-            Skip <span className="ml-1">→</span>
-          </button>
+          {/* Skip while video is playing — reveals the Take-a-tour CTA */}
+          {!ended && (
+            <button
+              type="button"
+              onClick={() => {
+                const v = videoRef.current
+                if (v) {
+                  try { v.pause() } catch {}
+                }
+                setEnded(true)
+              }}
+              className="absolute bottom-5 right-6 text-[10px] uppercase tracking-[0.32em] text-white/40 hover:text-white/90 transition-colors z-10"
+            >
+              Skip <span className="ml-1">→</span>
+            </button>
+          )}
 
-          {/* "Take a tour" CTA — fades in when the video ends */}
+          {/* "Take a tour" CTA — fades in when the video ends or is skipped */}
           {ended && (
             <div
               className="absolute inset-0 flex items-center justify-center"
@@ -167,6 +175,16 @@ export function IntroVideo() {
                 <span className="ml-3 inline-block transition-transform group-hover:translate-x-1">
                   →
                 </span>
+              </button>
+
+              {/* Skip the cinematic tour — go straight into the 3D world */}
+              <button
+                type="button"
+                onClick={handleEnter}
+                className="absolute bottom-5 right-6 text-[10px] uppercase tracking-[0.32em] text-white/40 hover:text-white/90 transition-colors z-10"
+                style={{ animation: 'fadeIn 800ms ease-out 400ms both' }}
+              >
+                Skip tour <span className="ml-1">→</span>
               </button>
             </div>
           )}

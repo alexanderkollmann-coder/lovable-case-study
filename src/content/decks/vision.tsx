@@ -29,7 +29,7 @@ export const deck: Deck = [
         <GridBg accent={ACCENT} />
         <CornerNum n={1} total={2} accent={ACCENT} />
         <div className="flex-1 flex flex-col justify-center items-center text-center max-w-6xl mx-auto">
-          <Eyebrow color={ACCENT}>Booth 01 · Vision</Eyebrow>
+          <Eyebrow color={ACCENT}>Vision</Eyebrow>
           <h1
             className="font-display font-semibold leading-[0.95] tracking-tight mt-8"
             style={{ fontSize: 'clamp(3rem, 8vw, 8rem)' }}

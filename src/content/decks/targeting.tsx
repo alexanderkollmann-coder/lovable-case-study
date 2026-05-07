@@ -19,7 +19,7 @@ export const deck: Deck = [
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
         <CornerNum n={1} total={3} accent={ACCENT} />
-        <Eyebrow color={ACCENT}>Booth 03 · Targeting · The rubric</Eyebrow>
+        <Eyebrow color={ACCENT}>The rubric</Eyebrow>
         <div className="mt-3 mb-8">
           <BigTitle>Three buckets. Three questions. One target list.</BigTitle>
         </div>
@@ -165,9 +165,6 @@ export const deck: Deck = [
               </ul>
             </Card>
           ))}
-        </div>
-        <div className="mt-6 pt-4 border-t border-white/10 text-xs text-white/55 italic">
-          I met Jonathan Abrahamson at the ElevenLabs conference earlier this year. The warm intro is in place.
         </div>
       </SlideShell>
     ),

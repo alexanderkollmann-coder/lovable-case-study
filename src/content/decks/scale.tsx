@@ -9,7 +9,7 @@ import type { Deck } from './types'
 const ACCENT = '#6ee7b7'
 const BG = 'radial-gradient(ellipse at 50% 0%, #0a4634 0%, #07120e 65%)'
 
-type Point = { title: string; body: string }
+type Point = { title: string; body: string; muted?: boolean }
 type Section = {
   kicker: string
   question: string
@@ -35,7 +35,7 @@ const SECTIONS: Section[] = [
     points: [
       { title: 'Applications Library', body: 'Reusable templates: 8-hour build \u2192 2-hour build.' },
       { title: 'Champion network', body: 'Graduates return as references and judges.' },
-      { title: 'Procurement assets', body: 'First telco contract: 75 days. Fifth: 30.' },
+      { title: 'Procurement assets', body: 'DPA, SOC 2 Type II, ISO 27001, EU AI Act assessment, pen-test reports \u2014 first telco contract: 75 days, fifth: 30.' },
     ],
   },
   {
@@ -43,7 +43,7 @@ const SECTIONS: Section[] = [
     question: 'What format do we use as we expand?',
     backTitle: 'Right format for each tier.',
     points: [
-      { title: 'Anchor \u2014 Enterprise', body: 'Optimized for \u20AC1M+ contracts.' },
+      { title: 'Anchor \u2014 Enterprise', body: 'Optimized for enterprise contracts.', muted: true },
       { title: 'Peer \u2014 Mid-market', body: 'Sector cohorts, lower per-account CAC.' },
       { title: 'Community \u2014 SMB', body: 'Brand reach and downstream pipeline.' },
     ],
@@ -108,7 +108,7 @@ function FlipCard({ section }: { section: Section }) {
           </div>
           <ul className="mt-5 space-y-4 flex-1">
             {section.points.map((p) => (
-              <li key={p.title}>
+              <li key={p.title} className={p.muted ? 'opacity-40' : ''}>
                 <div className="text-sm font-semibold text-white">{p.title}</div>
                 <div className="text-xs text-white/65 leading-relaxed mt-0.5">
                   {p.body}

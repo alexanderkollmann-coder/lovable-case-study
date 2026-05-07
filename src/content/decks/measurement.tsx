@@ -58,7 +58,7 @@ function FlipCard({ section }: { section: Section }) {
           style={{ backfaceVisibility: 'hidden', borderColor: `${ACCENT}33` }}
         >
           <div
-            className="text-[10px] font-mono uppercase tracking-[0.28em]"
+            className="text-sm font-mono uppercase tracking-[0.28em]"
             style={{ color: ACCENT_BRIGHT }}
           >
             {section.kicker}

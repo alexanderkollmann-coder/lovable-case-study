@@ -5,6 +5,7 @@ export type BoothId =
   | 'value'
   | 'targeting'
   | 'formats'
+  | 'execution'
   | 'gtm'
   | 'measurement'
   | 'scale'
@@ -77,15 +78,15 @@ const booths: BoothMeta[] = [
 
   // ========== HACKATHON ==========
   {
-    id: 'measurement',
+    id: 'execution',
     timeline: 'hack',
     position: [-5, 0, 8],
     rotation: -0.2,
-    label: 'Measurement',
-    subtitle: 'How we know it is working.',
-    accent: '#0f9b6c',
-    iconName: 'gauge',
-    load: () => import('./booths/06-measurement.md?raw'),
+    label: 'Format',
+    subtitle: 'Goal × Audience. We picked Peer Studios.',
+    accent: '#ff4d7a',
+    iconName: 'zap',
+    load: () => import('./booths/04-execution.md?raw'),
   },
 
   // ========== POST-HACKATHON ==========
@@ -99,6 +100,19 @@ const booths: BoothMeta[] = [
     accent: '#34d399',
     iconName: 'users',
     load: () => import('./booths/05-gtm-motion.md?raw'),
+  },
+  {
+    id: 'measurement',
+    timeline: 'post',
+    // Far back-right corner of post zone — mirroring the winner's position in hack
+    position: [24, 0, -7],
+    // Faces back toward the centre of the zone (world 17, 0, 0)
+    rotation: -Math.PI / 4,
+    label: 'Measurement',
+    subtitle: 'How we know it is working.',
+    accent: '#0f9b6c',
+    iconName: 'gauge',
+    load: () => import('./booths/06-measurement.md?raw'),
   },
   {
     id: 'scale',

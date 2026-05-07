@@ -6,7 +6,6 @@ export type BoothId =
   | 'targeting'
   | 'formats'
   | 'execution'
-  | 'gtm'
   | 'measurement'
   | 'scale'
 

@@ -176,14 +176,6 @@ export const deck: Deck = [
   },
 ]
 
-function Bullet({ children }: { children: React.ReactNode }) {
-  return (
-    <li className="flex gap-3 leading-relaxed">
-      <span style={{ color: ACCENT }}>▸</span>
-      <span>{children}</span>
-    </li>
-  )
-}
 
 /* ----------------------- ROI Calculator ----------------------- */
 

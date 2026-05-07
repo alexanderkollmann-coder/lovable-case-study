@@ -91,23 +91,10 @@ const booths: BoothMeta[] = [
 
   // ========== POST-HACKATHON ==========
   {
-    id: 'gtm',
+    id: 'measurement',
     timeline: 'post',
     position: [13, 0, 7],
     rotation: -0.5,
-    label: 'Execution',
-    subtitle: 'The day — beat by beat. Hackathon → contract.',
-    accent: '#34d399',
-    iconName: 'users',
-    load: () => import('./booths/05-gtm-motion.md?raw'),
-  },
-  {
-    id: 'measurement',
-    timeline: 'post',
-    // Far back-right corner of post zone — mirroring the winner's position in hack
-    position: [24, 0, -7],
-    // Faces back toward the centre of the zone (world 17, 0, 0)
-    rotation: -Math.PI / 4,
     label: 'Measurement',
     subtitle: 'How we know it is working.',
     accent: '#0f9b6c',

@@ -65,17 +65,15 @@ function ValueFlipCard({ section }: { section: ValueSection }) {
       >
         {/* Front */}
         <div
-          className="absolute inset-0 rounded-2xl border bg-white/[0.03] backdrop-blur-sm p-8 flex flex-col justify-between hover:bg-white/[0.05] transition-colors"
+          className="absolute inset-0 rounded-2xl border bg-white/[0.03] backdrop-blur-sm p-8 flex flex-col items-center justify-center text-center hover:bg-white/[0.05] transition-colors"
           style={{ backfaceVisibility: 'hidden', borderColor: `${ACCENT}33` }}
         >
           <div className="font-display font-bold text-white leading-[0.95]" style={{ fontSize: 'clamp(2rem, 3.4vw, 3rem)' }}>
             {section.frontTitle}
           </div>
-          <div className="flex items-end justify-between">
-            <div className="text-base text-white/75">{section.tagline}</div>
-            <div className="text-[10px] font-mono uppercase tracking-[0.22em] text-white/40">
-              Tap to reveal →
-            </div>
+          <div className="mt-6 text-base text-white/75">{section.tagline}</div>
+          <div className="absolute bottom-4 right-5 text-[10px] font-mono uppercase tracking-[0.22em] text-white/40">
+            Tap to reveal →
           </div>
         </div>
 

@@ -519,7 +519,11 @@ export function CinematicNameTag({
   color?: string
 }) {
   const cinematicShotId = useGameStore((s) => s.cinematicShotId)
+  const tourActive = useGameStore((s) => s.tourActive)
+  // Show during cinematic shots (e.g. audience-reveal recording) but NOT during the
+  // post-intro tour — Big-Ben pull-back should read as a clean wide of the office.
   if (cinematicShotId === null) return null
+  if (tourActive) return null
   return (
     <Billboard position={pos} follow lockX={false} lockY={false} lockZ={false}>
       <RoundedBox args={[0.95, 0.32, 0.05]} radius={0.04} smoothness={2}>

@@ -135,12 +135,12 @@ export const SHOTS: Shot[] = [
     ],
   },
 
-  /* ---------- TOUR · 5 × 3s b-roll sequence triggered from the intro CTA ---------- */
+  /* ---------- TOUR · 5-shot · 20s b-roll sequence triggered from the intro CTA ---------- */
   {
     id: 'tour-overview',
     name: 'Tour · Global overview',
-    description: 'Sweeping pan across all three zones, all lit up.',
-    duration: 3,
+    description: 'Slow sweeping pan across all three zones, all lit up.',
+    duration: 4,
     timeline: 'hack',
     filename: 'tour-01-overview',
     keys: [
@@ -151,20 +151,20 @@ export const SHOTS: Shot[] = [
   {
     id: 'tour-london',
     name: 'Tour · London zoom-out',
-    description: 'Frontal view of Big Ben + the Eye behind the office, dollying back.',
-    duration: 3,
+    description: 'Tight on Big Ben + the Eye, slow tilt-up + pull-back to wide.',
+    duration: 5,
     timeline: 'pre',
     filename: 'tour-02-london',
     keys: [
-      { t: 0.0, pos: [-17, 4.5, 4], lookAt: [-17, 4, -12], zoom: 90 },
-      { t: 1.0, pos: [-17, 7, 16], lookAt: [-17, 3, -10], zoom: 36 },
+      { t: 0.0, pos: [-17, 3.6, 6], lookAt: [-17, 4.6, -10], zoom: 130 },
+      { t: 1.0, pos: [-17, 7.5, 18], lookAt: [-17, 3.0, -8], zoom: 36 },
     ],
   },
   {
     id: 'tour-hack',
     name: 'Tour · Hackathon orbit + winner push-in',
-    description: 'Side-arc around the hack arena, then push in to the winner podium.',
-    duration: 3,
+    description: 'Slow side-arc around the hack arena, then push in to the winner podium.',
+    duration: 4,
     timeline: 'hack',
     filename: 'tour-03-hack',
     keys: [
@@ -177,7 +177,7 @@ export const SHOTS: Shot[] = [
     id: 'tour-post',
     name: 'Tour · Post-hack screen pull-back',
     description: 'Tight on the wall screen, pulling back to reveal the command centre.',
-    duration: 3,
+    duration: 4,
     timeline: 'post',
     filename: 'tour-04-post',
     keys: [

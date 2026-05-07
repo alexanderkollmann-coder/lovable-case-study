@@ -134,7 +134,79 @@ export const SHOTS: Shot[] = [
       { t: 1.0, pos: [4.6, 1.5, -5.0], lookAt: [6.5, 0.6, -6.3], zoom: 170 },
     ],
   },
+
+  /* ---------- TOUR · 5 × 3s b-roll sequence triggered from the intro CTA ---------- */
+  {
+    id: 'tour-overview',
+    name: 'Tour · Global overview',
+    description: 'Sweeping pan across all three zones, all lit up.',
+    duration: 3,
+    timeline: 'hack',
+    filename: 'tour-01-overview',
+    keys: [
+      { t: 0.0, pos: [-22, 18, 24], lookAt: [-6, 0, -2], zoom: 22 },
+      { t: 1.0, pos: [22, 18, 24], lookAt: [6, 0, -2], zoom: 22 },
+    ],
+  },
+  {
+    id: 'tour-london',
+    name: 'Tour · London zoom-out',
+    description: 'Frontal view of Big Ben + the Eye behind the office, dollying back.',
+    duration: 3,
+    timeline: 'pre',
+    filename: 'tour-02-london',
+    keys: [
+      { t: 0.0, pos: [-17, 4.5, 4], lookAt: [-17, 4, -12], zoom: 90 },
+      { t: 1.0, pos: [-17, 7, 16], lookAt: [-17, 3, -10], zoom: 36 },
+    ],
+  },
+  {
+    id: 'tour-hack',
+    name: 'Tour · Hackathon orbit + winner push-in',
+    description: 'Side-arc around the hack arena, then push in to the winner podium.',
+    duration: 3,
+    timeline: 'hack',
+    filename: 'tour-03-hack',
+    keys: [
+      { t: 0.0, pos: [-10, 6, 9], lookAt: [0, 1, 0], zoom: 36 },
+      { t: 0.6, pos: [9, 4, 6], lookAt: [3, 1, -2], zoom: 50 },
+      { t: 1.0, pos: [4.6, 1.6, -5.0], lookAt: [6.5, 0.6, -6.3], zoom: 130 },
+    ],
+  },
+  {
+    id: 'tour-post',
+    name: 'Tour · Post-hack screen pull-back',
+    description: 'Tight on the wall screen, pulling back to reveal the command centre.',
+    duration: 3,
+    timeline: 'post',
+    filename: 'tour-04-post',
+    keys: [
+      { t: 0.0, pos: [17, 2.5, -4], lookAt: [17, 2.5, -10.18], zoom: 95 },
+      { t: 1.0, pos: [17, 7, 14], lookAt: [17, 2.0, -8], zoom: 36 },
+    ],
+  },
+  {
+    id: 'tour-topdown',
+    name: 'Tour · Top-down all three zones',
+    description: 'Birds-eye of all three spaces side-by-side, slow vertical drift.',
+    duration: 3,
+    timeline: 'hack',
+    filename: 'tour-05-topdown',
+    keys: [
+      { t: 0.0, pos: [0, 24, 0.5], lookAt: [0, 0, 0], zoom: 22 },
+      { t: 1.0, pos: [0, 30, 0.5], lookAt: [0, 0, 0], zoom: 24 },
+    ],
+  },
 ]
+
+/** Ordered IDs of the tour b-roll, played sequentially from the intro CTA. */
+export const TOUR_SHOT_IDS = [
+  'tour-overview',
+  'tour-london',
+  'tour-hack',
+  'tour-post',
+  'tour-topdown',
+] as const
 
 const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2)
 

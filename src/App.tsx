@@ -17,6 +17,7 @@ import { IntroVideo } from '@/ui/IntroVideo'
 import { Cinematic } from '@/cinematic/Cinematic'
 import { CinematicDebugHud } from '@/cinematic/CinematicDebugHud'
 import { CameraExplorer } from '@/cinematic/CameraExplorer'
+import { TourPlayer } from '@/cinematic/TourPlayer'
 import { useGameStore } from '@/store/gameStore'
 
 function App() {
@@ -89,6 +90,9 @@ function App() {
 
       {/* Cinematic debug HUD — only when a shot is active */}
       {cinematicMode && <CinematicDebugHud />}
+
+      {/* Post-intro b-roll tour orchestrator — runs the 5-shot sequence when tourActive */}
+      <TourPlayer />
 
       {/* Camera Explorer — live-tune the gameplay camera framing in cinematic mode (no shot playing) */}
       {cinematicMode && !cinematicShotId && <CameraExplorer />}

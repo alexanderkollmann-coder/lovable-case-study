@@ -74,6 +74,18 @@ export function IntroVideo() {
     }, 1400)
   }
 
+  const handleStartTour = () => {
+    // Kick off the b-roll sequence — TourPlayer takes over once intro unmounts.
+    useGameStore.getState().setTourShotIndex(0)
+    useGameStore.getState().setTourActive(true)
+
+    setExiting(true)
+    setTimeout(() => {
+      setIntroComplete(true)
+      setExiting(false)
+    }, 1400)
+  }
+
   return (
     <div
       className="fixed inset-0 z-[100] bg-black"
@@ -126,18 +138,16 @@ export function IntroVideo() {
             </button>
           )}
 
-          {/* Subtle skip button — bottom-right */}
-          {!ended && (
-            <button
-              type="button"
-              onClick={handleEnter}
-              className="absolute bottom-5 right-6 text-[10px] uppercase tracking-[0.32em] text-white/40 hover:text-white/90 transition-colors"
-            >
-              Skip <span className="ml-1">→</span>
-            </button>
-          )}
+          {/* Subtle skip button — bottom-right, persists after the video ends */}
+          <button
+            type="button"
+            onClick={handleEnter}
+            className="absolute bottom-5 right-6 text-[10px] uppercase tracking-[0.32em] text-white/40 hover:text-white/90 transition-colors z-10"
+          >
+            Skip <span className="ml-1">→</span>
+          </button>
 
-          {/* "Do you believe?" CTA — appears when video ends */}
+          {/* "Take a tour" CTA — fades in when the video ends */}
           {ended && (
             <div
               className="absolute inset-0 flex items-center justify-center"
@@ -149,11 +159,11 @@ export function IntroVideo() {
             >
               <button
                 type="button"
-                onClick={handleEnter}
+                onClick={handleStartTour}
                 className="group relative px-10 py-5 rounded-full bg-white/95 text-black text-lg font-medium tracking-wide hover:bg-white transition-all hover:scale-105 shadow-2xl"
                 style={{ animation: 'fadeInUp 800ms ease-out 200ms both' }}
               >
-                Do you believe?
+                Take a tour
                 <span className="ml-3 inline-block transition-transform group-hover:translate-x-1">
                   →
                 </span>

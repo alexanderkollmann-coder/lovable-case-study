@@ -139,6 +139,11 @@ interface GameState {
   /** When true, the shot t advances automatically each frame from the clock. When false, t holds and can be scrubbed. */
   cinematicAutoAdvance: boolean
 
+  /** True while the post-intro b-roll tour is playing. Hides gameplay UI and runs TOUR_SHOT_IDS in sequence. */
+  tourActive: boolean
+  /** Index into TOUR_SHOT_IDS — which shot of the tour is currently playing. */
+  tourShotIndex: number
+
   /** Active visual palette. Cycle through PALETTE_ORDER. */
   palette: Palette
 
@@ -179,6 +184,8 @@ interface GameState {
   setCinematicShotId: (id: string | null) => void
   setCinematicShotT: (t: number) => void
   setCinematicAutoAdvance: (auto: boolean) => void
+  setTourActive: (v: boolean) => void
+  setTourShotIndex: (i: number) => void
   cyclePalette: () => void
   setCameraConfig: (
     partial: Partial<{
@@ -203,6 +210,8 @@ export const useGameStore = create<GameState>((set, get) => ({
   cinematicShotId: null,
   cinematicShotT: 0,
   cinematicAutoAdvance: true,
+  tourActive: false,
+  tourShotIndex: 0,
   palette: 'energetic',
   cameraConfig: {
     offset: [0, 5, 16],
@@ -245,6 +254,8 @@ export const useGameStore = create<GameState>((set, get) => ({
   setCinematicShotId: (id) => set({ cinematicShotId: id }),
   setCinematicShotT: (t) => set({ cinematicShotT: Math.max(0, Math.min(1, t)) }),
   setCinematicAutoAdvance: (auto) => set({ cinematicAutoAdvance: auto }),
+  setTourActive: (v) => set({ tourActive: v }),
+  setTourShotIndex: (i) => set({ tourShotIndex: i }),
   cyclePalette: () =>
     set((state) => {
       const idx = PALETTE_ORDER.indexOf(state.palette)

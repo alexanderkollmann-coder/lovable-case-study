@@ -55,7 +55,8 @@ export function BoothPanel() {
 
   if (!isOpen || !meta || !deck) return null
 
-  const slide = deck[index]
+  const slide = deck[index] ?? deck[0]
+  if (!slide) return null
 
   return (
     <AnimatePresence>

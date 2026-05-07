@@ -83,7 +83,7 @@ function FlipCard({ section }: { section: Section }) {
             {section.question}
           </div>
           <div className="text-[10px] font-mono uppercase tracking-[0.22em] text-white/40">
-            Tap to reveal \u2192
+            Tap to reveal →
           </div>
         </div>
 

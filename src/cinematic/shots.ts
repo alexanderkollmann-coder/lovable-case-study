@@ -135,12 +135,12 @@ export const SHOTS: Shot[] = [
     ],
   },
 
-  /* ---------- TOUR · 5-shot · 20s b-roll sequence triggered from the intro CTA ---------- */
+  /* ---------- TOUR · 5-shot · ~25s b-roll sequence triggered from the intro CTA ---------- */
   {
     id: 'tour-overview',
     name: 'Tour · Global overview',
-    description: 'Slow sweeping pan across all three zones, all lit up.',
-    duration: 4,
+    description: 'Slow sweeping orbit-pan across all three zones, all lit up.',
+    duration: 5,
     timeline: 'hack',
     filename: 'tour-01-overview',
     keys: [
@@ -150,39 +150,41 @@ export const SHOTS: Shot[] = [
   },
   {
     id: 'tour-london',
-    name: 'Tour · London zoom-out',
-    description: 'Tight on Big Ben + the Eye, slow tilt-up + pull-back to wide.',
-    duration: 5,
+    name: 'Tour · London pull-back',
+    description: 'Original London pull-back, slowed down — frontal Big Ben + Eye, gentle dolly back.',
+    duration: 6,
     timeline: 'pre',
     filename: 'tour-02-london',
     keys: [
-      { t: 0.0, pos: [-17, 3.6, 6], lookAt: [-17, 4.6, -10], zoom: 130 },
-      { t: 1.0, pos: [-17, 7.5, 18], lookAt: [-17, 3.0, -8], zoom: 36 },
+      { t: 0.0, pos: [-17, 4.5, 4], lookAt: [-17, 4, -12], zoom: 90 },
+      { t: 1.0, pos: [-17, 7, 16], lookAt: [-17, 3, -10], zoom: 36 },
     ],
   },
   {
     id: 'tour-hack',
-    name: 'Tour · Hackathon orbit + winner push-in',
-    description: 'Slow side-arc around the hack arena, then push in to the winner podium.',
-    duration: 4,
+    name: 'Tour · Hackathon orbit + winner push-in (with hold)',
+    description: 'Slow side-arc around the hack arena, push in to the winner podium, then hold for ~2s.',
+    duration: 7,
     timeline: 'hack',
     filename: 'tour-03-hack',
     keys: [
-      { t: 0.0, pos: [-10, 6, 9], lookAt: [0, 1, 0], zoom: 36 },
-      { t: 0.6, pos: [9, 4, 6], lookAt: [3, 1, -2], zoom: 50 },
-      { t: 1.0, pos: [4.6, 1.6, -5.0], lookAt: [6.5, 0.6, -6.3], zoom: 130 },
+      { t: 0.00, pos: [-10, 6, 9],     lookAt: [0, 1, 0],          zoom: 36  },
+      { t: 0.45, pos: [9, 4, 6],       lookAt: [3, 1, -2],         zoom: 50  },
+      { t: 0.70, pos: [4.6, 1.6, -5.0], lookAt: [6.5, 0.6, -6.3],  zoom: 130 },
+      { t: 1.00, pos: [4.6, 1.6, -5.0], lookAt: [6.5, 0.6, -6.3],  zoom: 130 }, // hold ~2s
     ],
   },
   {
     id: 'tour-post',
-    name: 'Tour · Post-hack screen pull-back',
-    description: 'Tight on the wall screen, pulling back to reveal the command centre.',
-    duration: 4,
+    name: 'Tour · Post-hack diagonal orbit',
+    description: 'Diagonal orbit across the command centre — sweeps front-right to front-left, screen always in view.',
+    duration: 5,
     timeline: 'post',
     filename: 'tour-04-post',
     keys: [
-      { t: 0.0, pos: [17, 2.5, -4], lookAt: [17, 2.5, -10.18], zoom: 95 },
-      { t: 1.0, pos: [17, 7, 14], lookAt: [17, 2.0, -8], zoom: 36 },
+      { t: 0.0, pos: [25, 6, 8], lookAt: [17, 2, -4], zoom: 38 },
+      { t: 0.5, pos: [17, 8, 12], lookAt: [17, 2.2, -6], zoom: 38 },
+      { t: 1.0, pos: [9, 6, 8],  lookAt: [17, 2, -4], zoom: 38 },
     ],
   },
   {

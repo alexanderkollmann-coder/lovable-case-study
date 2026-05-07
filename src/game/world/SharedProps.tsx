@@ -361,6 +361,7 @@ export function StandingNPC({
   nameColor?: string
 }) {
   const cinematicShotId = useGameStore((s) => s.cinematicShotId)
+  const tourActive = useGameStore((s) => s.tourActive)
   const groupRef = useRef<THREE.Group>(null)
   const armOffsetRef = useRef(0)
   // Subtle idle / presenting motion
@@ -479,8 +480,9 @@ export function StandingNPC({
           </mesh>
         </>
       )}
-      {/* Floating name tag (above head) — only visible while a cinematic shot is playing */}
-      {name && cinematicShotId !== null && (
+      {/* Floating name tag (above head) — only during explicit cinematic shots,
+          never during the post-intro tour (we want a clean wide of the office). */}
+      {name && cinematicShotId !== null && !tourActive && (
         <Billboard position={[0, 2.45, 0]} follow lockX={false} lockY={false} lockZ={false}>
           <RoundedBox args={[0.95, 0.32, 0.05]} radius={0.04} smoothness={2}>
             <meshStandardMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={0.25} roughness={0.3} />

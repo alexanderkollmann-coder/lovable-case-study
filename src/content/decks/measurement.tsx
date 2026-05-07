@@ -114,7 +114,7 @@ export const deck: Deck = [
         <GridBg accent={ACCENT} />
         <div className="max-w-5xl">
           <BigTitle>
-            What we measure, <span style={{ color: ACCENT_BRIGHT }}>and when</span>.
+            How do we <span style={{ color: ACCENT_BRIGHT }}>measure success</span>?
           </BigTitle>
         </div>
         <div className="mt-4 mb-10 text-lg text-white/65">

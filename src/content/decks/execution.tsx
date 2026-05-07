@@ -17,19 +17,19 @@ interface MatrixCell {
   highlight?: boolean
 }
 
-const X_LABELS = ['1:1', '1:Few', '1:Many']
+const X_LABELS = ['Anchor', 'Peer', 'Community']
 const Y_LABELS = ['Origination', 'Upsell', 'Awareness']
 
 const MATRIX: MatrixCell[][] = [
   // Origination
   [
-    { title: 'Anchor', sub: 'Lovable × Allianz' },
-    { title: 'Peer', sub: 'Financial Institution bootcamp' },
+    { title: 'Lovable × Allianz', highlight: true },
+    { title: 'Financial Institution bootcamp', highlight: true },
     {},
   ],
   // Upsell
   [
-    { title: 'Anchor', sub: 'Lovable × DT' },
+    { title: 'Lovable × DT', highlight: true },
     {},
     {},
   ],
@@ -37,7 +37,7 @@ const MATRIX: MatrixCell[][] = [
   [
     {},
     {},
-    { title: 'Community', sub: 'Free-for-all enterprise hackathon' },
+    { title: 'Free-for-all enterprise hackathon', highlight: true },
   ],
 ]
 

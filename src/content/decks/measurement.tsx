@@ -18,17 +18,17 @@ const SECTIONS: Section[] = [
   {
     kicker: 'Leading',
     question: 'Indicators measured during the event window.',
-    backTitle: 'Signals we can act on in-event.',
+    backTitle: 'Indicators measured during the event window.',
     metrics: [
-      { title: 'Hackathon-to-PoC', body: 'Conversion from event to paid pilot.' },
-      { title: 'Named champions per account', body: 'IC + VP committed before we leave the room.' },
-      { title: 'Prototype-to-production rate', body: 'How many demos survive the first sprint review.' },
+      { title: 'Hackathon-to-PoC', body: 'Conversion from event to pilot.' },
+      { title: 'Named champions per account', body: 'IC + VP combination.' },
+      { title: 'Prototype-to-PoC', body: 'How many demos result in pilots.' },
     ],
   },
   {
     kicker: 'Lagging',
     question: 'Indicators that influence the P&L.',
-    backTitle: 'Outcomes that show up on the books.',
+    backTitle: 'Indicators that influence the P&L.',
     metrics: [
       { title: 'PoC-to-Contract conversion', body: 'Pilots that turn into signed deals.' },
       { title: 'Hackathon-sourced ARR', body: 'Net new ARR attributed to the program.' },
@@ -58,7 +58,7 @@ function FlipCard({ section }: { section: Section }) {
           style={{ backfaceVisibility: 'hidden', borderColor: `${ACCENT}33` }}
         >
           <div
-            className="text-[10px] font-mono uppercase tracking-[0.28em]"
+            className="text-sm font-mono uppercase tracking-[0.28em]"
             style={{ color: ACCENT_BRIGHT }}
           >
             {section.kicker}
@@ -82,7 +82,7 @@ function FlipCard({ section }: { section: Section }) {
           }}
         >
           <div
-            className="text-[10px] font-mono uppercase tracking-[0.28em]"
+            className="text-sm font-mono uppercase tracking-[0.28em]"
             style={{ color: ACCENT_BRIGHT }}
           >
             {section.kicker}
@@ -114,7 +114,7 @@ export const deck: Deck = [
         <GridBg accent={ACCENT} />
         <div className="max-w-5xl">
           <BigTitle>
-            What we measure, <span style={{ color: ACCENT_BRIGHT }}>and when</span>.
+            How do we <span style={{ color: ACCENT_BRIGHT }}>measure success</span>?
           </BigTitle>
         </div>
         <div className="mt-4 mb-10 text-lg text-white/65">

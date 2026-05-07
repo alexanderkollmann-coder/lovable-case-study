@@ -18,17 +18,17 @@ const SECTIONS: Section[] = [
   {
     kicker: 'Leading',
     question: 'Indicators measured during the event window.',
-    backTitle: 'Signals we can act on in-event.',
+    backTitle: 'Indicators measured during the event window.',
     metrics: [
-      { title: 'Hackathon-to-PoC', body: 'Conversion from event to paid pilot.' },
-      { title: 'Named champions per account', body: 'IC + VP committed before we leave the room.' },
-      { title: 'Prototype-to-production rate', body: 'How many demos survive the first sprint review.' },
+      { title: 'Hackathon-to-PoC', body: 'Conversion from event to pilot.' },
+      { title: 'Named champions per account', body: 'IC + VP combination.' },
+      { title: 'Prototype-to-PoC', body: 'How many demos result in pilots.' },
     ],
   },
   {
     kicker: 'Lagging',
     question: 'Indicators that influence the P&L.',
-    backTitle: 'Outcomes that show up on the books.',
+    backTitle: 'Indicators that influence the P&L.',
     metrics: [
       { title: 'PoC-to-Contract conversion', body: 'Pilots that turn into signed deals.' },
       { title: 'Hackathon-sourced ARR', body: 'Net new ARR attributed to the program.' },

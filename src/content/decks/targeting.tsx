@@ -19,7 +19,7 @@ export const deck: Deck = [
       <SlideShell bg={BG}>
         <GridBg accent={ACCENT} />
         <CornerNum n={1} total={3} accent={ACCENT} />
-        <Eyebrow color={ACCENT}>Booth 03 · Targeting · The rubric</Eyebrow>
+        <Eyebrow color={ACCENT}>The rubric</Eyebrow>
         <div className="mt-3 mb-8">
           <BigTitle>Three buckets. Three questions. One target list.</BigTitle>
         </div>
